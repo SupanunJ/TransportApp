@@ -10,7 +10,7 @@ import { StackNavigator } from "react-navigation";
 
 import Login from "./components/Login";
 import ForgetPassword from "./components/ForgetPassword";
-import MainMenu from "./components/MainMenu";
+import mainScreen from "./components/mainScreen";
 
 import mainService from "./components/services/mainService";
 
@@ -54,8 +54,8 @@ const AppStackNavigator = StackNavigator({
   ForgetPassword: {
     screen: ForgetPassword
   },
-  MainMenu: {
-    screen: MainMenu
+  mainScreen: {
+    screen: mainScreen
   }
 },
 {

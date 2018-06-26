@@ -27,12 +27,12 @@ class Login extends Component {
         if(IMEI.getImei()!='357220076959124')
         {
             // Alert.alert("Test Login","Failed Login and you input -"+this.state.text+"-");
-            navigate('MainMenu');
+            navigate('mainScreen');
         }
         else
         {
             // Alert.alert("Test Login",IMEI.getImei());
-            navigate('MainMenu');
+            navigate('mainScreen');
         }
         // console.log("test")
     }
