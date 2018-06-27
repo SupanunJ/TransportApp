@@ -1,66 +1,45 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Platform,StatusBar } from 'react-native'
+import { Text, StyleSheet, View, Image, TextInput, TouchableOpacity, Alert, Platform,StatusBar } from 'react-native'
 
-import HomeTab from './AppTabNavigator/HomeTab';
-import AddMediaTab from './AppTabNavigator/AddMediaTab';
-import LikesTab from './AppTabNavigator/LikesTab';
-import ProfileTab from './AppTabNavigator/ProfileTab';
-import SearchTab from './AppTabNavigator/SearchTab';
+import { Icon, Container, Header, Left, Body, Right, Content, Button, Form, Item, Label, Input, Title } from 'native-base'
 
-import { TabNavigator ,createMaterialTopTabNavigator } from "react-navigation";
+
+import MainMenu from './MainMenu';
+import TabPage from './TabPage';
+
+import { StackNavigator } from "react-navigation";
 
 
 class mainScreen extends Component {
     static navigationOptions = {
         header: null
     }
+
     render() {
 
         return (
-            <AppTabNavigator />
+            <AppStackNavigator />
         );
     }
 }
 
 export default mainScreen;
 
-const AppTabNavigator = createMaterialTopTabNavigator({
-    HomeTab: {
-        screen: HomeTab
+const AppStackNavigator = StackNavigator({
+    MainMenu: {
+        screen: MainMenu
     },
-    SearchTab: {
-        screen: SearchTab
-    },
-    AddMediaTab: {
-        screen: AddMediaTab
-    },
-    LikesTab: {
-        screen: LikesTab
-    },
-    ProfileTab: {
-        screen: ProfileTab
+    TabPage: {
+        screen: ({navigation}) => <TabPage screenProps={{ rootNavigation: navigation }} />,
+        navigationOptions: () => ({
+            header: null
+          }),
     }
-}, {
-        animationEnabled: true,
-        swipeEnabled: true,
-        tabBarPosition: "bottom",
-        tabBarOptions: {
-            style: {
-                ...Platform.select({
-                    android: {
-                        backgroundColor: 'white'
-                    }
-                })
-            }, indicatorStyle: {
-                backgroundColor: '#00BFFF'
-            },
-            activeTintColor: '#000',
-            inactiveTintColor: '#d1cece',
-            showLabel: true,
-            showIcon: true,
+  },
+  {
+    initialRouteName: 'MainMenu',
+  });
 
-        }
-    });
 
 const styles = StyleSheet.create({
     container: {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet ,StatusBar} from 'react-native'
 
-import {Icon,Header,Container,Left,Body,Title,Right} from 'native-base';
+import {Icon,Header,Container,Left,Body,Title,Right,Button} from 'native-base';
 
 class AddMediaTab extends Component {
 
@@ -11,13 +11,20 @@ class AddMediaTab extends Component {
             <Icon name="ios-construct" style={{ color:
             tintColor  }} />
             
-        )
+        ),
+        
     }
   render() {
+    const { navigate } = this.props.navigation
     return (
       <Container>
        <Header>
-          <Left/>
+          <Left>
+            <Button transparent
+            onPress={() => {this.props.screenProps.rootNavigation.navigate("MainMenu")}}>
+              <Icon name='arrow-back' />
+            </Button>
+          </Left>
           <Body>
             <Title>เครม</Title>
           </Body>

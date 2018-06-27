@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View } from 'react-native'
-import {Icon,Container,Header,Left,Body,Title,Right, Tab, Tabs, TabHeading} from 'native-base';
+import {Icon,Container,Header,Left,Body,Title,Right, Tab, Tabs, TabHeading,Button} from 'native-base';
 
 import SuccessWorkTab from './WorkTab/SuccessWorkTab';
 import UnsuccessWorkTab from './WorkTab/UnsuccessWorkTab';
@@ -19,9 +19,13 @@ class SearchTab extends Component {
     return (
         
         <Container>
-        <Header >
-            <Left/>
-           
+        <Header>
+        <Left>
+        <Button transparent
+        onPress={() => {this.props.screenProps.rootNavigation.navigate("MainMenu")}}>
+              <Icon name='arrow-back' />
+            </Button>
+          </Left>
             <Body>
               <Title>ส่งงาน</Title>
             </Body>
