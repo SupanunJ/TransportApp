@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View } from 'react-native'
+import {Icon,Container,Header,Left,Body,Title,Right, Tab, Tabs, TabHeading} from 'native-base';
 
-import {Icon,Container,Header,Left,Body,Title,Right} from 'native-base';
+import SuccessWorkTab from './WorkTab/SuccessWorkTab';
+import UnsuccessWorkTab from './WorkTab/UnsuccessWorkTab';
+
 
 class SearchTab extends Component {
     
@@ -16,13 +19,24 @@ class SearchTab extends Component {
     return (
         
         <Container>
-        <Header>
+        <Header >
             <Left/>
+           
             <Body>
               <Title>ส่งงาน</Title>
             </Body>
             <Right />
           </Header>
+         
+        <Tabs >
+          <Tab heading={ <TabHeading><Icon name="md-cart" /><Text>  รายการส่ง</Text></TabHeading>}>
+            <SuccessWorkTab/>
+          </Tab>
+          <Tab heading={ <TabHeading><Icon name="md-checkbox-outline" /><Text>  ส่งสำเร็จ</Text></TabHeading>}>
+         <UnsuccessWorkTab/>
+          </Tab>
+        </Tabs>
+        
         </Container>
     );
   }

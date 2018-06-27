@@ -7,7 +7,7 @@ import LikesTab from './AppTabNavigator/LikesTab';
 import ProfileTab from './AppTabNavigator/ProfileTab';
 import SearchTab from './AppTabNavigator/SearchTab';
 
-import { TabNavigator } from "react-navigation";
+import { TabNavigator ,createMaterialTopTabNavigator } from "react-navigation";
 
 
 class mainScreen extends Component {
@@ -24,7 +24,7 @@ class mainScreen extends Component {
 
 export default mainScreen;
 
-const AppTabNavigator = TabNavigator({
+const AppTabNavigator = createMaterialTopTabNavigator({
     HomeTab: {
         screen: HomeTab
     },
