@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View } from 'react-native'
 
-import {Icon,Container,Header,Left,Body,Title,Right} from 'native-base';
+import {Icon,Container,Header,Left,Body,Title,Right,Button} from 'native-base';
 
 class LikesTab extends Component {
     
@@ -17,7 +17,12 @@ class LikesTab extends Component {
         
         <Container>
         <Header >
-            <Left/>
+        <Left>
+        <Button transparent
+        onPress={() => {this.props.screenProps.rootNavigation.navigate("MainMenu")}}>
+              <Icon name='arrow-back' />
+            </Button>
+          </Left>
             <Body>
               <Title>ประวัติ</Title>
             </Body>

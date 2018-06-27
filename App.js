@@ -10,7 +10,12 @@ import { StackNavigator } from "react-navigation";
 
 import Login from "./components/Login";
 import ForgetPassword from "./components/ForgetPassword";
+import MainMenu from './components/MainMenu';
 import mainScreen from "./components/mainScreen";
+// import mainScreen2 from "./components/MenuTabBar/mainScreen2";
+// import mainScreen3 from "./components/MenuTabBar/mainScreen3";
+// import mainScreen4 from "./components/MenuTabBar/mainScreen4";
+// import mainScreen5 from "./components/MenuTabBar/mainScreen5";
 
 import mainService from "./components/services/mainService";
 
@@ -54,9 +59,24 @@ const AppStackNavigator = StackNavigator({
   ForgetPassword: {
     screen: ForgetPassword
   },
+  // MainMenu: {
+  //   screen: MainMenu
+  // },
   mainScreen: {
     screen: mainScreen
-  }
+  },
+  // mainScreen2: {
+  //   screen: mainScreen2
+  // },
+  // mainScreen3: {
+  //   screen: mainScreen3
+  // },
+  // mainScreen4: {
+  //   screen: mainScreen4
+  // },
+  // mainScreen5: {
+  //   screen: mainScreen5
+  // },
 },
 {
   initialRouteName: 'Login',
