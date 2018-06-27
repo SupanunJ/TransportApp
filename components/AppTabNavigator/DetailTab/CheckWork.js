@@ -58,22 +58,11 @@ class CheckWork extends Component {
                 <Footer style={{ 
                     backgroundColor: '#66c2ff',
                     justifyContent:'center', 
-                    alignItems: 'center',
-                    flexDirection: 'row'
+                    alignItems: 'center'
                     }}>
-                    <View style={{ justifyContent:'center', alignItems: 'center', paddingHorizontal: 5 }}>
-                        <Button warning style={{ 
-                            width: Dimensions.get('window').width/2.5, 
-                            height: '80%', 
-                            justifyContent:'center', 
-                            alignItems: 'center' }}
-                        >
-                            <Text style={{ color: 'white', fontWeight: 'bold' }}>แก้ไขรายการ</Text>
-                        </Button>
-                    </View>
-                    <View style={{ justifyContent:'center', alignItems: 'center', paddingHorizontal: 5 }}>
+                    <View style={{ justifyContent:'center', alignItems: 'center' }}>
                         <Button success style={{ 
-                            width: Dimensions.get('window').width/2.5, 
+                            width: 200, 
                             height: '80%', 
                             justifyContent:'center', 
                             alignItems: 'center' }}

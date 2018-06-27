@@ -19,27 +19,27 @@ class SearchTab extends Component {
     return (
         
         <Container>
-        <Header>
-        <Left>
-        <Button transparent
-        onPress={() => {this.props.screenProps.rootNavigation.navigate("MainMenu")}}>
-              <Icon name='arrow-back' />
-            </Button>
-          </Left>
+          <Header style={{ backgroundColor: '#66c2ff' }}>
+            <Left>
+              <Button transparent
+              onPress={() => {this.props.screenProps.rootNavigation.navigate("MainMenu")}}>
+                    <Icon name='arrow-back' />
+              </Button>
+            </Left>
             <Body>
               <Title>ส่งงาน</Title>
             </Body>
             <Right />
           </Header>
-         
-        <Tabs >
-          <Tab heading={ <TabHeading><Icon name="md-cart" /><Text>  รายการส่ง</Text></TabHeading>}>
-            <SuccessWorkTab/>
-          </Tab>
-          <Tab heading={ <TabHeading><Icon name="md-checkbox-outline" /><Text>  ส่งสำเร็จ</Text></TabHeading>}>
-         <UnsuccessWorkTab/>
-          </Tab>
-        </Tabs>
+          
+          <Tabs>
+            <Tab heading={ <TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-cart" /><Text style={{color: 'white'}}>  รายการส่ง</Text></TabHeading>}>
+              <SuccessWorkTab/>
+            </Tab>
+            <Tab heading={ <TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-checkbox-outline" /><Text style={{color: 'white'}}>  ส่งสำเร็จ</Text></TabHeading>}>
+          <UnsuccessWorkTab/>
+            </Tab>
+          </Tabs>
         
         </Container>
     );
