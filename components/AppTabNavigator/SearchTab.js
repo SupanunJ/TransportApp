@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View } from 'react-native'
-import {Icon,Container,Header,Left,Body,Title,Right, Tab, Tabs, TabHeading,Button} from 'native-base';
+import { Text, StyleSheet, View,Dimensions } from 'react-native'
+import {Icon,Container,Header,Left,Body,Title,Right, Tab, Tabs, TabHeading,Button,Separator,ListItem,Content} from 'native-base';
 
 import SuccessWorkTab from './WorkTab/SuccessWorkTab';
 import UnsuccessWorkTab from './WorkTab/UnsuccessWorkTab';
@@ -8,15 +8,14 @@ import UnsuccessWorkTab from './WorkTab/UnsuccessWorkTab';
 
 class SearchTab extends Component {
     
-    static navigationOptions = {
-        tabBarLabel: "ส่งงาน",
-        tabBarIcon: ({ tintColor }) => (
-            <Icon name="md-car" style={{ color:
-            tintColor }} />
-        )
-    }
+  
+  static navigationOptions = {}
+    
   render() {
-    return (
+
+      const { navigate } = this.props.navigation
+
+      return (
         
         <Container>
           <Header style={{ backgroundColor: '#66c2ff' }}>
@@ -34,10 +33,84 @@ class SearchTab extends Component {
           
           <Tabs>
             <Tab heading={ <TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-cart" /><Text style={{color: 'white'}}>  รายการส่ง</Text></TabHeading>}>
-              <SuccessWorkTab/>
+            <Content>
+          <Separator bordered>
+            <Text>ห้างเดอะมอลล์ท่าพระ</Text>
+          </Separator>
+          <ListItem>
+            <View>
+              <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                <Text style={styles.storeLabel}>ABCD001</Text>
+                <Text style={{ paddingHorizontal: 5 }}>คุณA</Text>
+                <Text>/</Text>
+                <Text style={{ paddingHorizontal: 5 }}>ร้านAAA</Text>
+              </View>
+            </View>
+            <View style={{ position: 'absolute', right: 0 }}>
+              <Button transparent
+                onPress={() => navigate('DetailWork')}>
+                <Icon name='ios-arrow-dropright' />
+              </Button>
+            </View>
+          </ListItem>
+          <Separator bordered>
+            <Text>ห้างเดอะมอลล์ลาดพร้าว</Text>
+          </Separator>
+          <ListItem>
+            <View>
+              <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                <Text style={styles.storeLabel}>ABCD001</Text>
+                <Text style={{ paddingHorizontal: 5 }}>คุณA</Text>
+                <Text>/</Text>
+                <Text style={{ paddingHorizontal: 5 }}>ร้านAAA</Text>
+              </View>
+            </View>
+            <View style={{ position: 'absolute', right: 0 }}>
+              <Button transparent
+                onPress={() => navigate('DetailWork')}>
+                <Icon name='ios-arrow-dropright' />
+              </Button>
+            </View>
+          </ListItem>
+        </Content>
+
+        
             </Tab>
             <Tab heading={ <TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-checkbox-outline" /><Text style={{color: 'white'}}>  ส่งสำเร็จ</Text></TabHeading>}>
-          <UnsuccessWorkTab/>
+            <Content>
+          <ListItem>
+            <View>
+              <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                <Text style={styles.storeLabel}>ABCD001</Text>
+                <Text style={{ paddingHorizontal: 5 }}>คุณA</Text>
+                <Text>/</Text>
+                <Text style={{ paddingHorizontal: 5 }}>ร้านAAA</Text>
+              </View>
+            </View>
+            <View style={{ position: 'absolute', right: 0 }}>
+              <Button transparent
+                onPress={() => navigate('DetailWork')}>
+                <Icon name='ios-arrow-dropright' />
+              </Button>
+            </View>
+          </ListItem>
+          <ListItem>
+            <View>
+              <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                <Text style={styles.storeLabel}>ABCD001</Text>
+                <Text style={{ paddingHorizontal: 5 }}>คุณA</Text>
+                <Text>/</Text>
+                <Text style={{ paddingHorizontal: 5 }}>ร้านAAA</Text>
+              </View>
+            </View>
+            <View style={{ position: 'absolute', right: 0 }}>
+              <Button transparent
+                onPress={() => navigate('DetailWork')}>
+                <Icon name='ios-arrow-dropright' />
+              </Button>
+            </View>
+          </ListItem>
+        </Content>
             </Tab>
           </Tabs>
         
@@ -50,9 +123,25 @@ class SearchTab extends Component {
 export default SearchTab;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center"
-    },
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  storeLabel: {
+    fontSize: 18,
+    color: 'black'
+  },
+  detailContent: {
+    width: Dimensions.get('window').width,
+    backgroundColor: 'white',
+    borderColor: 'white',
+    borderRightWidth: 2,
+    borderLeftWidth: 2,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    height: 50,
+    justifyContent: 'center'
+  }
 })

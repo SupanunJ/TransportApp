@@ -1,27 +1,54 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, List, ListItem, Text, Separator,Accordion } from 'native-base';
- class SuccessWorkTab extends Component {
+import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, ScrollView } from 'react-native'
+import { Container, Icon, Content, Button, ListItem, Separator, Accordion } from 'native-base';
+
+
+class SuccessWorkTab extends Component {
+
   render() {
+
+    // const { navigate } = this.props.navigation
+
     return (
       <Container>
         <Content>
-          <Accordion >
-            <Text>FORWARD</Text>
-          </Accordion>
-          <ListItem >
-            <Text>Aaron Bennet</Text>
-          </ListItem>
-          <ListItem>
-            <Text>Claire Barclay</Text>
-          </ListItem>
-          <ListItem last>
-            <Text>Kelso Brittany</Text>
-          </ListItem>
           <Separator bordered>
-            <Text>MIDFIELD</Text>
+            <Text>ห้างเดอะมอลล์ท่าพระ</Text>
           </Separator>
           <ListItem>
-            <Text>Caroline Aaron</Text>
+            <View>
+              <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                <Text style={styles.storeLabel}>ABCD001</Text>
+                <Text style={{ paddingHorizontal: 5 }}>คุณA</Text>
+                <Text>/</Text>
+                <Text style={{ paddingHorizontal: 5 }}>ร้านAAA</Text>
+              </View>
+            </View>
+            <View style={{ position: 'absolute', right: 0 }}>
+              <Button transparent
+                onPress={() => navigate('DetailWork')}>
+                <Icon name='ios-arrow-dropright' />
+              </Button>
+            </View>
+          </ListItem>
+          <Separator bordered>
+            <Text>ห้างเดอะมอลล์ลาดพร้าว</Text>
+          </Separator>
+          <ListItem>
+            <View>
+              <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                <Text style={styles.storeLabel}>ABCD001</Text>
+                <Text style={{ paddingHorizontal: 5 }}>คุณA</Text>
+                <Text>/</Text>
+                <Text style={{ paddingHorizontal: 5 }}>ร้านAAA</Text>
+              </View>
+            </View>
+            <View style={{ position: 'absolute', right: 0 }}>
+              <Button transparent
+                onPress={() => navigate('DetailWork')}>
+                <Icon name='ios-arrow-dropright' />
+              </Button>
+            </View>
           </ListItem>
         </Content>
       </Container>
@@ -29,3 +56,26 @@ import { Container, Header, Content, List, ListItem, Text, Separator,Accordion }
   }
 }
 export default SuccessWorkTab
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  storeLabel: {
+    fontSize: 18,
+    color: 'black'
+  },
+  detailContent: {
+    width: Dimensions.get('window').width,
+    backgroundColor: 'white',
+    borderColor: 'white',
+    borderRightWidth: 2,
+    borderLeftWidth: 2,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    height: 50,
+    justifyContent: 'center'
+  }
+})
