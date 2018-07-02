@@ -24,7 +24,7 @@ export default class MapScreen extends Component {
                 <Header style={{ backgroundColor: '#66c2ff' }}>
                     <Left>
                         <Button transparent
-                        onPress={() => navigate('Home')}>
+                        onPress={() => navigate('Search')}>
                             <Icon name='arrow-back' />
                         </Button>
                     </Left>

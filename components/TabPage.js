@@ -10,7 +10,7 @@ import SearchTab from './AppTabNavigator/SearchTab';
 import CheckWork from './AppTabNavigator/DetailTab/CheckWork';
 import MapScreen from './AppTabNavigator/DetailTab/MapScreen'
 import DetailWork from './AppTabNavigator/DetailTab/DetailWork';
-
+import EditItem from './AppTabNavigator/DetailTab/EditItem';
 
 import { TabNavigator, StackNavigator } from 'react-navigation'
 
@@ -40,7 +40,7 @@ const Checking = StackNavigator({
         }),
     },
     CheckWork: {
-        screen: MapScreen,
+        screen: CheckWork,
         navigationOptions: () => ({
             header: null
         }),
@@ -59,7 +59,19 @@ const Working = StackNavigator({
         navigationOptions: () => ({
             header: null
         }),
-    }
+    },
+    EditItem: {
+        screen: EditItem,
+        navigationOptions: () => ({
+            header: null
+        }),
+    },
+    MapScreen: {
+        screen: MapScreen,
+        navigationOptions: () => ({
+            header: null
+        }),
+    },
 })
 
 const AppTabNavigator = TabNavigator({
