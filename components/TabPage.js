@@ -8,6 +8,7 @@ import ProfileTab from './AppTabNavigator/ProfileTab';
 import SearchTab from './AppTabNavigator/SearchTab';
 
 import CheckWork from './AppTabNavigator/DetailTab/CheckWork';
+import MapScreen from './AppTabNavigator/DetailTab/MapScreen'
 
 import { TabNavigator, StackNavigator } from 'react-navigation'
 
@@ -37,7 +38,7 @@ const Checking = StackNavigator({
           }),
     },
     CheckWork: {
-        screen: CheckWork,
+        screen: MapScreen,
         navigationOptions: () => ({
             header: null
           }),
