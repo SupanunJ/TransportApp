@@ -9,7 +9,7 @@ import SearchTab from './AppTabNavigator/SearchTab';
 
 import CheckWork from './AppTabNavigator/DetailTab/CheckWork';
 import DetailWork from './AppTabNavigator/DetailTab/DetailWork';
-
+import EditItem from './AppTabNavigator/DetailTab/EditItem';
 
 import { TabNavigator, StackNavigator } from 'react-navigation'
 
@@ -55,6 +55,12 @@ const Working = StackNavigator({
     },  
     DetailWork: {
         screen: DetailWork,
+        navigationOptions: () => ({
+            header: null
+        }),
+    },
+    EditItem: {
+        screen: EditItem,
         navigationOptions: () => ({
             header: null
         }),
