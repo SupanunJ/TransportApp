@@ -9,6 +9,8 @@ import SearchTab from './AppTabNavigator/SearchTab';
 
 import CheckWork from './AppTabNavigator/DetailTab/CheckWork';
 import MapScreen from './AppTabNavigator/DetailTab/MapScreen'
+import DetailWork from './AppTabNavigator/DetailTab/DetailWork';
+
 
 import { TabNavigator, StackNavigator } from 'react-navigation'
 
@@ -20,12 +22,12 @@ class TabPage extends Component {
         header: null
     }
 
-  render() {
-    
-    return (
-      <AppTabNavigator screenProps={{ rootNavigation: this.props.screenProps.rootNavigation}} />
-    )
-  }
+    render() {
+
+        return (
+            <AppTabNavigator screenProps={{ rootNavigation: this.props.screenProps.rootNavigation }} />
+        )
+    }
 }
 
 export default TabPage;
@@ -35,13 +37,28 @@ const Checking = StackNavigator({
         screen: HomeTab,
         navigationOptions: () => ({
             header: null
-          }),
+        }),
     },
     CheckWork: {
         screen: MapScreen,
         navigationOptions: () => ({
             header: null
-          }),
+        }),
+    }
+})
+
+const Working = StackNavigator({
+    Search: {
+        screen: SearchTab,
+        navigationOptions: () => ({
+            header: null
+        }),
+    },  
+    DetailWork: {
+        screen: DetailWork,
+        navigationOptions: () => ({
+            header: null
+        }),
     }
 })
 
@@ -59,7 +76,16 @@ const AppTabNavigator = TabNavigator({
         })
     },
     SearchTab: {
-        screen: SearchTab
+        screen: Working,
+        navigationOptions: () => ({
+            tabBarLabel: "ส่งงาน",
+            tabBarIcon: ({ tintColor }) => (
+                <Icon name="md-car" style={{
+                    color:
+                        tintColor
+                }} />
+            )
+        })
     },
     AddMediaTab: {
         screen: AddMediaTab
