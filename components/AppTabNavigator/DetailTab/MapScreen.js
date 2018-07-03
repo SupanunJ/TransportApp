@@ -24,7 +24,7 @@ export default class MapScreen extends Component {
                 <Header style={{ backgroundColor: '#66c2ff' }}>
                     <Left>
                         <Button transparent
-                        onPress={() => navigate('Search')}>
+                        onPress={() => navigate('DetailWork')}>
                             <Icon name='arrow-back' />
                         </Button>
                     </Left>
@@ -45,7 +45,7 @@ export default class MapScreen extends Component {
                             latitudeDelta: 0.1,
                             longitudeDelta: 0.1
                             }}>
-                        </MapView>
+                    </MapView>
                 </View>
                 </Content>
 
