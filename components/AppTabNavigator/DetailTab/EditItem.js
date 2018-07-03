@@ -15,7 +15,7 @@ class EditItem extends Component {
                 <Header style={{ backgroundColor: '#66c2ff' }}>
                     <Left>
                         <Button transparent
-                            onPress={() => navigate('EditItem')}>
+                            onPress={() => navigate('DetailWork')}>
                             <Icon name='arrow-back' />
                         </Button>
                     </Left>

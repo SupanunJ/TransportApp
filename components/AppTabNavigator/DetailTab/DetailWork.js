@@ -68,7 +68,7 @@ class DetailWork extends Component {
                         flex: 1,
                         flexDirection: 'column',
                     }}>
-                        <TouchableOpacity onPress={() => navigate('EditItem')} >
+                        <TouchableOpacity onPress={() => navigate('')} >
                             <View style={{ width: Dimensions.get('window').width/2, 
                             height: 100, backgroundColor: '#FFBC66', justifyContent: 'center', alignItems: 'center' }} >
                                 <Image source={require('../../../assets/icon/phone-receiver.png')}
@@ -77,7 +77,7 @@ class DetailWork extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => navigate('TabPage')} >
+                        <TouchableOpacity onPress={() => navigate('EditItem')} >
                             <View style={{ width: Dimensions.get('window').width/2, 
                             height: 100, backgroundColor: '#FFFD66', justifyContent: 'center', alignItems: 'center' }} >
                                 <Image source={require('../../../assets/icon/clam.png')}
@@ -99,9 +99,9 @@ class DetailWork extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => navigate('TabPage')} >
+                        <TouchableOpacity onPress={() => navigate('SubmitJob')} >
                             <View style={{ width: Dimensions.get('window').width/2, height: 100, backgroundColor: '#FFA566', justifyContent: 'center', alignItems: 'center' }} >
-                                <Image source={require('../../../assets/icon/check.png')}
+                                <Image source={require('../../../assets/icon/file.png')}
                                     style={{ width: 70, height: 70 }} />
                                 <Text style={{ fontWeight: 'bold', marginTop: 2 }}>ส่งงาน</Text>
                             </View>
