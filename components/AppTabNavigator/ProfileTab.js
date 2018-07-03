@@ -13,13 +13,14 @@ class ProfileTab extends Component {
         )
     }
   render() {
+    const { navigate } = this.props.navigation
     return (
         
         <Container>
        <Header >
        <Left>
        <Button transparent
-       onPress={() => {this.props.screenProps.rootNavigation.navigate("MainMenu")}}>
+       onPress={() => {navigate("MainMenu")}}>
               <Icon name='arrow-back' />
             </Button>
           </Left>

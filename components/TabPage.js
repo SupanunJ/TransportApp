@@ -97,7 +97,8 @@ const AppTabNavigator = TabNavigator({
                         tintColor
                 }} />
             )
-        })
+        }),
+        path: 'search'
     },
     AddMediaTab: {
         screen: AddMediaTab

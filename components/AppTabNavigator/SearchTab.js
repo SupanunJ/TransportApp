@@ -8,9 +8,6 @@ import UnsuccessWorkTab from './WorkTab/UnsuccessWorkTab';
 
 class SearchTab extends Component {
 
-
-  static navigationOptions = {}
-
   render() {
 
     const { navigate } = this.props.navigation
@@ -21,7 +18,7 @@ class SearchTab extends Component {
         <Header style={{ backgroundColor: '#66c2ff' }}>
           <Left>
             <Button transparent
-              onPress={() => { this.props.screenProps.rootNavigation.navigate("MainMenu") }}>
+              onPress={() => { navigate("MainMenu") }}>
               <Icon name='arrow-back' />
             </Button>
           </Left>
@@ -119,7 +116,7 @@ class SearchTab extends Component {
                 </View>
                 <View style={{ position: 'absolute', right: 0 }}>
                   <Badge >
-                    <Text>ส่งสำเร็จไม่สำเร็จ</Text>
+                    <Text>ส่งไม่สำเร็จ</Text>
                   </Badge>
                 </View>
               </ListItem>

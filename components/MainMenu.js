@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, Image, TextInput, TouchableOpacity, Alert, StatusBar} from 'react-native'
-
+import { TabRouter, addNavigationHelpers, createNavigator, NavigationActions } from 'react-navigation'
 import { Icon, Container, Header, Left, Body, Right, Content, Button, Form, Item, Label, Input, Title } from 'native-base'
 
 class MainMenu extends Component {
@@ -23,7 +23,7 @@ class MainMenu extends Component {
             </Header>
             <Body>
                 <View style={{ flexDirection: 'row', justifyContent: "space-between", paddingVertical: 20 }}>
-                    <TouchableOpacity onPress={() => navigate('TabPage')} 
+                    <TouchableOpacity onPress={() => { navigate('HomeTab')}} 
                     style={{ paddingHorizontal: 10 }}>
                         <View style={{ width: 150, height: 150, backgroundColor: '#0099CC',
                          justifyContent: 'center', alignItems: 'center'}}>
@@ -32,7 +32,7 @@ class MainMenu extends Component {
                             <Text style={{ fontWeight: 'bold', marginTop: 5 }}>ตรวจงาน</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigate('TabPage')}
+                    <TouchableOpacity onPress={() => navigate('SearchTab')}
                     style={{ paddingHorizontal: 10 }}>
                         <View style={{ width: 150, height: 150, backgroundColor: '#CCFFCC',
                         justifyContent: 'center', alignItems: 'center'}}>
@@ -43,7 +43,7 @@ class MainMenu extends Component {
                     </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: "space-between", paddingVertical: 10 }}>
-                    <TouchableOpacity onPress={() => navigate('TabPage')} 
+                    <TouchableOpacity onPress={() => navigate('AddMediaTab')} 
                     style={{ paddingHorizontal: 10 }}>
                         <View style={{ width: 100, height: 100, backgroundColor: '#CCFFCC',
                         justifyContent: 'center', alignItems: 'center'}}>
@@ -52,7 +52,7 @@ class MainMenu extends Component {
                             <Text style={{ fontWeight: 'bold', marginTop: 2 }}>เคลม</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigate('TabPage')}
+                    <TouchableOpacity onPress={() => navigate('LikesTab')}
                     style={{ paddingHorizontal: 10 }}>
                         <View style={{ width: 100, height: 100, backgroundColor: '#66CCFF',
                         justifyContent: 'center', alignItems: 'center'}}>
@@ -61,7 +61,7 @@ class MainMenu extends Component {
                             <Text style={{ fontWeight: 'bold', marginTop: 2 }}>ประวัติ</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigate('TabPage')}
+                    <TouchableOpacity onPress={() => navigate('ProfileTab')}
                     style={{ paddingHorizontal: 10 }}>
                         <View style={{ width: 100, height: 100, backgroundColor: '#0099CC',
                         justifyContent: 'center', alignItems: 'center'}}>
