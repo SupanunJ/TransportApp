@@ -7,17 +7,23 @@ import {
   Image
 } from 'react-native'
 import { StackNavigator } from "react-navigation";
+import { ApolloClient, ApolloProvider, createNetworkInterface } from 'react-apollo'
 
 import Login from "./components/Login";
 import ForgetPassword from "./components/ForgetPassword";
-import MainMenu from './components/MainMenu';
 import mainScreen from "./components/mainScreen";
-// import mainScreen2 from "./components/MenuTabBar/mainScreen2";
-// import mainScreen3 from "./components/MenuTabBar/mainScreen3";
-// import mainScreen4 from "./components/MenuTabBar/mainScreen4";
-// import mainScreen5 from "./components/MenuTabBar/mainScreen5";
 
 import mainService from "./components/services/mainService";
+
+
+const networkInterface = createNetworkInterface({
+  uri: 'http://10.0.2.2:3009/api/graphql'
+})
+
+const client = new ApolloClient({
+  networkInterface,
+  dataIdFromObject: r => r.id,
+})
 
 export default class App extends React.Component {
 
@@ -28,6 +34,7 @@ export default class App extends React.Component {
   constructor(){
     super();
     mainService.load(v => this.setState({loaded: true}));
+    
   }
 
   renderSection = () => {
@@ -47,7 +54,9 @@ export default class App extends React.Component {
   render() {
     return (
       
-        this.state.loaded ? this.renderSection() : this.renderLoad()
+        <ApolloProvider client={client}>
+          {this.state.loaded ? this.renderSection() : this.renderLoad()}
+        </ApolloProvider>
     );
   }
 }
@@ -59,24 +68,9 @@ const AppStackNavigator = StackNavigator({
   ForgetPassword: {
     screen: ForgetPassword
   },
-  // MainMenu: {
-  //   screen: MainMenu
-  // },
   mainScreen: {
     screen: mainScreen
   },
-  // mainScreen2: {
-  //   screen: mainScreen2
-  // },
-  // mainScreen3: {
-  //   screen: mainScreen3
-  // },
-  // mainScreen4: {
-  //   screen: mainScreen4
-  // },
-  // mainScreen5: {
-  //   screen: mainScreen5
-  // },
 },
 {
   initialRouteName: 'Login',

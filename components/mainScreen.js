@@ -20,6 +20,7 @@ import { StackNavigator, TabNavigator } from "react-navigation";
 
 
 class mainScreen extends Component {
+
     static navigationOptions = {
         header: null
     }
@@ -120,7 +121,7 @@ const AppStackNavigator = StackNavigator({
                 screen: ProfileTab
             }
         },{
-            animationEnabled: true,
+            animationEnabled: false,
             swipeEnabled: false,
             tabBarPosition: "bottom",
             tabBarOptions: {
