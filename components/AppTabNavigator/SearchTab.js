@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, Dimensions } from 'react-native'
-import { Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Separator, ListItem, Content, Badge, Accordion } from 'native-base';
+import { Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Separator, ListItem, Content, Badge, Accordion,Footer } from 'native-base';
 import { gql, withApollo, compose } from 'react-apollo'
 
 // import SuccessWorkTab from './WorkTab/SuccessWorkTab';
@@ -250,9 +250,28 @@ class SearchTab extends Component {
                 </View>
               </ListItem> */}
             </Content>
+            <Footer style={{ 
+                    backgroundColor: '#66c2ff',
+                    justifyContent:'center', 
+                    alignItems: 'center'
+                    }}>
+                    <View style={{ justifyContent:'center', alignItems: 'center' }}>
+                        <Button warning 
+                        onPress={() => navigate('SumBill')} 
+                         style={{ 
+                            width: 200, 
+                            height: '80%', 
+                            justifyContent:'center', 
+                            alignItems: 'center' }}
+                        >
+                            <Text style={{ color: 'white', fontWeight: 'bold' }}>สรุปยอดเงิน</Text>
+                        </Button>
+                    </View>
+                </Footer>
           </Tab>
+        
         </Tabs>
-
+       
       </Container>
     );
   }
