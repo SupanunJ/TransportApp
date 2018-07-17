@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, Dimensions } from 'react-native'
-import { Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Separator, ListItem, Content, Badge } from 'native-base';
+import { Footer,Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Separator, ListItem, Content, Badge } from 'native-base';
 
 import SuccessWorkTab from './WorkTab/SuccessWorkTab';
 import UnsuccessWorkTab from './WorkTab/UnsuccessWorkTab';
@@ -70,9 +70,9 @@ class SearchTab extends Component {
                 </View>
               </ListItem>
             </Content>
-
-
           </Tab>
+
+
           <Tab heading={<TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-checkbox-outline" /><Text style={{ color: 'white' }}>  ส่งสำเร็จ</Text></TabHeading>}>
             <Content>
               <ListItem>
@@ -121,9 +121,28 @@ class SearchTab extends Component {
                 </View>
               </ListItem>
             </Content>
+            <Footer style={{ 
+                    backgroundColor: '#66c2ff',
+                    justifyContent:'center', 
+                    alignItems: 'center'
+                    }}>
+                    <View style={{ justifyContent:'center', alignItems: 'center' }}>
+                        <Button warning 
+                        onPress={() => navigate('SumBill')} 
+                         style={{ 
+                            width: 200, 
+                            height: '80%', 
+                            justifyContent:'center', 
+                            alignItems: 'center' }}
+                        >
+                            <Text style={{ color: 'white', fontWeight: 'bold' }}>สรุปยอดเงิน</Text>
+                        </Button>
+                    </View>
+                </Footer>
           </Tab>
+        
         </Tabs>
-
+       
       </Container>
     );
   }

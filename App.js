@@ -1,11 +1,5 @@
 import React, { Component } from 'react'
-import { 
-  Text,
-  StyleSheet, 
-  View,
-  ImageBackground,
-  Image
-} from 'react-native'
+import { StyleSheet, ImageBackground, Image } from 'react-native'
 import { StackNavigator } from "react-navigation";
 
 import Login from "./components/Login";

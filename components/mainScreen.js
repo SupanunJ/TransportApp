@@ -15,6 +15,9 @@ import CheckWork from './AppTabNavigator/DetailTab/CheckWork';
 import MapScreen from './AppTabNavigator/DetailTab/MapScreen'
 import DetailWork from './AppTabNavigator/DetailTab/DetailWork';
 import EditItem from './AppTabNavigator/DetailTab/EditItem';
+import SubmitJob from './AppTabNavigator/DetailTab/SubmitJob';
+import DetailBill from './AppTabNavigator/DetailTab/DetailBill';
+import SumBill from './AppTabNavigator/DetailTab/SumBill';
 
 import { StackNavigator, TabNavigator } from "react-navigation";
 
@@ -94,6 +97,24 @@ const AppStackNavigator = StackNavigator({
                     },
                     MapScreen: {
                         screen: MapScreen,
+                        navigationOptions: () => ({
+                            header: null
+                        }),
+                    },
+                    SubmitJob: {
+                        screen: SubmitJob,
+                        navigationOptions: () => ({
+                            header: null
+                        }),
+                    },
+                    SumBill: {
+                        screen: SumBill,
+                        navigationOptions: () => ({
+                            header: null
+                        }),
+                    },
+                    DetailBill: {
+                        screen: DetailBill,
                         navigationOptions: () => ({
                             header: null
                         }),
