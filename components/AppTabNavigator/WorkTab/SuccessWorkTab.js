@@ -38,9 +38,9 @@ class SuccessWorkTab extends Component {
             <View>
               <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
                 <Text style={styles.storeLabel}>ABCD001</Text>
-                <Text style={{ paddingHorizontal: 5 }}>คุณA</Text>
+                <Text style={{ paddingHorizontal: 5 }}>คุณD</Text>
                 <Text>/</Text>
-                <Text style={{ paddingHorizontal: 5 }}>ร้านAAA</Text>
+                <Text style={{ paddingHorizontal: 5 }}>ร้านDDD</Text>
               </View>
             </View>
             <View style={{ position: 'absolute', right: 0 }}>

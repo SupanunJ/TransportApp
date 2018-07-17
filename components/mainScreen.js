@@ -12,7 +12,7 @@ import ProfileTab from './AppTabNavigator/ProfileTab';
 import SearchTab from './AppTabNavigator/SearchTab';
 
 import CheckWork from './AppTabNavigator/DetailTab/CheckWork';
-import MapScreen from './AppTabNavigator/DetailTab/MapScreen'
+import MapScreen from './AppTabNavigator/DetailTab/MapScreen';
 import DetailWork from './AppTabNavigator/DetailTab/DetailWork';
 import EditItem from './AppTabNavigator/DetailTab/EditItem';
 import SubmitJob from './AppTabNavigator/DetailTab/SubmitJob';
@@ -23,6 +23,7 @@ import { StackNavigator, TabNavigator } from "react-navigation";
 
 
 class mainScreen extends Component {
+
     static navigationOptions = {
         header: null
     }
@@ -80,7 +81,7 @@ const AppStackNavigator = StackNavigator({
                     Search: {
                         screen: SearchTab,
                         navigationOptions: () => ({
-                            header: null
+                            header: null,
                         }),
                     },  
                     DetailWork: {
@@ -141,7 +142,7 @@ const AppStackNavigator = StackNavigator({
                 screen: ProfileTab
             }
         },{
-            animationEnabled: true,
+            animationEnabled: false,
             swipeEnabled: false,
             tabBarPosition: "bottom",
             tabBarOptions: {
