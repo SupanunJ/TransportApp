@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
-import { 
+import {
   Text,
-  StyleSheet, 
+  StyleSheet,
   View,
   ImageBackground,
   Image
 } from 'react-native'
 import { StackNavigator } from "react-navigation";
 import { ApolloClient, ApolloProvider, createNetworkInterface } from 'react-apollo'
+import { Root } from 'native-base';
 
 import Login from "./components/Login";
 import ForgetPassword from "./components/ForgetPassword";
@@ -31,10 +32,10 @@ export default class App extends React.Component {
     loaded: false
   }
 
-  constructor(){
+  constructor() {
     super();
-    mainService.load(v => this.setState({loaded: true}));
-    
+    mainService.load(v => this.setState({ loaded: true }));
+
   }
 
   renderSection = () => {
@@ -42,21 +43,23 @@ export default class App extends React.Component {
   }
 
   renderLoad = () => {
-    return(
+    return (
       <ImageBackground style={styles.container}
-      source={require('./assets/loader.jpg')}>
-        <Image source={require('./assets/dplus.jpg')} 
-                            style={{ width: 160, height: 133 }} />
+        source={require('./assets/loader.jpg')}>
+        <Image source={require('./assets/dplus.jpg')}
+          style={{ width: 160, height: 133 }} />
       </ImageBackground>
     );
   }
 
   render() {
     return (
-      
-        <ApolloProvider client={client}>
+
+      <ApolloProvider client={client}>
+        <Root>
           {this.state.loaded ? this.renderSection() : this.renderLoad()}
-        </ApolloProvider>
+        </Root>
+      </ApolloProvider>
     );
   }
 }
@@ -72,9 +75,9 @@ const AppStackNavigator = StackNavigator({
     screen: mainScreen
   },
 },
-{
-  initialRouteName: 'Login',
-});
+  {
+    initialRouteName: 'Login',
+  });
 
 const styles = StyleSheet.create({
   container: {

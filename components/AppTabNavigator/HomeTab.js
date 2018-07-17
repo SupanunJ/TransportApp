@@ -15,7 +15,7 @@ class HomeTab extends Component {
         this.state = {
             showTable: []
         }
-        this.props.client.resetStore();
+        // this.props.client.resetStore();
         this.worklist_query();
     }
 
@@ -82,7 +82,7 @@ class HomeTab extends Component {
                 <Header style={{ backgroundColor: '#66c2ff' }}>
                     <Left>
                         <Button transparent
-                            onPress={() => { navigate("MainMenu") }}>
+                            onPress={() => { this.props.client.resetStore(); navigate("MainMenu"); }}>
                             <Icon name='arrow-back' />
                         </Button>
                     </Left>
@@ -93,19 +93,24 @@ class HomeTab extends Component {
                 </Header>
                 <Content>
 
-                    <List containerStyle={{ marginBottom: 20, top: 0 }}>
+                    <View>
                         {
                             this.state.showTable.map((l, i) => (
-                                <TouchableOpacity onPress={() => navigate('CheckWork', { id: l.invoiceNumber })}>
-                                    <ListItem
-                                        key={i}
-                                        title={l.invoiceNumber}
-                                        subtitle={l.DELIVERYNAME}
-                                    />
-                                </TouchableOpacity>
+                                <View style={styles.detailContent}>
+                                    <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                                        <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                        <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
+                                    </View>
+                                    <View style={{ position: 'absolute', right: 0 }}>
+                                        <Button transparent
+                                            onPress={() => navigate('CheckWork', { id: l.invoiceNumber })}>
+                                            <Icon name='ios-arrow-dropright' />
+                                        </Button>
+                                    </View>
+                                </View>
                             ))
                         }
-                    </List>
+                    </View>
 
                 </Content>
                 <Footer style={{
