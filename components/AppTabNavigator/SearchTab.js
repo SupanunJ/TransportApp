@@ -13,12 +13,13 @@ class SearchTab extends Component {
     super(props);
     this.state = {
       showWork: [],
-      showZone: []
+      showZone: [],
+      show_SUC: [],
     }
     // this.props.client.resetStore();
     this.queryZONE();
     this.worksub();
-
+    this.sucesswork();
   }
 
   worksub = () => {
@@ -51,6 +52,24 @@ class SearchTab extends Component {
       console.log(result.data.queryZONE)
       this.setState({
         showZone: result.data.queryZONE
+      })
+    }).catch((err) => {
+      console.log(err)
+    });
+  }
+
+  sucesswork = () => {
+    console.log("sucesswork")
+
+    this.props.client.query({
+      query: sucesswork,
+      variables: {
+        "MessengerID": global.NameOfMess
+      }
+    }).then((result) => {
+      console.log(result.data.sucesswork)
+      this.setState({
+        show_SUC: result.data.sucesswork
       })
     }).catch((err) => {
       console.log(err)
@@ -136,15 +155,61 @@ class SearchTab extends Component {
               </View>
             </Content>
           </Tab>
-          
+
           <Tab heading={<TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-checkbox-outline" /><Text style={{ color: 'white' }}>  ส่งสำเร็จ</Text></TabHeading>}>
             <Content>
-              <ListItem>
+              {
+                this.state.show_SUC.map(k => (
+                  <ListItem>
+                    <View>
+                      <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                        <Text style={styles.storeLabel}>{k.invoiceNumber}</Text>
+                        <Text style={{ paddingHorizontal: 5 }}>{k.DELIVERYNAME}</Text>
+                      </View>
+                    </View>
+                    <View style={{ position: 'absolute', right: 0 }}>
+                      {
+                        (() => {
+                          if (k.status == "A1") {
+                            return (
+
+                              <Badge success>
+                                <Text>ส่งสำเร็จ</Text>
+                              </Badge>
+
+                            )
+                          } else if (k.status == "A2") {
+                            return (
+                              <View style={{ position: 'absolute', right: 0 }}>
+                                <Badge warning>
+                                  <Text>ส่งสำเร็จมีการแก้ไข</Text>
+                                </Badge>
+                              </View>
+
+                            )
+                          } else {
+                            return (
+                              <View style={{ position: 'absolute', right: 0 }}>
+                                <Badge >
+                                  <Text>ส่งไม่สำเร็จ</Text>
+                                </Badge>
+                              </View>
+
+                            )
+                          }
+                        })()
+                      }
+                      {/* <Badge success>
+                        <Text>ส่งสำเร็จ</Text>
+                      </Badge> */}
+                    </View>
+                  </ListItem>
+                ))
+              }
+              {/* <ListItem>
                 <View>
                   <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
                     <Text style={styles.storeLabel}>ABCD001</Text>
-                    <Text style={{ paddingHorizontal: 5 }}>คุณC</Text>
-                    <Text>/</Text>
                     <Text style={{ paddingHorizontal: 5 }}>ร้านCCC</Text>
                   </View>
                 </View>
@@ -153,8 +218,8 @@ class SearchTab extends Component {
                     <Text>ส่งสำเร็จ</Text>
                   </Badge>
                 </View>
-              </ListItem>
-              <ListItem>
+              </ListItem> */}
+              {/* <ListItem>
                 <View>
                   <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
                     <Text style={styles.storeLabel}>ABCD001</Text>
@@ -183,7 +248,7 @@ class SearchTab extends Component {
                     <Text>ส่งไม่สำเร็จ</Text>
                   </Badge>
                 </View>
-              </ListItem>
+              </ListItem> */}
             </Content>
           </Tab>
         </Tabs>
@@ -214,6 +279,16 @@ const queryZONE = gql`
   query queryZONE($MessengerID:String!){
     queryZONE(MessengerID: $MessengerID){
           Zone
+      }
+  }
+`
+
+const sucesswork = gql`
+  query sucesswork($MessengerID:String!){
+    sucesswork(MessengerID: $MessengerID){
+          invoiceNumber
+          status
+          DELIVERYNAME
       }
   }
 `
