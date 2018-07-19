@@ -1,27 +1,54 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet ,StatusBar} from 'react-native'
+import { AppRegistry, Text, StyleSheet, StatusBar, Dimensions, View } from 'react-native'
 
-import {Icon,Header,Container,Left,Body,Title,Right,Button} from 'native-base';
+import { Icon, Header, Container, Left, Body, Title, Right, Button, Content } from 'native-base';
 
 class AddMediaTab extends Component {
 
-    static navigationOptions = {
-        tabBarLabel: "่เครม",
-        tabBarIcon: ({ tintColor }) => (
-            <Icon name="ios-construct" style={{ color:
-            tintColor  }} />
-            
-        ),
-        
-    }
+  constructor(props) {
+    super(props);
+
+    // this.state = {
+    //   latitude: null,
+    //   longitude: null,
+    //   error: null,
+    // };
+  }
+
+  static navigationOptions = {
+    tabBarLabel: "่เครม",
+    tabBarIcon: ({ tintColor }) => (
+      <Icon name="ios-construct" style={{
+        color:
+          tintColor
+      }} />
+    ),
+  }
+
+  // componentDidMount() {
+  //   navigator.geolocation.getCurrentPosition(
+  //     (position) => {
+  //       console.log("wokeeey");
+  //       console.log(position);
+  //       this.setState({
+  //         latitude: position.coords.latitude,
+  //         longitude: position.coords.longitude,
+  //         error: null,
+  //       });
+  //     },
+  //     (error) => this.setState({ error: error.message }),
+  //     { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+  //   );
+  // }
+  
   render() {
     const { navigate } = this.props.navigation
     return (
       <Container>
-       <Header>
+        <Header>
           <Left>
             <Button transparent
-            onPress={() => {navigate("MainMenu")}}>
+              onPress={() => { navigate("MainMenu") }}>
               <Icon name='arrow-back' />
             </Button>
           </Left>
@@ -30,18 +57,36 @@ class AddMediaTab extends Component {
           </Body>
           <Right />
         </Header>
+        {/* <Content>
+          <View>
+            <Text> {this.state.latitude} </Text>
+            <Text> {this.state.longitude} </Text>
+            <Text> {this.state.error} </Text>
+          </View>
+        </Content> */}
       </Container>
     );
   }
 
-  
+
 }
 export default AddMediaTab;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center"
-    },
-})
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+});

@@ -42,7 +42,8 @@ class SubmitJob extends Component {
                 "invoiceNumber": this.props.navigation.state.params.id
             }
         }).then((result) => {
-            navigate("Search")
+            this.props.navigation.state.params.refresion()
+            this.props.navigation.goBack()
         }).catch((err) => {
             console.log("err of submitwork", err)
         });
@@ -116,7 +117,16 @@ class SubmitJob extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => this.submitedit()} >
+                        <TouchableOpacity onPress={() => 
+                            Alert.alert(
+                                "Confirm Finish Job",
+                                "",
+                                [
+                                    { text: "Cancle", onPress: () => console.log("Cancle")},
+                                    { text: "Confirm", onPress: () => this.submitedit()}
+                                ]
+                            )
+                        } >
                             <View style={{
                                 width: Dimensions.get('window').width / 2, height: 80, backgroundColor: '#66FFB3'
                                 , justifyContent: 'center', alignItems: 'center'

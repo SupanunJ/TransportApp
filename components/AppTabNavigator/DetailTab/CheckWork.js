@@ -8,10 +8,29 @@ class CheckWork extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ShowData: []
+            ShowData: [],
+            latitude: null,
+            longitude: null,
+            error: null,
         }
         this.props.client.resetStore();
         this.datailwork();
+    }
+
+    componentDidMount() {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                console.log("wokeeey");
+                console.log(position);
+                this.setState({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    error: null,
+                });
+            },
+            (error) => this.setState({ error: error.message }),
+            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+        );
     }
 
     datailwork = () => {
@@ -41,7 +60,9 @@ class CheckWork extends Component {
             }
         }).then((result) => {
             if (result.data.confirmworksome.status) {
-                navigate('Home',{id:this.props.navigation.state.params.id})
+                this.tracking(this.props.navigation.state.params.id, "5", global.NameOfMess, this.state.latitude, this.state.longitude);
+                this.props.navigation.state.params.refresion()
+                this.props.navigation.goBack()
             } else {
                 Alert.alert("Confirm Failed", "Please Confirm Again")
             }
@@ -50,13 +71,32 @@ class CheckWork extends Component {
         });
     }
 
+    tracking = (invoice, status, messID, lat, long) => {
+        console.log("tracking")
+
+        this.props.client.mutate({
+            mutation: tracking,
+            variables: {
+                "invoice": invoice,
+                "status": status,
+                "messengerID": messID,
+                "lat": lat,
+                "long": long,
+            }
+        }).then((result) => {
+            console.log("Tracking ", result.data.tracking.status)
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
     // componentWillMount() {
     //     console.log('componentWillMount');
-        
+
     // }
     // componentWillUnmount() {
     //     console.log('componentWillUnmount')
-        
+
     // }
 
     render() {
@@ -126,14 +166,14 @@ class CheckWork extends Component {
                             height: '80%',
                             justifyContent: 'center',
                             alignItems: 'center'
-                            }}
+                        }}
                             onPress={
                                 () => Alert.alert(
                                     'Confirm?',
                                     'You want to confirm?',
                                     [
-                                        {text: 'yes', onPress: () => this.confirmworksome()},
-                                        {text: 'no', onPress: () => console.log("no")}
+                                        { text: 'yes', onPress: () => this.confirmworksome() },
+                                        { text: 'no', onPress: () => console.log("no") }
                                     ]
                                 )
                             }
@@ -174,6 +214,26 @@ const datailwork = gql`
 const confirmworksome = gql`
     mutation confirmworksome($invoiceNumber:String!){
         confirmworksome(invoiceNumber: $invoiceNumber){
+            status
+        }
+    }
+`
+
+const tracking = gql`
+    mutation tracking(
+        $invoice:String!,
+        $status:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        tracking(
+            invoice: $invoice,
+            status: $status,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
             status
         }
     }

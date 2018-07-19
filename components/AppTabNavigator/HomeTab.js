@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, TouchableOpacity, RefreshControl } from 'react-native'
 import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer } from 'native-base';
 import { List, ListItem } from 'react-native-elements';
 import { gql, withApollo, compose } from 'react-apollo'
@@ -13,7 +13,8 @@ class HomeTab extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showTable: []
+            showTable: [],
+            refreshing_1: false,
         }
         // this.props.client.resetStore();
         this.worklist_query();
@@ -37,6 +38,14 @@ class HomeTab extends Component {
         });
     }
 
+    _Re_worklist_query = () => {
+        this.props.client.resetStore();
+        console.log('_Re_worklist_query')
+        this.setState({ refreshing_1: true });
+        this.worklist_query();
+        this.setState({ refreshing_1: false });
+    }
+
     confirmwork = () => {
         const { navigate } = this.props.navigation
         console.log("confirmwork")
@@ -57,21 +66,6 @@ class HomeTab extends Component {
         });
     }
 
-    // componentWillMount() {
-    //     console.log('componentWillMount');
-    //     this.worklist_query();
-    // }
-
-    // componentDidMount() {
-    //     this.props.client.resetStore();
-    //     this.worklist_query();
-    // }
-
-    // componentWillUnmount() {
-    //     console.log('componentWillUnmount')
-    //     this.props.client.resetStore();
-    // }
-
     render() {
 
         const { navigate } = this.props.navigation
@@ -91,7 +85,12 @@ class HomeTab extends Component {
                     </Body>
                     <Right />
                 </Header>
-                <Content>
+                <Content refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing_1}
+                        onRefresh={this._Re_worklist_query}
+                    />
+                }>
 
                     <View>
                         {
@@ -103,7 +102,7 @@ class HomeTab extends Component {
                                     </View>
                                     <View style={{ position: 'absolute', right: 0 }}>
                                         <Button transparent
-                                            onPress={() => navigate('CheckWork', { id: l.invoiceNumber })}>
+                                            onPress={() => navigate('CheckWork', { id: l.invoiceNumber, refresion: this._Re_worklist_query })}>
                                             <Icon name='ios-arrow-dropright' />
                                         </Button>
                                     </View>
@@ -140,7 +139,7 @@ class HomeTab extends Component {
                         </Button>
                     </View>
                 </Footer>
-            </Container>
+            </Container >
 
         );
     }

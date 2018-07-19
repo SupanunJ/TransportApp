@@ -16,10 +16,29 @@ class MainMenu extends Component {
             mess: "",
             showStatus: [],
             showINVOICE_ID: [],
+            latitude: null,
+            longitude: null,
+            error: null,
         };
         global.NameOfMess = "";
         this.props.client.resetStore();
         this.user();
+    }
+
+    componentDidMount() {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                console.log("wokeeey");
+                console.log(position);
+                this.setState({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    error: null,
+                });
+            },
+            (error) => this.setState({ error: error.message }),
+            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+        );
     }
 
     user = () => {
@@ -52,7 +71,7 @@ class MainMenu extends Component {
             if (result.data.checkroundout.status == 1) {
                 Alert.alert(
                     'คุณยังมีรายการที่ยังไม่ได้ตรวจ',
-                    'ต้ืองการออกรอบเลยหรือไม่',
+                    'ต้องการออกรอบเลยหรือไม่',
                     [
                         { text: 'yes', onPress: () => this.roundout() },
                         { text: 'back to checkwork', onPress: () => navigate("Home") },
@@ -81,7 +100,7 @@ class MainMenu extends Component {
         this.props.client.mutate({
             mutation: roundout
         }).then((result) => {
-            navigate('SearchTab')
+            navigate('Search')
             // if (result.data.roundout.status) {
             //     navigate('SearchTab')
             // } else {
@@ -102,20 +121,20 @@ class MainMenu extends Component {
         }).then((result) => {
             console.log("checkinvoice", result.data.checkinvoice)
             this.setState({ showINVOICE_ID: result.data.checkinvoice })
-            console.log("NUM",this.state.showINVOICE_ID.length)
-            if(this.state.showINVOICE_ID.length > 0)
-            {
+            console.log("NUM", this.state.showINVOICE_ID.length)
+            if (this.state.showINVOICE_ID.length > 0) {
                 this.billTOapp();
-            }else{
+            } else {
                 navigate('HomeTab')
             }
-            
+
         }).catch((err) => {
             console.log("err of checkinvoice", err)
         });
     }
 
     billTOapp = () => {
+        const { navigate } = this.props.navigation
         console.log("billTOapp")
         this.props.client.mutate({
             mutation: billTOapp,
@@ -125,16 +144,17 @@ class MainMenu extends Component {
         }).then((result) => {
             console.log(global.NameOfMess)
             console.log("result", result.data.billTOapp)
-            this.state.showINVOICE_ID.map(l => (
-                this.detailtoapp(l.INVOICEID)
-            ));
+            this.state.showINVOICE_ID.map(l => {
+                this.detailtoapp(l.INVOICEID);
+                this.tracking(l.INVOICEID, "4", global.NameOfMess, this.state.latitude, this.state.longitude);
+            });
+            navigate('HomeTab')
         }).catch((err) => {
             console.log("error of billTOapp", err)
         });
     }
 
     detailtoapp = (id) => {
-        const { navigate } = this.props.navigation
         console.log("detailtoapp")
 
         this.props.client.mutate({
@@ -144,21 +164,33 @@ class MainMenu extends Component {
             }
         }).then((result) => {
             console.log("...")
-            navigate('HomeTab')
+            // navigate('HomeTab')
         }).catch((err) => {
             console.log("error", err)
         });
     }
 
-    _PRESS_HOME = () => {
-        // const { navigate } = this.props.navigation
-        this.checkinvoice();
-        // this.billTOapp();
+    tracking = (invoice, status, messID, lat, long) => {
+        console.log("tracking")
 
-        // this.state.showINVOICE_ID.map(l => (
-        //     this.detailtoapp(l.INVOICEID)
-        // ));
-        // navigate('HomeTab')
+        this.props.client.mutate({
+            mutation: tracking,
+            variables: {
+                "invoice": invoice,
+                "status": status,
+                "messengerID": messID,
+                "lat": lat,
+                "long": long,
+            }
+        }).then((result) => {
+            console.log("Tracking ", result.data.tracking.status)
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
+    _PRESS_HOME = () => {
+        this.checkinvoice();
     }
 
     render() {
@@ -296,6 +328,26 @@ const checkinvoice = gql`
     query checkinvoice($MessengerID:String!){
         checkinvoice(MessengerID: $MessengerID){
             INVOICEID
+        }
+    }
+`
+
+const tracking = gql`
+    mutation tracking(
+        $invoice:String!,
+        $status:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        tracking(
+            invoice: $invoice,
+            status: $status,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
+            status
         }
     }
 `

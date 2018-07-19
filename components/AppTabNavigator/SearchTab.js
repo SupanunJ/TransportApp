@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Dimensions } from 'react-native'
-import { Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Separator, ListItem, Content, Badge, Accordion,Footer } from 'native-base';
+import { Text, StyleSheet, View, Dimensions, RefreshControl } from 'react-native'
+import { Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Separator, ListItem, Content, Badge, Accordion, Footer } from 'native-base';
 import { gql, withApollo, compose } from 'react-apollo'
 
 // import SuccessWorkTab from './WorkTab/SuccessWorkTab';
@@ -15,11 +15,21 @@ class SearchTab extends Component {
       showWork: [],
       showZone: [],
       show_SUC: [],
+      refreshing_2: false,
     }
     // this.props.client.resetStore();
     this.queryZONE();
     this.worksub();
     this.sucesswork();
+  }
+
+  _RELOAD_MAIN2 = () => {
+    this.props.client.resetStore();
+    this.setState({ refreshing_2: true });
+    this.queryZONE();
+    this.worksub();
+    this.sucesswork();
+    this.setState({ refreshing_2: false });
   }
 
   worksub = () => {
@@ -76,21 +86,6 @@ class SearchTab extends Component {
     });
   }
 
-  _renderHeader(expanded) {
-    return (
-      <View
-        style={{ flexDirection: "row", padding: 10, justifyContent: "space-between", alignItems: "center", backgroundColor: "#A9DAD6" }}
-      >
-        <Text style={{ fontWeight: "600" }}>
-          {" "}{}
-        </Text>
-        {expanded
-          ? <Icon style={{ fontSize: 18 }} name="remove-circle" />
-          : <Icon style={{ fontSize: 18 }} name="add-circle" />}
-      </View>
-    );
-  }
-
   render() {
 
     const { navigate } = this.props.navigation
@@ -111,9 +106,16 @@ class SearchTab extends Component {
           <Right />
         </Header>
 
-        <Tabs>
+        <Tabs locked>
           <Tab heading={<TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-cart" /><Text style={{ color: 'white' }}>  รายการส่ง</Text></TabHeading>}>
-            <Content padder>
+            <Content padder
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.refreshing_2}
+                  onRefresh={this._RELOAD_MAIN2}
+                />
+              }
+            >
               <View>
                 {
                   this.state.showZone.map(val => (
@@ -141,7 +143,7 @@ class SearchTab extends Component {
                               </View>
                               <View style={{ position: 'absolute', right: 10 }}>
                                 <Button transparent
-                                  onPress={() => navigate('DetailWork', { id: l.invoiceNumber })}>
+                                  onPress={() => navigate('DetailWork', { id: l.invoiceNumber, refresion: this._RELOAD_MAIN2 })}>
                                   <Icon name='ios-arrow-forward' />
                                 </Button>
                               </View>
@@ -157,17 +159,24 @@ class SearchTab extends Component {
           </Tab>
 
           <Tab heading={<TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-checkbox-outline" /><Text style={{ color: 'white' }}>  ส่งสำเร็จ</Text></TabHeading>}>
-            <Content>
+            <Content
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.refreshing_2}
+                  onRefresh={this._RELOAD_MAIN2}
+                />
+              }
+            >
               {
                 this.state.show_SUC.map(k => (
                   <ListItem>
                     <View>
-                      <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                      <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
                         <Text style={styles.storeLabel}>{k.invoiceNumber}</Text>
                         <Text style={{ paddingHorizontal: 5 }}>{k.DELIVERYNAME}</Text>
                       </View>
                     </View>
-                    <View style={{ position: 'absolute', right: 0 }}>
+                    <View style={{ position: 'absolute', right: 3 }}>
                       {
                         (() => {
                           if (k.status == "A1") {
@@ -180,98 +189,49 @@ class SearchTab extends Component {
                             )
                           } else if (k.status == "A2") {
                             return (
-                              <View style={{ position: 'absolute', right: 0 }}>
-                                <Badge warning>
-                                  <Text>ส่งสำเร็จมีการแก้ไข</Text>
-                                </Badge>
-                              </View>
+                              <Badge warning>
+                                <Text>ส่งสำเร็จมีการแก้ไข</Text>
+                              </Badge>
 
                             )
                           } else {
                             return (
-                              <View style={{ position: 'absolute', right: 0 }}>
-                                <Badge >
-                                  <Text>ส่งไม่สำเร็จ</Text>
-                                </Badge>
-                              </View>
+                              <Badge >
+                                <Text>ส่งไม่สำเร็จ</Text>
+                              </Badge>
 
                             )
                           }
                         })()
                       }
-                      {/* <Badge success>
-                        <Text>ส่งสำเร็จ</Text>
-                      </Badge> */}
                     </View>
                   </ListItem>
                 ))
               }
-              {/* <ListItem>
-                <View>
-                  <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
-                    <Text style={styles.storeLabel}>ABCD001</Text>
-                    <Text style={{ paddingHorizontal: 5 }}>ร้านCCC</Text>
-                  </View>
-                </View>
-                <View style={{ position: 'absolute', right: 0 }}>
-                  <Badge success>
-                    <Text>ส่งสำเร็จ</Text>
-                  </Badge>
-                </View>
-              </ListItem> */}
-              {/* <ListItem>
-                <View>
-                  <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
-                    <Text style={styles.storeLabel}>ABCD001</Text>
-                    <Text style={{ paddingHorizontal: 5 }}>คุณB</Text>
-                    <Text>/</Text>
-                    <Text style={{ paddingHorizontal: 5 }}>ร้านBBB</Text>
-                  </View>
-                </View>
-                <View style={{ position: 'absolute', right: 0 }}>
-                  <Badge warning>
-                    <Text>ส่งสำเร็จมีการแก้ไข</Text>
-                  </Badge>
-                </View>
-              </ListItem>
-              <ListItem>
-                <View>
-                  <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
-                    <Text style={styles.storeLabel}>ABCD001</Text>
-                    <Text style={{ paddingHorizontal: 5 }}>คุณB</Text>
-                    <Text>/</Text>
-                    <Text style={{ paddingHorizontal: 5 }}>ร้านBBB</Text>
-                  </View>
-                </View>
-                <View style={{ position: 'absolute', right: 0 }}>
-                  <Badge >
-                    <Text>ส่งไม่สำเร็จ</Text>
-                  </Badge>
-                </View>
-              </ListItem> */}
             </Content>
-            <Footer style={{ 
-                    backgroundColor: '#66c2ff',
-                    justifyContent:'center', 
+            <Footer style={{
+              backgroundColor: '#66c2ff',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Button warning
+                  onPress={() => navigate('SumBill')}
+                  style={{
+                    width: 200,
+                    height: '80%',
+                    justifyContent: 'center',
                     alignItems: 'center'
-                    }}>
-                    <View style={{ justifyContent:'center', alignItems: 'center' }}>
-                        <Button warning 
-                        onPress={() => navigate('SumBill')} 
-                         style={{ 
-                            width: 200, 
-                            height: '80%', 
-                            justifyContent:'center', 
-                            alignItems: 'center' }}
-                        >
-                            <Text style={{ color: 'white', fontWeight: 'bold' }}>สรุปยอดเงิน</Text>
-                        </Button>
-                    </View>
-                </Footer>
+                  }}
+                >
+                  <Text style={{ color: 'white', fontWeight: 'bold' }}>สรุปยอดเงิน</Text>
+                </Button>
+              </View>
+            </Footer>
           </Tab>
-        
+
         </Tabs>
-       
+
       </Container>
     );
   }

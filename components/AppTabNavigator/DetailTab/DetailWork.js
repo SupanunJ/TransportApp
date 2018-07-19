@@ -33,6 +33,16 @@ class DetailWork extends Component {
         this.subDetail();
     }
 
+    _RELOAD_DETAILWORK = () => {
+        this.props.client.resetStore();
+        this.subDetail();
+    }
+
+    _RELOAD_TO_GOBACK = () => {
+        this.props.navigation.state.params.refresion()
+        this.props.navigation.goBack()
+    }
+
     subDetail = () => {
         this.props.client.query({
             query: subDetail,
@@ -57,38 +67,12 @@ class DetailWork extends Component {
                 "invoiceNumber": this.props.navigation.state.params.id
             }
         }).then((result) => {
-            navigate("Search")
+            this.props.navigation.state.params.refresion()
+            this.props.navigation.goBack()
         }).catch((err) => {
             console.log("err of submitwork", err)
         });
     }
-
-    // componentDidMount() {
-    //     this.watchID = navigator.geolocation.watchPosition((position) => {
-    //         // Create the object to update this.state.mapRegion through the onRegionChange function
-    //         let region = {
-    //             latitude: position.coords.latitude,
-    //             longitude: position.coords.longitude,
-    //             latitudeDelta: 0.00922 * 1.5,
-    //             longitudeDelta: 0.00421 * 1.5
-    //         }
-    //         this.onRegionChange(region, region.latitude, region.longitude);
-    //         console.log("latlat",position.coords.latitude)
-    //     });
-    // }
-
-    // onRegionChange(region, lastLat, lastLong) {
-    //     this.setState({
-    //         mapRegion: region,
-    //         // If there are no new values set the current ones
-    //         lastLat: lastLat || this.state.lastLat,
-    //         lastLong: lastLong || this.state.lastLong
-    //     });
-    // }
-
-    // componentWillUnmount() {
-    //     navigator.geolocation.clearWatch(this.watchID);
-    // }
 
     render() {
 
@@ -134,7 +118,7 @@ class DetailWork extends Component {
                                         <Text>{l.itemCode}</Text>
                                     </View>
                                     <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.qty}</Text>
+                                        <Text>{l.qty - l.qtyCN}</Text>
                                     </View>
                                     <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.amount}</Text>
@@ -166,7 +150,7 @@ class DetailWork extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => navigate('EditItem', { id: this.props.navigation.state.params.id })} >
+                        <TouchableOpacity onPress={() => navigate('EditItem', { id: this.props.navigation.state.params.id, refresion: this._RELOAD_DETAILWORK })} >
                             <View style={{
                                 width: Dimensions.get('window').width / 2,
                                 height: 100, backgroundColor: '#FFFD66', justifyContent: 'center', alignItems: 'center'
@@ -215,7 +199,7 @@ class DetailWork extends Component {
                                                     }
                                                 )
                                         },
-                                        { text: "Finish", onPress: () => navigate("SubmitJob", { id: this.props.navigation.state.params.id }) }
+                                        { text: "Finish", onPress: () => navigate("SubmitJob", { id: this.props.navigation.state.params.id, refresion: this._RELOAD_TO_GOBACK }) }
                                     ]
                                 )
                             }
@@ -245,6 +229,7 @@ const subDetail = gql`
             itemCode
             itemName
             qty
+            qtyCN
             amount
             priceOfUnit
             amountbox
