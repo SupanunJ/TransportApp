@@ -15,6 +15,9 @@ class EditItem extends Component {
             item_arr: [],
             visibleModal: null,
             reason: "",
+            latitude: null,
+            longitude: null,
+            error: null,
         };
         this.props.client.resetStore();
         this.subDetail();
@@ -48,12 +51,52 @@ class EditItem extends Component {
             }
         }).then((result) => {
             if (result.data.editsubwork.status) {
+                this.insertedit(it_C)
+            } else {
+                console.log("no")
+            }
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
+    insertedit = (it_C) => {
+        console.log("insertedit")
+        this.props.client.mutate({
+            mutation: insertedit,
+            variables: {
+                "invoiceNumber": this.props.navigation.state.params.id,
+                "itemCode": it_C,
+            }
+        }).then((result) => {
+            if (result.data.insertedit.status) {
                 console.log("yes")
             } else {
                 console.log("no")
             }
         }).catch((err) => {
             console.log(err)
+        });
+    }
+
+    tracking = () => {
+        console.log("tracking")
+
+        this.props.client.mutate({
+            mutation: tracking,
+            variables: {
+                "invoice": this.props.navigation.state.params.id,
+                "status": "9",
+                "messengerID": global.NameOfMess,
+                "lat": this.state.latitude,
+                "long": this.state.longitude,
+            }
+        }).then((result) => {
+            console.log("Tracking ", result.data.tracking.status)
+            // this.props.navigation.state.params.refresion()
+            // this.props.navigation.goBack()
+        }).catch((err) => {
+            console.log("ERR OF TRACKING", err)
         });
     }
 
@@ -87,9 +130,23 @@ class EditItem extends Component {
                         }
                         console.log(i)
                         this.setState({ visibleModal: null })
-                        this.props.navigation.state.params.refresion()
-                        this.props.navigation.goBack()
-                        
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                console.log("wokeeey");
+                                console.log(position);
+                                this.setState({
+                                    latitude: position.coords.latitude,
+                                    longitude: position.coords.longitude,
+                                    error: null,
+                                }, () => {
+                                    this.tracking()
+                                    this.props.navigation.state.params.refresion()
+                                    this.props.navigation.goBack()
+                                });
+                            },
+                            (error) => this.setState({ error: error.message }),
+                            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                        );
                     })
                 })}
             </View>
@@ -289,20 +346,36 @@ const editsubwork = gql`
     }
 `
 
-// const inputEditsubwork = gql`
-//     mutation inputEditsubwork(
-//         $invoiceNumber:String!,
-//         $qtyCN:Int!,
-//         $itemCode:String!,
-//         $ReasonCN:String!
-//     ){
-//         inputEditsubwork(
-//             invoiceNumber: $invoiceNumber,
-//             qtyCN: $qtyCN,
-//             itemCode: $itemCode,
-//             ReasonCN: $ReasonCN
-//         ){
-//             status
-//         }
-//     }
-// `
+const insertedit = gql`
+    mutation insertedit(
+        $invoiceNumber:String!,
+        $itemCode:String!,
+    ){
+        insertedit(
+            invoiceNumber: $invoiceNumber,
+            itemCode: $itemCode,
+        ){
+            status
+        }
+    }
+`
+
+const tracking = gql`
+    mutation tracking(
+        $invoice:String!,
+        $status:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        tracking(
+            invoice: $invoice,
+            status: $status,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
+            status
+        }
+    }
+`

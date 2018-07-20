@@ -11,7 +11,11 @@ class SubmitJob extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            latitude: null,
+            longitude: null,
+            error: null,
+        }
         this.props.client.resetStore();
     }
 
@@ -42,10 +46,42 @@ class SubmitJob extends Component {
                 "invoiceNumber": this.props.navigation.state.params.id
             }
         }).then((result) => {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log("wokeeey");
+                    console.log(position);
+                    this.setState({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        error: null,
+                    }, () => this.tracking());
+                },
+                (error) => this.setState({ error: error.message }),
+                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+            );
+        }).catch((err) => {
+            console.log("err of submitwork", err)
+        });
+    }
+
+    tracking = () => {
+        console.log("tracking")
+
+        this.props.client.mutate({
+            mutation: tracking,
+            variables: {
+                "invoice": this.props.navigation.state.params.id,
+                "status": "10",
+                "messengerID": global.NameOfMess,
+                "lat": this.state.latitude,
+                "long": this.state.longitude,
+            }
+        }).then((result) => {
+            console.log("Tracking ", result.data.tracking.status)
             this.props.navigation.state.params.refresion()
             this.props.navigation.goBack()
         }).catch((err) => {
-            console.log("err of submitwork", err)
+            console.log("ERR OF TRACKING", err)
         });
     }
 
@@ -117,13 +153,13 @@ class SubmitJob extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => 
+                        <TouchableOpacity onPress={() =>
                             Alert.alert(
                                 "Confirm Finish Job",
                                 "",
                                 [
-                                    { text: "Cancle", onPress: () => console.log("Cancle")},
-                                    { text: "Confirm", onPress: () => this.submitedit()}
+                                    { text: "Cancle", onPress: () => console.log("Cancle") },
+                                    { text: "Confirm", onPress: () => this.submitedit() }
                                 ]
                             )
                         } >
@@ -159,6 +195,26 @@ const submitwork = gql`
 const submitedit = gql`
     query submitedit($invoiceNumber:String!){
         submitedit(invoiceNumber: $invoiceNumber){
+            status
+        }
+    }
+`
+
+const tracking = gql`
+    mutation tracking(
+        $invoice:String!,
+        $status:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        tracking(
+            invoice: $invoice,
+            status: $status,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
             status
         }
     }

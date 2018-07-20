@@ -91,15 +91,6 @@ class CheckWork extends Component {
         });
     }
 
-    // componentWillMount() {
-    //     console.log('componentWillMount');
-
-    // }
-    // componentWillUnmount() {
-    //     console.log('componentWillUnmount')
-
-    // }
-
     render() {
 
         const { navigate } = this.props.navigation

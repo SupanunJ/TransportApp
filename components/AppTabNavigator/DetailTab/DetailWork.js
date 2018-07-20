@@ -25,9 +25,9 @@ class DetailWork extends Component {
         super(props);
         this.state = {
             showDetailWork: [],
-            mapRegion: null,
-            lastLat: null,
-            lastLong: null,
+            latitude: null,
+            longitude: null,
+            error: null,
         }
         this.props.client.resetStore();
         this.subDetail();
@@ -67,10 +67,44 @@ class DetailWork extends Component {
                 "invoiceNumber": this.props.navigation.state.params.id
             }
         }).then((result) => {
-            this.props.navigation.state.params.refresion()
-            this.props.navigation.goBack()
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log("wokeeey");
+                    console.log(position);
+                    this.setState({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        error: null,
+                    }, () => {
+                        this.tracking("10")
+                        this.props.navigation.state.params.refresion()
+                        this.props.navigation.goBack()
+                    });
+                },
+                (error) => this.setState({ error: error.message }),
+                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+            );
         }).catch((err) => {
             console.log("err of submitwork", err)
+        });
+    }
+
+    tracking = (s) => {
+        console.log("tracking")
+
+        this.props.client.mutate({
+            mutation: tracking,
+            variables: {
+                "invoice": this.props.navigation.state.params.id,
+                "status": s,
+                "messengerID": global.NameOfMess,
+                "lat": this.state.latitude,
+                "long": this.state.longitude,
+            }
+        }).then((result) => {
+            console.log("Tracking ", result.data.tracking.status)
+        }).catch((err) => {
+            console.log("ERR OF TRACKING", err)
         });
     }
 
@@ -139,7 +173,23 @@ class DetailWork extends Component {
                         flex: 1,
                         flexDirection: 'column',
                     }}>
-                        <TouchableOpacity onPress={() => navigate('')} >
+                        <TouchableOpacity onPress={() => {
+                            navigator.geolocation.getCurrentPosition(
+                                (position) => {
+                                    console.log("wokeeey");
+                                    console.log(position);
+                                    this.setState({
+                                        latitude: position.coords.latitude,
+                                        longitude: position.coords.longitude,
+                                        error: null,
+                                    }, () => {
+                                        this.tracking("7")
+                                    });
+                                },
+                                (error) => this.setState({ error: error.message }),
+                                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                            );
+                        }}>
                             <View style={{
                                 width: Dimensions.get('window').width / 2,
                                 height: 100, backgroundColor: '#FFBC66', justifyContent: 'center', alignItems: 'center'
@@ -166,7 +216,24 @@ class DetailWork extends Component {
                         flex: 1,
                         flexDirection: 'column',
                     }}>
-                        <TouchableOpacity onPress={() => navigate('MapScreen')} >
+                        <TouchableOpacity onPress={() => {
+                            navigator.geolocation.getCurrentPosition(
+                                (position) => {
+                                    console.log("wokeeey");
+                                    console.log(position);
+                                    this.setState({
+                                        latitude: position.coords.latitude,
+                                        longitude: position.coords.longitude,
+                                        error: null,
+                                    }, () => {
+                                        this.tracking("8")
+                                        navigate('MapScreen')
+                                    });
+                                },
+                                (error) => this.setState({ error: error.message }),
+                                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                            );
+                        }} >
                             <View style={{ width: Dimensions.get('window').width / 2, height: 100, backgroundColor: '#66FFB3', justifyContent: 'center', alignItems: 'center' }} >
                                 <Image source={require('../../../assets/icon/car.png')}
                                     style={{ width: 70, height: 70 }} />
@@ -189,13 +256,7 @@ class DetailWork extends Component {
                                                         title: "รายงานการส่ง"
                                                     },
                                                     buttonIndex => {
-                                                        // this.setState({ clicked: BUTTONS[buttonIndex] });
                                                         this.submitwork(BUTTONS[buttonIndex].status)
-                                                        // this.xoxona();
-                                                        // console.log(BUTTONS[buttonIndex].status);
-
-                                                        // console.log("lat",this.state.lastLat);
-                                                        // console.log("long",this.state.lastLong);
                                                     }
                                                 )
                                         },
@@ -241,6 +302,26 @@ const subDetail = gql`
 const submitwork = gql`
     mutation submitwork($status:String!, $invoiceNumber:String!){
         submitwork(status: $status, invoiceNumber: $invoiceNumber){
+            status
+        }
+    }
+`
+
+const tracking = gql`
+    mutation tracking(
+        $invoice:String!,
+        $status:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        tracking(
+            invoice: $invoice,
+            status: $status,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
             status
         }
     }
