@@ -15,9 +15,29 @@ class HomeTab extends Component {
         this.state = {
             showTable: [],
             refreshing_1: false,
+            latitude: null,
+            longitude: null,
+            error: null,
         }
         // this.props.client.resetStore();
         this.worklist_query();
+    }
+
+    GET_LOCATE = () => {
+        console.log("componentDidMount")
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                console.log("wokeeey");
+                console.log(position);
+                this.setState({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    error: null,
+                },() => this.Trackingstatus4());
+            },
+            (error) => this.setState({ error: error.message }),
+            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+        );
     }
 
     worklist_query = () => {
@@ -47,7 +67,6 @@ class HomeTab extends Component {
     }
 
     confirmwork = () => {
-        const { navigate } = this.props.navigation
         console.log("confirmwork")
 
         this.props.client.mutate({
@@ -57,10 +76,30 @@ class HomeTab extends Component {
             }
         }).then((result) => {
             if (result.data.confirmwork.status) {
-                navigate('Home')
+                this._Re_worklist_query()
             } else {
                 Alert.alert("Confirm Failed", "Please Confirm Again")
             }
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
+    Trackingstatus4 = () => {
+        console.log("Trackingstatus4")
+
+        this.props.client.mutate({
+            mutation: Trackingstatus4,
+            variables: {
+                "status": "5",
+                "location": "NULL",
+                "messengerID": global.NameOfMess,
+                "lat": this.state.latitude,
+                "long": this.state.longitude,
+            }
+        }).then((result) => {
+            console.log("Result of Trackingstatus4", result.data.Trackingstatus4)
+            this.confirmwork()
         }).catch((err) => {
             console.log(err)
         });
@@ -129,7 +168,7 @@ class HomeTab extends Component {
                                     'Confirm ALL?',
                                     'You want to confirm all?',
                                     [
-                                        { text: 'yes', onPress: () => this.confirmwork() },
+                                        { text: 'yes', onPress: () => this.GET_LOCATE() },
                                         { text: 'no', onPress: () => console.log("no") }
                                     ]
                                 )
@@ -164,6 +203,26 @@ const querywork = gql`
 const confirmwork = gql`
     mutation confirmwork($MessengerID:String!){
         confirmwork(MessengerID: $MessengerID){
+            status
+        }
+    }
+`
+
+const Trackingstatus4 = gql`
+    mutation Trackingstatus4(
+        $status:String!,
+        $location:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        Trackingstatus4(
+            status: $status,
+            location: $location,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
             status
         }
     }

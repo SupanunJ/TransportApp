@@ -17,7 +17,7 @@ class CheckWork extends Component {
         this.datailwork();
     }
 
-    componentDidMount() {
+    GET_LOCATE = () => {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 console.log("wokeeey");
@@ -26,7 +26,7 @@ class CheckWork extends Component {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                     error: null,
-                });
+                },() => this.confirmworksome());
             },
             (error) => this.setState({ error: error.message }),
             { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
@@ -50,7 +50,7 @@ class CheckWork extends Component {
     }
 
     confirmworksome = () => {
-        const { navigate } = this.props.navigation
+        // const { navigate } = this.props.navigation
         console.log("confirmworksome")
 
         this.props.client.mutate({
@@ -60,9 +60,7 @@ class CheckWork extends Component {
             }
         }).then((result) => {
             if (result.data.confirmworksome.status) {
-                this.tracking(this.props.navigation.state.params.id, "5", global.NameOfMess, this.state.latitude, this.state.longitude);
-                this.props.navigation.state.params.refresion()
-                this.props.navigation.goBack()
+                this.tracking()
             } else {
                 Alert.alert("Confirm Failed", "Please Confirm Again")
             }
@@ -71,22 +69,25 @@ class CheckWork extends Component {
         });
     }
 
-    tracking = (invoice, status, messID, lat, long) => {
+    tracking = () => {
         console.log("tracking")
+        // console.log(this.props.navigation.state.params.id)
 
         this.props.client.mutate({
             mutation: tracking,
             variables: {
-                "invoice": invoice,
-                "status": status,
-                "messengerID": messID,
-                "lat": lat,
-                "long": long,
+                "invoice": this.props.navigation.state.params.id,
+                "status": "5",
+                "messengerID": global.NameOfMess,
+                "lat": this.state.latitude,
+                "long": this.state.longitude,
             }
         }).then((result) => {
             console.log("Tracking ", result.data.tracking.status)
+            this.props.navigation.state.params.refresion()
+            this.props.navigation.goBack()
         }).catch((err) => {
-            console.log(err)
+            console.log("ERR OF TRACKING", err)
         });
     }
 
@@ -172,7 +173,7 @@ class CheckWork extends Component {
                                     'Confirm?',
                                     'You want to confirm?',
                                     [
-                                        { text: 'yes', onPress: () => this.confirmworksome() },
+                                        { text: 'yes', onPress: () =>  this.GET_LOCATE() },
                                         { text: 'no', onPress: () => console.log("no") }
                                     ]
                                 )

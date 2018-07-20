@@ -89,6 +89,7 @@ class EditItem extends Component {
                         this.setState({ visibleModal: null })
                         this.props.navigation.state.params.refresion()
                         this.props.navigation.goBack()
+                        
                     })
                 })}
             </View>
