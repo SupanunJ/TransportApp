@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, TouchableOpacity, RefreshControl } from 'react-native'
 import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer } from 'native-base';
 import { List, ListItem } from 'react-native-elements';
 import { gql, withApollo, compose } from 'react-apollo'
@@ -13,10 +13,31 @@ class HomeTab extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showTable: []
+            showTable: [],
+            refreshing_1: false,
+            latitude: null,
+            longitude: null,
+            error: null,
         }
         // this.props.client.resetStore();
         this.worklist_query();
+    }
+
+    GET_LOCATE = () => {
+        console.log("componentDidMount")
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                console.log("wokeeey");
+                console.log(position);
+                this.setState({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    error: null,
+                },() => this.Trackingstatus4());
+            },
+            (error) => this.setState({ error: error.message }),
+            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+        );
     }
 
     worklist_query = () => {
@@ -37,8 +58,15 @@ class HomeTab extends Component {
         });
     }
 
+    _Re_worklist_query = () => {
+        this.props.client.resetStore();
+        console.log('_Re_worklist_query')
+        this.setState({ refreshing_1: true });
+        this.worklist_query();
+        this.setState({ refreshing_1: false });
+    }
+
     confirmwork = () => {
-        const { navigate } = this.props.navigation
         console.log("confirmwork")
 
         this.props.client.mutate({
@@ -48,7 +76,7 @@ class HomeTab extends Component {
             }
         }).then((result) => {
             if (result.data.confirmwork.status) {
-                navigate('Home')
+                this._Re_worklist_query()
             } else {
                 Alert.alert("Confirm Failed", "Please Confirm Again")
             }
@@ -57,20 +85,25 @@ class HomeTab extends Component {
         });
     }
 
-    // componentWillMount() {
-    //     console.log('componentWillMount');
-    //     this.worklist_query();
-    // }
+    Trackingstatus4 = () => {
+        console.log("Trackingstatus4")
 
-    // componentDidMount() {
-    //     this.props.client.resetStore();
-    //     this.worklist_query();
-    // }
-
-    // componentWillUnmount() {
-    //     console.log('componentWillUnmount')
-    //     this.props.client.resetStore();
-    // }
+        this.props.client.mutate({
+            mutation: Trackingstatus4,
+            variables: {
+                "status": "5",
+                "location": "NULL",
+                "messengerID": global.NameOfMess,
+                "lat": this.state.latitude,
+                "long": this.state.longitude,
+            }
+        }).then((result) => {
+            console.log("Result of Trackingstatus4", result.data.Trackingstatus4)
+            this.confirmwork()
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
 
     render() {
 
@@ -91,7 +124,12 @@ class HomeTab extends Component {
                     </Body>
                     <Right />
                 </Header>
-                <Content>
+                <Content refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing_1}
+                        onRefresh={this._Re_worklist_query}
+                    />
+                }>
 
                     <View>
                         {
@@ -103,7 +141,7 @@ class HomeTab extends Component {
                                     </View>
                                     <View style={{ position: 'absolute', right: 0 }}>
                                         <Button transparent
-                                            onPress={() => navigate('CheckWork', { id: l.invoiceNumber })}>
+                                            onPress={() => navigate('CheckWork', { id: l.invoiceNumber, refresion: this._Re_worklist_query })}>
                                             <Icon name='ios-arrow-dropright' />
                                         </Button>
                                     </View>
@@ -130,7 +168,7 @@ class HomeTab extends Component {
                                     'Confirm ALL?',
                                     'You want to confirm all?',
                                     [
-                                        { text: 'yes', onPress: () => this.confirmwork() },
+                                        { text: 'yes', onPress: () => this.GET_LOCATE() },
                                         { text: 'no', onPress: () => console.log("no") }
                                     ]
                                 )
@@ -140,7 +178,7 @@ class HomeTab extends Component {
                         </Button>
                     </View>
                 </Footer>
-            </Container>
+            </Container >
 
         );
     }
@@ -165,6 +203,26 @@ const querywork = gql`
 const confirmwork = gql`
     mutation confirmwork($MessengerID:String!){
         confirmwork(MessengerID: $MessengerID){
+            status
+        }
+    }
+`
+
+const Trackingstatus4 = gql`
+    mutation Trackingstatus4(
+        $status:String!,
+        $location:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        Trackingstatus4(
+            status: $status,
+            location: $location,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
             status
         }
     }

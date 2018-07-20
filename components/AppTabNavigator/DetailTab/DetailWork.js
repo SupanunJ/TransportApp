@@ -25,12 +25,22 @@ class DetailWork extends Component {
         super(props);
         this.state = {
             showDetailWork: [],
-            mapRegion: null,
-            lastLat: null,
-            lastLong: null,
+            latitude: null,
+            longitude: null,
+            error: null,
         }
         this.props.client.resetStore();
         this.subDetail();
+    }
+
+    _RELOAD_DETAILWORK = () => {
+        this.props.client.resetStore();
+        this.subDetail();
+    }
+
+    _RELOAD_TO_GOBACK = () => {
+        this.props.navigation.state.params.refresion()
+        this.props.navigation.goBack()
     }
 
     subDetail = () => {
@@ -57,38 +67,46 @@ class DetailWork extends Component {
                 "invoiceNumber": this.props.navigation.state.params.id
             }
         }).then((result) => {
-            navigate("Search")
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log("wokeeey");
+                    console.log(position);
+                    this.setState({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        error: null,
+                    }, () => {
+                        this.tracking("10")
+                        this.props.navigation.state.params.refresion()
+                        this.props.navigation.goBack()
+                    });
+                },
+                (error) => this.setState({ error: error.message }),
+                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+            );
         }).catch((err) => {
             console.log("err of submitwork", err)
         });
     }
 
-    // componentDidMount() {
-    //     this.watchID = navigator.geolocation.watchPosition((position) => {
-    //         // Create the object to update this.state.mapRegion through the onRegionChange function
-    //         let region = {
-    //             latitude: position.coords.latitude,
-    //             longitude: position.coords.longitude,
-    //             latitudeDelta: 0.00922 * 1.5,
-    //             longitudeDelta: 0.00421 * 1.5
-    //         }
-    //         this.onRegionChange(region, region.latitude, region.longitude);
-    //         console.log("latlat",position.coords.latitude)
-    //     });
-    // }
+    tracking = (s) => {
+        console.log("tracking")
 
-    // onRegionChange(region, lastLat, lastLong) {
-    //     this.setState({
-    //         mapRegion: region,
-    //         // If there are no new values set the current ones
-    //         lastLat: lastLat || this.state.lastLat,
-    //         lastLong: lastLong || this.state.lastLong
-    //     });
-    // }
-
-    // componentWillUnmount() {
-    //     navigator.geolocation.clearWatch(this.watchID);
-    // }
+        this.props.client.mutate({
+            mutation: tracking,
+            variables: {
+                "invoice": this.props.navigation.state.params.id,
+                "status": s,
+                "messengerID": global.NameOfMess,
+                "lat": this.state.latitude,
+                "long": this.state.longitude,
+            }
+        }).then((result) => {
+            console.log("Tracking ", result.data.tracking.status)
+        }).catch((err) => {
+            console.log("ERR OF TRACKING", err)
+        });
+    }
 
     render() {
 
@@ -134,7 +152,7 @@ class DetailWork extends Component {
                                         <Text>{l.itemCode}</Text>
                                     </View>
                                     <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.qty}</Text>
+                                        <Text>{l.qty - l.qtyCN}</Text>
                                     </View>
                                     <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.amount}</Text>
@@ -155,7 +173,23 @@ class DetailWork extends Component {
                         flex: 1,
                         flexDirection: 'column',
                     }}>
-                        <TouchableOpacity onPress={() => navigate('')} >
+                        <TouchableOpacity onPress={() => {
+                            navigator.geolocation.getCurrentPosition(
+                                (position) => {
+                                    console.log("wokeeey");
+                                    console.log(position);
+                                    this.setState({
+                                        latitude: position.coords.latitude,
+                                        longitude: position.coords.longitude,
+                                        error: null,
+                                    }, () => {
+                                        this.tracking("7")
+                                    });
+                                },
+                                (error) => this.setState({ error: error.message }),
+                                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                            );
+                        }}>
                             <View style={{
                                 width: Dimensions.get('window').width / 2,
                                 height: 100, backgroundColor: '#FFBC66', justifyContent: 'center', alignItems: 'center'
@@ -166,7 +200,7 @@ class DetailWork extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => navigate('EditItem', { id: this.props.navigation.state.params.id })} >
+                        <TouchableOpacity onPress={() => navigate('EditItem', { id: this.props.navigation.state.params.id, refresion: this._RELOAD_DETAILWORK })} >
                             <View style={{
                                 width: Dimensions.get('window').width / 2,
                                 height: 100, backgroundColor: '#FFFD66', justifyContent: 'center', alignItems: 'center'
@@ -182,7 +216,24 @@ class DetailWork extends Component {
                         flex: 1,
                         flexDirection: 'column',
                     }}>
-                        <TouchableOpacity onPress={() => navigate('MapScreen')} >
+                        <TouchableOpacity onPress={() => {
+                            navigator.geolocation.getCurrentPosition(
+                                (position) => {
+                                    console.log("wokeeey");
+                                    console.log(position);
+                                    this.setState({
+                                        latitude: position.coords.latitude,
+                                        longitude: position.coords.longitude,
+                                        error: null,
+                                    }, () => {
+                                        this.tracking("8")
+                                        navigate('MapScreen')
+                                    });
+                                },
+                                (error) => this.setState({ error: error.message }),
+                                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                            );
+                        }} >
                             <View style={{ width: Dimensions.get('window').width / 2, height: 100, backgroundColor: '#66FFB3', justifyContent: 'center', alignItems: 'center' }} >
                                 <Image source={require('../../../assets/icon/car.png')}
                                     style={{ width: 70, height: 70 }} />
@@ -205,17 +256,11 @@ class DetailWork extends Component {
                                                         title: "รายงานการส่ง"
                                                     },
                                                     buttonIndex => {
-                                                        // this.setState({ clicked: BUTTONS[buttonIndex] });
                                                         this.submitwork(BUTTONS[buttonIndex].status)
-                                                        // this.xoxona();
-                                                        // console.log(BUTTONS[buttonIndex].status);
-
-                                                        // console.log("lat",this.state.lastLat);
-                                                        // console.log("long",this.state.lastLong);
                                                     }
                                                 )
                                         },
-                                        { text: "Finish", onPress: () => navigate("SubmitJob", { id: this.props.navigation.state.params.id }) }
+                                        { text: "Finish", onPress: () => navigate("SubmitJob", { id: this.props.navigation.state.params.id, refresion: this._RELOAD_TO_GOBACK }) }
                                     ]
                                 )
                             }
@@ -245,6 +290,7 @@ const subDetail = gql`
             itemCode
             itemName
             qty
+            qtyCN
             amount
             priceOfUnit
             amountbox
@@ -256,6 +302,26 @@ const subDetail = gql`
 const submitwork = gql`
     mutation submitwork($status:String!, $invoiceNumber:String!){
         submitwork(status: $status, invoiceNumber: $invoiceNumber){
+            status
+        }
+    }
+`
+
+const tracking = gql`
+    mutation tracking(
+        $invoice:String!,
+        $status:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        tracking(
+            invoice: $invoice,
+            status: $status,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
             status
         }
     }

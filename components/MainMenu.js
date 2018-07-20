@@ -16,11 +16,30 @@ class MainMenu extends Component {
             mess: "",
             showStatus: [],
             showINVOICE_ID: [],
+            latitude: null,
+            longitude: null,
+            error: null,
         };
         global.NameOfMess = "";
         this.props.client.resetStore();
         this.user();
     }
+
+    // GET_LOCATE() {
+    //     navigator.geolocation.getCurrentPosition(
+    //         (position) => {
+    //             console.log("wokeeey");
+    //             console.log(position);
+    //             this.setState({
+    //                 latitude: position.coords.latitude,
+    //                 longitude: position.coords.longitude,
+    //                 error: null,
+    //             });
+    //         },
+    //         (error) => this.setState({ error: error.message }),
+    //         { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+    //     );
+    // }
 
     user = () => {
         const IMEI = require('react-native-imei');
@@ -52,9 +71,25 @@ class MainMenu extends Component {
             if (result.data.checkroundout.status == 1) {
                 Alert.alert(
                     'คุณยังมีรายการที่ยังไม่ได้ตรวจ',
-                    'ต้ืองการออกรอบเลยหรือไม่',
+                    'ต้องการออกรอบเลยหรือไม่',
                     [
-                        { text: 'yes', onPress: () => this.roundout() },
+                        {
+                            text: 'yes', onPress: () => {
+                                navigator.geolocation.getCurrentPosition(
+                                    (position) => {
+                                        console.log("wokeeey");
+                                        console.log(position);
+                                        this.setState({
+                                            latitude: position.coords.latitude,
+                                            longitude: position.coords.longitude,
+                                            error: null,
+                                        }, () => this.Trackingstatus5());
+                                    },
+                                    (error) => this.setState({ error: error.message }),
+                                    { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                );
+                            }
+                        },
                         { text: 'back to checkwork', onPress: () => navigate("Home") },
                         { text: 'no', onPress: () => console.log("no") },
                     ]
@@ -64,7 +99,23 @@ class MainMenu extends Component {
                     'Confirm Round Out?',
                     'You want to confirm round out',
                     [
-                        { text: 'yes', onPress: () => this.roundout() },
+                        {
+                            text: 'yes', onPress: () => {
+                                navigator.geolocation.getCurrentPosition(
+                                    (position) => {
+                                        console.log("wokeeey");
+                                        console.log(position);
+                                        this.setState({
+                                            latitude: position.coords.latitude,
+                                            longitude: position.coords.longitude,
+                                            error: null,
+                                        }, () => this.Trackingstatus5());
+                                    },
+                                    (error) => this.setState({ error: error.message }),
+                                    { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                );
+                            }
+                        },
                         { text: 'no', onPress: () => console.log("no") },
                     ]
                 )
@@ -81,12 +132,7 @@ class MainMenu extends Component {
         this.props.client.mutate({
             mutation: roundout
         }).then((result) => {
-            navigate('SearchTab')
-            // if (result.data.roundout.status) {
-            //     navigate('SearchTab')
-            // } else {
-            //     Alert.alert("Round Out Failed", "Please Confirm Again")
-            // }
+            navigate('Search')
         }).catch((err) => {
             console.log("error", err)
         });
@@ -102,20 +148,20 @@ class MainMenu extends Component {
         }).then((result) => {
             console.log("checkinvoice", result.data.checkinvoice)
             this.setState({ showINVOICE_ID: result.data.checkinvoice })
-            console.log("NUM",this.state.showINVOICE_ID.length)
-            if(this.state.showINVOICE_ID.length > 0)
-            {
+            console.log("NUM", this.state.showINVOICE_ID.length)
+            if (this.state.showINVOICE_ID.length > 0) {
                 this.billTOapp();
-            }else{
+            } else {
                 navigate('HomeTab')
             }
-            
+
         }).catch((err) => {
             console.log("err of checkinvoice", err)
         });
     }
 
     billTOapp = () => {
+        const { navigate } = this.props.navigation
         console.log("billTOapp")
         this.props.client.mutate({
             mutation: billTOapp,
@@ -123,18 +169,33 @@ class MainMenu extends Component {
                 "MessengerID": global.NameOfMess
             }
         }).then((result) => {
-            console.log(global.NameOfMess)
-            console.log("result", result.data.billTOapp)
-            this.state.showINVOICE_ID.map(l => (
-                this.detailtoapp(l.INVOICEID)
-            ));
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log("wokeeey");
+                    console.log(position);
+                    this.setState({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        error: null,
+                    }, () => {
+                        console.log(global.NameOfMess)
+                        console.log("result", result.data.billTOapp)
+                        this.state.showINVOICE_ID.map(l => {
+                            this.detailtoapp(l.INVOICEID);
+                            this.tracking(l.INVOICEID, "4", global.NameOfMess, this.state.latitude, this.state.longitude);
+                        });
+                        navigate('HomeTab')
+                    });
+                },
+                (error) => this.setState({ error: error.message }),
+                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+            );
         }).catch((err) => {
             console.log("error of billTOapp", err)
         });
     }
 
     detailtoapp = (id) => {
-        const { navigate } = this.props.navigation
         console.log("detailtoapp")
 
         this.props.client.mutate({
@@ -144,21 +205,53 @@ class MainMenu extends Component {
             }
         }).then((result) => {
             console.log("...")
-            navigate('HomeTab')
+            // navigate('HomeTab')
         }).catch((err) => {
             console.log("error", err)
         });
     }
 
-    _PRESS_HOME = () => {
-        // const { navigate } = this.props.navigation
-        this.checkinvoice();
-        // this.billTOapp();
+    tracking = (invoice, status, messID, lat, long) => {
+        console.log("tracking")
 
-        // this.state.showINVOICE_ID.map(l => (
-        //     this.detailtoapp(l.INVOICEID)
-        // ));
-        // navigate('HomeTab')
+        this.props.client.mutate({
+            mutation: tracking,
+            variables: {
+                "invoice": invoice,
+                "status": status,
+                "messengerID": messID,
+                "lat": lat,
+                "long": long,
+            }
+        }).then((result) => {
+            console.log("Tracking ", result.data.tracking.status)
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
+    Trackingstatus5 = () => {
+        console.log("Trackingstatus5")
+
+        this.props.client.mutate({
+            mutation: Trackingstatus5,
+            variables: {
+                "status": "6",
+                "location": "NULL",
+                "messengerID": global.NameOfMess,
+                "lat": this.state.latitude,
+                "long": this.state.longitude,
+            }
+        }).then((result) => {
+            console.log("Result of Trackingstatus5", result.data.Trackingstatus5)
+            this.roundout()
+        }).catch((err) => {
+            console.log("ERR OF Trackingstatus5", err)
+        });
+    }
+
+    _PRESS_HOME = () => {
+        this.checkinvoice();
     }
 
     render() {
@@ -296,6 +389,46 @@ const checkinvoice = gql`
     query checkinvoice($MessengerID:String!){
         checkinvoice(MessengerID: $MessengerID){
             INVOICEID
+        }
+    }
+`
+
+const tracking = gql`
+    mutation tracking(
+        $invoice:String!,
+        $status:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        tracking(
+            invoice: $invoice,
+            status: $status,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
+            status
+        }
+    }
+`
+
+const Trackingstatus5 = gql`
+    mutation Trackingstatus5(
+        $status:String!,
+        $location:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        Trackingstatus5(
+            status: $status,
+            location: $location,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
+            status
         }
     }
 `

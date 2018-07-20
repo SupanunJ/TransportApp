@@ -1,15 +1,23 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, ScrollView } from 'react-native'
+import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
 import { gql, withApollo, compose } from 'react-apollo'
-import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer, Item, Input } from 'native-base';
+import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer, Item, Input, Form, Textarea } from 'native-base';
+import Modal from "react-native-modal";
+// const update = React.addons.update;
 
 class EditItem extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            text: '0',
-            showWorkEdit: []
+            text_arr: [],
+            showWorkEdit: [],
+            item_arr: [],
+            visibleModal: null,
+            reason: "",
+            latitude: null,
+            longitude: null,
+            error: null,
         };
         this.props.client.resetStore();
         this.subDetail();
@@ -30,17 +38,38 @@ class EditItem extends Component {
         });
     }
 
-    editsubwork = (q_CN, it_C) => {
-        console.log("edit")
+    editsubwork = (q_CN, it_C, reason) => {
+        console.log("editsubwork")
+        console.log(q_CN, it_C, reason)
         this.props.client.mutate({
             mutation: editsubwork,
             variables: {
                 "invoiceNumber": this.props.navigation.state.params.id,
                 "qtyCN": q_CN,
-                "itemCode": it_C
+                "itemCode": it_C,
+                "ReasonCN": reason,
             }
         }).then((result) => {
             if (result.data.editsubwork.status) {
+                this.insertedit(it_C)
+            } else {
+                console.log("no")
+            }
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
+    insertedit = (it_C) => {
+        console.log("insertedit")
+        this.props.client.mutate({
+            mutation: insertedit,
+            variables: {
+                "invoiceNumber": this.props.navigation.state.params.id,
+                "itemCode": it_C,
+            }
+        }).then((result) => {
+            if (result.data.insertedit.status) {
                 console.log("yes")
             } else {
                 console.log("no")
@@ -49,6 +78,80 @@ class EditItem extends Component {
             console.log(err)
         });
     }
+
+    tracking = () => {
+        console.log("tracking")
+
+        this.props.client.mutate({
+            mutation: tracking,
+            variables: {
+                "invoice": this.props.navigation.state.params.id,
+                "status": "9",
+                "messengerID": global.NameOfMess,
+                "lat": this.state.latitude,
+                "long": this.state.longitude,
+            }
+        }).then((result) => {
+            console.log("Tracking ", result.data.tracking.status)
+            // this.props.navigation.state.params.refresion()
+            // this.props.navigation.goBack()
+        }).catch((err) => {
+            console.log("ERR OF TRACKING", err)
+        });
+    }
+
+    _renderButton = (text, onPress) => (
+        <TouchableOpacity onPress={onPress}>
+            <View style={styles.button}>
+                <Text>{text}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+
+    _renderModalContent = () => (
+        <View style={styles.modalContent}>
+            <Text style={{ fontSize: 16, fontWeight: '900' }}>Why do you edit?</Text>
+            <Form style={{ width: Dimensions.get('window').width / 1.3 }}>
+                <Textarea
+                    rowSpan={5}
+                    bordered
+                    placeholder="your reason ..."
+                    maxLength={255}
+                    keyboardType='default'
+                    onChangeText={(text) => this.setState({ reason: text })}
+                />
+            </Form>
+            <View style={{ flexDirection: 'row' }}>
+                {this._renderButton('Cancle', () => this.setState({ visibleModal: null }))}
+                {this._renderButton('OK', () => {
+                    this.state.text_arr.map((p, i) => {
+                        if (p != '') {
+                            this.editsubwork(parseInt(p), this.state.item_arr[i], this.state.reason)
+                        }
+                        console.log(i)
+                        this.setState({ visibleModal: null })
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                console.log("wokeeey");
+                                console.log(position);
+                                this.setState({
+                                    latitude: position.coords.latitude,
+                                    longitude: position.coords.longitude,
+                                    error: null,
+                                }, () => {
+                                    this.tracking()
+                                    this.props.navigation.state.params.refresion()
+                                    this.props.navigation.goBack()
+                                });
+                            },
+                            (error) => this.setState({ error: error.message }),
+                            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                        );
+                    })
+                })}
+            </View>
+        </View>
+    );
 
     render() {
 
@@ -81,7 +184,6 @@ class EditItem extends Component {
                         <Text>ชื่อ</Text>
                         <Text>จำนวน</Text>
                         <Text>จำนวน</Text>
-                        <Text>Confirm</Text>
 
                     </View>
 
@@ -90,36 +192,41 @@ class EditItem extends Component {
                             this.state.showWorkEdit.map((l, i) => (
                                 <View style={{ flexDirection: 'row' }}>
 
-                                    <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.itemCode}</Text>
                                     </View>
-                                    <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.qty}</Text>
                                     </View>
-                                    <Item style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Input keyboardType='number-pad'
-                                            placeholder='...'
-                                            placeholderTextColor="white"
+                                    <Item style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                        <Input keyboardType='numeric'
+                                            placeholder={l.qtyCN.toString()}
+                                            placeholderTextColor="gray"
                                             underlineColorAndroid='white'
-                                            onChangeText={(text) => this.setState({ text })} />
+                                            onChangeText={
+                                                (text) => {
+                                                    let a = this.state.text_arr.slice();
+                                                    let b = this.state.item_arr.slice();
+                                                    b[i] = l.itemCode
+                                                    a[i] = text
+                                                    this.setState({
+                                                        text_arr: a,
+                                                        item_arr: b
+                                                    })
+                                                }
+                                            } />
                                     </Item>
-                                    <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
-                                        <View style={{ justifyContent: 'center', alignItems: 'center', width: Dimensions.get('window').width / 6 }}>
-                                            <Button rounded
-                                                style={{ backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', width: Dimensions.get('window').width / 6 }}
-                                                onPress={ () => this.editsubwork(parseInt(this.state.text), l.itemCode) }
-                                            >
-                                                <Text style={{ color: '#0086b3', fontWeight: 'bold' }}>OK</Text>
-                                            </Button>
-                                        </View>
-                                    </View>
-
                                 </View>
                             ))
                         }
                     </View>
-
                 </Content>
+
+                <View>
+                    <Modal isVisible={this.state.visibleModal === 1}>
+                        {this._renderModalContent()}
+                    </Modal>
+                </View>
 
                 <Footer style={{
                     backgroundColor: '#66c2ff',
@@ -134,6 +241,13 @@ class EditItem extends Component {
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}
+                            onPress={() => {
+                                if (this.state.text_arr.length == 0) {
+                                    this.setState({ visibleModal: null });
+                                } else {
+                                    this.setState({ visibleModal: 1 })
+                                }
+                            }}
                         >
                             <Text style={{ color: 'white', fontWeight: 'bold' }}>ยืนยันการแก้ไข</Text>
                         </Button>
@@ -146,10 +260,68 @@ class EditItem extends Component {
     }
 }
 
+// onPress={() => {
+//     if (this.state.text_arr.length == 0) {
+//         console.log("null")
+//         console.log("ARRAY_TEXT", this.state.text_arr)
+//         console.log("ARRAY_ITEM", this.state.item_arr)
+//     }
+//     else {
+//         console.log("notnull")
+
+//         console.log("ARRAY_TEXT", this.state.text_arr)
+//         console.log("ARRAY_ITEM", this.state.item_arr)
+//         this.state.text_arr.map(p => {
+//             if(p == '')
+//             {
+//                 console.log("yes '' ")
+//             }
+//         })
+//     }
+// }}
+
+// if (this.state.text_arr.length == 0) {
+//     this.setState({ promptVisible: false });
+// } else {
+//     this.state.text_arr.map((p,i) => {
+//         // if (p != '') {
+//         //     this.editsubwork(parseInt(p),this.state.item_arr[i])
+//         // }
+//         console.log(i)
+//     })
+// }
+
 const GraphQL = compose(EditItem)
 export default withApollo(GraphQL)
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    button: {
+        backgroundColor: 'lightblue',
+        padding: 12,
+        margin: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+    },
+    bottomModal: {
+        justifyContent: 'flex-end',
+        margin: 0,
+    },
+})
 
 const subDetail = gql`
     query subDetail($invoiceNumber:String!){
@@ -158,6 +330,7 @@ const subDetail = gql`
             itemCode
             itemName
             qty
+            qtyCN
             amount
             priceOfUnit
             amountbox
@@ -166,8 +339,42 @@ const subDetail = gql`
     }
 `
 const editsubwork = gql`
-    mutation editsubwork($invoiceNumber:String!,$qtyCN:Int!,$itemCode:String!){
-        editsubwork(invoiceNumber: $invoiceNumber,qtyCN: $qtyCN,itemCode: $itemCode){
+    mutation editsubwork($invoiceNumber:String!,$qtyCN:Int!,$itemCode:String!,$ReasonCN:String!){
+        editsubwork(invoiceNumber: $invoiceNumber,qtyCN: $qtyCN,itemCode: $itemCode,ReasonCN: $ReasonCN){
+            status
+        }
+    }
+`
+
+const insertedit = gql`
+    mutation insertedit(
+        $invoiceNumber:String!,
+        $itemCode:String!,
+    ){
+        insertedit(
+            invoiceNumber: $invoiceNumber,
+            itemCode: $itemCode,
+        ){
+            status
+        }
+    }
+`
+
+const tracking = gql`
+    mutation tracking(
+        $invoice:String!,
+        $status:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        tracking(
+            invoice: $invoice,
+            status: $status,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
             status
         }
     }
