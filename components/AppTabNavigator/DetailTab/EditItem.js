@@ -110,20 +110,20 @@ class EditItem extends Component {
 
     _renderModalContent = () => (
         <View style={styles.modalContent}>
-            <Text style={{ fontSize: 16, fontWeight: '900' }}>Why do you edit?</Text>
+            <Text style={{ fontSize: 16, fontWeight: '900' }}>สาเหตุที่แก้ไขรายการ</Text>
             <Form style={{ width: Dimensions.get('window').width / 1.3 }}>
                 <Textarea
                     rowSpan={5}
                     bordered
-                    placeholder="your reason ..."
+                    placeholder="เหตุผล..."
                     maxLength={255}
                     keyboardType='default'
                     onChangeText={(text) => this.setState({ reason: text })}
                 />
             </Form>
             <View style={{ flexDirection: 'row' }}>
-                {this._renderButton('Cancle', () => this.setState({ visibleModal: null }))}
-                {this._renderButton('OK', () => {
+                {this._renderButton('ยกเลิก', () => this.setState({ visibleModal: null }))}
+                {this._renderButton('ตกลง', () => {
                     this.state.text_arr.map((p, i) => {
                         if (p != '') {
                             this.editsubwork(parseInt(p), this.state.item_arr[i], this.state.reason)

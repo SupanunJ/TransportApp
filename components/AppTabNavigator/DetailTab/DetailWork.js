@@ -28,9 +28,11 @@ class DetailWork extends Component {
             latitude: null,
             longitude: null,
             error: null,
+            ShowMomey:[],
         }
         this.props.client.resetStore();
         this.subDetail();
+        this.summoneydetail();
     }
 
     _RELOAD_DETAILWORK = () => {
@@ -53,6 +55,7 @@ class DetailWork extends Component {
             this.setState({
                 showDetailWork: result.data.subDetail
             })
+            // console.log( result.data.subDetail)
         }).catch((err) => {
             console.log(err)
         });
@@ -88,7 +91,21 @@ class DetailWork extends Component {
             console.log("err of submitwork", err)
         });
     }
-
+    summoneydetail = () => {
+        this.props.client.query({
+            query: summoneydetail,
+            variables: {
+                "invoiceNumber": this.props.navigation.state.params.id
+            }
+        }).then((result) => {
+            this.setState({
+                ShowMomey: result.data.summoneydetail
+            })
+            // console.log(this.state.ShowSUM)
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
     tracking = (s) => {
         console.log("tracking")
 
@@ -131,8 +148,11 @@ class DetailWork extends Component {
                 <Content>
 
                     <View style={{ margin: 10 }}>
+                    
                         <Text>{this.props.navigation.state.params.id}</Text>
-                        <Text>ห้าง : </Text>
+                        <Text>ห้าง : { this.props.navigation.state.params.Zone} </Text>
+                        <Text>ชื่อลูกค้า : { this.props.navigation.state.params.Cusname} </Text>
+                        <Text>ที่อยู่ : { this.props.navigation.state.params.NAME} </Text>
                     </View>
 
                     <View style={{ justifyContent: 'space-around', flexDirection: 'row' }}>
@@ -149,7 +169,7 @@ class DetailWork extends Component {
                                 <View style={{ flexDirection: 'row' }}>
 
                                     <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.itemCode}</Text>
+                                        <Text>{l.itemName}</Text>
                                     </View>
                                     <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.qty - l.qtyCN}</Text>
@@ -162,9 +182,16 @@ class DetailWork extends Component {
                             ))
                         }
                     </View>
-                    <View style={{ margin: 10 }}>
-                        <Text>หมายเหตุ : </Text>
-                    </View>
+                    <View>
+                            {
+                                this.state.ShowMomey.map((l, i) => (
+                                    <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
+                                        <Text>ราคาทั้งหมด : {l.SUM} </Text>
+                                        <Text>หมายเหตุ :  </Text>
+                                    </View>
+                                ))
+                            }
+                        </View>
 
                 </Content>
 
@@ -298,7 +325,13 @@ const subDetail = gql`
         }
     }
 `
-
+const summoneydetail = gql`
+    query summoneydetail($invoiceNumber:String!){
+        summoneydetail(invoiceNumber: $invoiceNumber){
+            SUM
+        }
+    }
+`
 const submitwork = gql`
     mutation submitwork($status:String!, $invoiceNumber:String!){
         submitwork(status: $status, invoiceNumber: $invoiceNumber){
