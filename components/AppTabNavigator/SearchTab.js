@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Text, StyleSheet, View, Dimensions, RefreshControl, CheckBox } from 'react-native'
 import { Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Separator, ListItem, Content, Badge, Accordion, Footer } from 'native-base';
 import { gql, withApollo, compose } from 'react-apollo'
 
