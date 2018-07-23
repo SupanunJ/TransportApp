@@ -9,12 +9,14 @@ class CheckWork extends Component {
         super(props);
         this.state = {
             ShowData: [],
+            ShowSUM: [],
             latitude: null,
             longitude: null,
             error: null,
         }
         this.props.client.resetStore();
         this.datailwork();
+        this.datailsum();
     }
 
     GET_LOCATE = () => {
@@ -26,7 +28,7 @@ class CheckWork extends Component {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                     error: null,
-                },() => this.confirmworksome());
+                }, () => this.confirmworksome());
             },
             (error) => this.setState({ error: error.message }),
             { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
@@ -44,6 +46,22 @@ class CheckWork extends Component {
                 ShowData: result.data.datailwork
             })
             // console.log(this.state.ShowData)
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
+    datailsum = () => {
+        this.props.client.query({
+            query: datailsum,
+            variables: {
+                "invoiceNumber": this.props.navigation.state.params.id
+            }
+        }).then((result) => {
+            this.setState({
+                ShowSUM: result.data.datailsum
+            })
+            // console.log(this.state.ShowSUM)
         }).catch((err) => {
             console.log(err)
         });
@@ -129,20 +147,36 @@ class CheckWork extends Component {
 
                         {
                             this.state.ShowData.map((l, i) => (
-                                <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.itemCode}</Text>
+
+                                <View>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text>{l.itemCode}</Text>
+                                        </View>
+                                        <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text>{l.qty}</Text>
+                                        </View>
+                                        <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text>{l.amount}</Text>
+                                        </View>
+
                                     </View>
-                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.qty}</Text>
-                                    </View>
-                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.amount}</Text>
-                                    </View>
+
                                 </View>
+
                             ))
                         }
-
+                      
+                        <View>
+                            {
+                                this.state.ShowSUM.map((l, i) => (
+                                    <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
+                                        <Text>ราคาทั้งหมด : {l.SUM} </Text>
+                                        <Text>หมายเหตุ :  </Text>
+                                    </View>
+                                ))
+                            }
+                        </View>
                     </View>
 
                 </Content>
@@ -164,7 +198,7 @@ class CheckWork extends Component {
                                     'Confirm?',
                                     'You want to confirm?',
                                     [
-                                        { text: 'yes', onPress: () =>  this.GET_LOCATE() },
+                                        { text: 'yes', onPress: () => this.GET_LOCATE() },
                                         { text: 'no', onPress: () => console.log("no") }
                                     ]
                                 )
@@ -202,7 +236,13 @@ const datailwork = gql`
         }
     }
 `
-
+const datailsum = gql`
+    query datailsum($invoiceNumber:String!){
+        datailsum(invoiceNumber: $invoiceNumber){
+            SUM
+        }
+    }
+`
 const confirmworksome = gql`
     mutation confirmworksome($invoiceNumber:String!){
         confirmworksome(invoiceNumber: $invoiceNumber){

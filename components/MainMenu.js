@@ -74,7 +74,7 @@ class MainMenu extends Component {
                     'ต้องการออกรอบเลยหรือไม่',
                     [
                         {
-                            text: 'yes', onPress: () => {
+                            text: 'ตกลง', onPress: () => {
                                 navigator.geolocation.getCurrentPosition(
                                     (position) => {
                                         console.log("wokeeey");
@@ -90,8 +90,8 @@ class MainMenu extends Component {
                                 );
                             }
                         },
-                        { text: 'back to checkwork', onPress: () => navigate("Home") },
-                        { text: 'no', onPress: () => console.log("no") },
+                        { text: 'กลับไปตรวจงาน', onPress: () => navigate("Home") },
+                        { text: 'ยกเลิก', onPress: () => console.log("no") },
                     ]
                 )
             } else if (result.data.checkroundout.status == 2) {
