@@ -169,11 +169,11 @@ class SubmitJob extends Component {
 
                         <TouchableOpacity onPress={() =>
                             Alert.alert(
-                                "Confirm Finish Job",
-                                "",
+                                "ยืนยันการส่งงาน",
+                                "คุณต้องการยืนยันการส่งงานหรือไม่?",
                                 [
-                                    { text: "Cancle", onPress: () => console.log("Cancle") },
-                                    { text: "Confirm", onPress: () => this.submitedit() }
+                                    { text: "ยกเลิก", onPress: () => console.log("Cancle") },
+                                    { text: "ยืนยัน", onPress: () => this.submitedit() }
                                 ]
                             )
                         } >

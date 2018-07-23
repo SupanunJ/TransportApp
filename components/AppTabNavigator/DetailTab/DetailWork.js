@@ -166,7 +166,7 @@ class DetailWork extends Component {
                         <Text>{this.props.navigation.state.params.id}</Text>
                         <Text>ห้าง : {this.props.navigation.state.params.Zone} </Text>
                         <Text>ชื่อลูกค้า : {this.props.navigation.state.params.Cusname} </Text>
-                        <Text>ที่อยู่ : {this.props.navigation.state.params.NAME} </Text>
+                        <Text>ที่อยู่ : {this.props.navigation.state.params.address} </Text>
                     </View>
 
                     <View style={{ justifyContent: 'space-around', flexDirection: 'row' }}>
@@ -285,11 +285,11 @@ class DetailWork extends Component {
                         <TouchableOpacity
                             onPress={() =>
                                 Alert.alert(
-                                    "Confirm Close Job",
-                                    "",
+                                    "ส่งงานไม่ได้",
+                                    "คุณต้องการยืนยัน การส่งงานไม่ได้? ",
                                     [
                                         {
-                                            text: "Don't Finish", onPress: () =>
+                                            text: "ไม่", onPress: () =>
                                                 ActionSheet.show(
                                                     {
                                                         options: BUTTONS,
@@ -301,7 +301,7 @@ class DetailWork extends Component {
                                                     }
                                                 )
                                         },
-                                        { text: "Finish", onPress: () => navigate("SubmitJob", { id: this.props.navigation.state.params.id, refresion: this._RELOAD_TO_GOBACK }) }
+                                        { text: "ใช่", onPress: () => navigate("SubmitJob", { id: this.props.navigation.state.params.id, refresion: this._RELOAD_TO_GOBACK }) }
                                     ]
                                 )
                             }
