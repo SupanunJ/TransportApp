@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Dimensions, RefreshControl } from 'react-native'
 import { Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Separator, ListItem, Content, Badge, Accordion, Footer } from 'native-base';
 import { gql, withApollo, compose } from 'react-apollo'
 
@@ -16,6 +15,7 @@ class SearchTab extends Component {
       showZone: [],
       show_SUC: [],
       refreshing_2: false,
+      CF_ALL_INVOICE: [],
     }
     // this.props.client.resetStore();
     this.queryZONE();
@@ -138,6 +138,18 @@ class SearchTab extends Component {
                           return (
                             <View style={styles.detailContent}>
                               <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                                {/* <CheckBox
+                                  value={this.state.checked}
+                                  onValueChange={() => {
+                                    this.setState({ checked: !this.state.checked })
+                                    // if (!this.state.checked == true) {
+                                    //   let n = this.state.CF_ALL_INVOICE.slice();
+                                    //   n[val][l] = l.invoiceNumber
+                                    //   this.setState({
+                                    //     CF_ALL_INVOICE: n
+                                    //   })
+                                    // }
+                                  }} /> */}
                                 <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
                                 <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
                               </View>
@@ -156,6 +168,25 @@ class SearchTab extends Component {
                 }
               </View>
             </Content>
+            <Footer style={{
+              backgroundColor: '#66c2ff',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Button warning
+                  onPress={() => console.log("CF ALL",this.state.CF_ALL_INVOICE)}
+                  style={{
+                    width: 200,
+                    height: '80%',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Text style={{ color: 'white', fontWeight: 'bold' }}>CF ALL</Text>
+                </Button>
+              </View>
+            </Footer>
           </Tab>
 
           <Tab heading={<TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-checkbox-outline" /><Text style={{ color: 'white' }}>  ส่งสำเร็จ</Text></TabHeading>}>

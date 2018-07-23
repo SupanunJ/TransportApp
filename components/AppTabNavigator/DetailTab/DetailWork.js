@@ -52,7 +52,7 @@ class DetailWork extends Component {
         }).then((result) => {
             this.setState({
                 showDetailWork: result.data.subDetail
-            })
+            },() => {console.log("data",this.state.showDetailWork[0].amount)})
         }).catch((err) => {
             console.log(err)
         });

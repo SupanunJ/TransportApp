@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AppRegistry, Text, StyleSheet, StatusBar, Dimensions, View } from 'react-native'
+import { AppRegistry, Text, StyleSheet, StatusBar, Dimensions, View, CheckBox } from 'react-native'
 
 import { Icon, Header, Container, Left, Body, Title, Right, Button, Content } from 'native-base';
 
@@ -8,11 +8,11 @@ class AddMediaTab extends Component {
   constructor(props) {
     super(props);
 
-    // this.state = {
-    //   latitude: null,
-    //   longitude: null,
-    //   error: null,
-    // };
+    this.state = {
+      // latitude: null,
+      // longitude: null,
+      // error: null,
+    };
   }
 
   static navigationOptions = {
@@ -40,7 +40,7 @@ class AddMediaTab extends Component {
   //     { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
   //   );
   // }
-  
+
   render() {
     const { navigate } = this.props.navigation
     return (
@@ -57,13 +57,20 @@ class AddMediaTab extends Component {
           </Body>
           <Right />
         </Header>
-        {/* <Content>
+        <Content>
           <View>
-            <Text> {this.state.latitude} </Text>
+            {/* <Switch /> */}
+            <CheckBox
+              value={this.state.checked}
+              onValueChange={() => {
+                this.setState({ checked: !this.state.checked })
+                console.log("CHECK BOX",!this.state.checked)
+              }} />
+            {/* <Text> {this.state.latitude} </Text>
             <Text> {this.state.longitude} </Text>
-            <Text> {this.state.error} </Text>
+            <Text> {this.state.error} </Text> */}
           </View>
-        </Content> */}
+        </Content>
       </Container>
     );
   }
