@@ -12,9 +12,11 @@ class SumBill extends Component {
             showsummoney: [],
             showStatusreport: [],
             showinvoicedetail_ID: [],
+            showmoneyfile: [],
         }
         this.props.client.resetStore();
         this.summoney();
+        this.summoneyfail();
     }
 
     summoney = () => {
@@ -34,6 +36,24 @@ class SumBill extends Component {
             console.log(err)
         });
     }
+    summoneyfail = () => {
+        console.log("summoneyfail")
+
+        this.props.client.query({
+            query: summoneyfail,
+            variables: {
+                "MessengerID": global.NameOfMess
+            }
+        }).then((result) => {
+            console.log(result.data.summoneyfail)
+            this.setState({
+                showmoneyfile: result.data.summoneyfail
+            })
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
     checkinvoicereport = () => {
         const { navigate } = this.props.navigation
         this.props.client.query({
@@ -44,14 +64,13 @@ class SumBill extends Component {
         }).then((result) => {
             console.log("checkinvoicereport", result.data.checkinvoicereport)
             this.setState({ showinvoicedetail_ID: result.data.checkinvoicereport })
-            console.log("NUM",this.state.showinvoicedetail_ID.length)
-            if(this.state.showinvoicedetail_ID.length > 0)
-            {
+            console.log("NUM", this.state.showinvoicedetail_ID.length)
+            if (this.state.showinvoicedetail_ID.length > 0) {
                 this.reportsubmitwork();
-            }else{
+            } else {
                 navigate('SumBill')
             }
-            
+
         }).catch((err) => {
             console.log("err of checkinvoicereport", err)
         });
@@ -138,7 +157,13 @@ class SumBill extends Component {
                                     <View style={{ margin: 45, marginTop: 5, justifyContent: 'center' }}>
                                         <Text>ยอดงเงินตามบิลจริง :                {l.amountBill}           บาท</Text>
                                         <Text>ยอดเงินที่เก็บได้ :                     {l.amountActual}         บาท </Text>
-                                        <Text>ยอดที่เก็บไม่ได้ :                      {l.amountBill - l.amountActual}         บาท </Text>
+                                        <View>
+                                            {
+                                                this.state.showmoneyfile.map((V, i) => (
+                                                    <Text>ยอดที่เก็บไม่ได้ :                      {V.amountBill}        บาท </Text>
+                                                ))
+                                            }
+                                        </View>
                                     </View>
                                     <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
                                         <Text>ยอดเงินที่ต้องโอนเข้าบัญชีของบริษัท    {l.amountActual}     บาท</Text>
@@ -160,8 +185,8 @@ class SumBill extends Component {
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}>
-                    <View style={{  justifyContent: 'center', alignItems: 'center' , flexDirection:'row', paddingLeft : 10}}>
-                        <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center', paddingLeft:5 }}>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', paddingLeft: 10 }}>
+                        <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center', paddingLeft: 5 }}>
                             <Button success
                                 onPress={
                                     this._PRESS_SearchTab.bind(this)
@@ -189,8 +214,8 @@ class SumBill extends Component {
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>รายละเอียดยอดเงิน</Text>
                             </Button>
                         </View>
-             
-                        </View>
+
+                    </View>
 
 
                 </Footer>
@@ -208,6 +233,14 @@ export default withApollo(GraphQL)
 const summoney = gql`
 query summoney($MessengerID:String!){
   summoney(MessengerID: $MessengerID){
+    amountBill
+    amountActual
+  }
+}
+`
+const summoneyfail = gql`
+query summoneyfail($MessengerID:String!){
+    summoneyfail(MessengerID: $MessengerID){
     amountBill
     amountActual
   }
