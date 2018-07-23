@@ -59,11 +59,23 @@ class DetailWork extends Component {
     }
 
     submitwork = (s) => {
-        const { navigate } = this.props.navigation
         this.props.client.mutate({
             mutation: submitwork,
             variables: {
                 "status": s,
+                "invoiceNumber": this.props.navigation.state.params.id
+            }
+        }).then((result) => {
+            this.submiitdetail()
+        }).catch((err) => {
+            console.log("err of submitwork", err)
+        });
+    }
+
+    submiitdetail = () => {
+        this.props.client.mutate({
+            mutation: submiitdetail,
+            variables: {
                 "invoiceNumber": this.props.navigation.state.params.id
             }
         }).then((result) => {
@@ -75,17 +87,13 @@ class DetailWork extends Component {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                         error: null,
-                    }, () => {
-                        this.tracking("10")
-                        this.props.navigation.state.params.refresion()
-                        this.props.navigation.goBack()
-                    });
+                    }, () => this.tracking());
                 },
                 (error) => this.setState({ error: error.message }),
                 { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
             );
         }).catch((err) => {
-            console.log("err of submitwork", err)
+            console.log("err of submiitdetail", err)
         });
     }
 
@@ -302,6 +310,14 @@ const subDetail = gql`
 const submitwork = gql`
     mutation submitwork($status:String!, $invoiceNumber:String!){
         submitwork(status: $status, invoiceNumber: $invoiceNumber){
+            status
+        }
+    }
+`
+
+const submiitdetail =gql`
+    mutation submiitdetail($invoiceNumber:String!){
+        submiitdetail(invoiceNumber: $invoiceNumber){
             status
         }
     }

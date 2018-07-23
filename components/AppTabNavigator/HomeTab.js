@@ -14,6 +14,7 @@ class HomeTab extends Component {
         super(props);
         this.state = {
             showTable: [],
+            showTableGreen: [],
             refreshing_1: false,
             latitude: null,
             longitude: null,
@@ -21,6 +22,7 @@ class HomeTab extends Component {
         }
         // this.props.client.resetStore();
         this.worklist_query();
+        this.selectwork();
     }
 
     GET_LOCATE = () => {
@@ -58,11 +60,30 @@ class HomeTab extends Component {
         });
     }
 
+    selectwork = () => {
+        console.log('selectwork')
+
+        this.props.client.query({
+            query: selectwork,
+            variables: {
+                "MessengerID": global.NameOfMess
+            }
+        }).then((result) => {
+            this.setState({
+                showTableGreen: result.data.selectwork
+            })
+            // console.log(this.state.showTable)
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
     _Re_worklist_query = () => {
         this.props.client.resetStore();
         console.log('_Re_worklist_query')
         this.setState({ refreshing_1: true });
         this.worklist_query();
+        this.selectwork();
         this.setState({ refreshing_1: false });
     }
 
@@ -130,11 +151,28 @@ class HomeTab extends Component {
                         onRefresh={this._Re_worklist_query}
                     />
                 }>
-
                     <View>
                         {
                             this.state.showTable.map((l, i) => (
                                 <View style={styles.detailContent}>
+                                    <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                                        <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                        <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
+                                    </View>
+                                    <View style={{ position: 'absolute', right: 0 }}>
+                                        <Button transparent
+                                            onPress={() => navigate('CheckWork', { id: l.invoiceNumber, refresion: this._Re_worklist_query })}>
+                                            <Icon name='ios-arrow-dropright' />
+                                        </Button>
+                                    </View>
+                                </View>
+                            ))
+                        }
+                    </View>
+                    <View>
+                        {
+                            this.state.showTableGreen.map((l, i) => (
+                                <View style={styles.detailContentGREEN}>
                                     <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
                                         <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
                                         <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
@@ -200,6 +238,16 @@ const querywork = gql`
     }
 `
 
+const selectwork = gql`
+    query selectwork($MessengerID:String!){
+        selectwork(MessengerID: $MessengerID){
+            invoiceNumber
+            customerName
+            DELIVERYNAME
+        }
+    }
+`
+
 const confirmwork = gql`
     mutation confirmwork($MessengerID:String!){
         confirmwork(MessengerID: $MessengerID){
@@ -249,5 +297,17 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         height: 50,
         justifyContent: 'center'
+    },
+    detailContentGREEN: {
+        width: Dimensions.get('window').width,
+        backgroundColor: 'white',
+        borderColor: 'gray',
+        borderRightWidth: 2,
+        borderLeftWidth: 2,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        height: 50,
+        justifyContent: 'center',
+        backgroundColor: '#77F156'
     }
 })

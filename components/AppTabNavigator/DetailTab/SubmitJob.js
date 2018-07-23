@@ -38,11 +38,23 @@ class SubmitJob extends Component {
     }
 
     submitwork = (s) => {
-        const { navigate } = this.props.navigation
         this.props.client.mutate({
             mutation: submitwork,
             variables: {
                 "status": s,
+                "invoiceNumber": this.props.navigation.state.params.id
+            }
+        }).then((result) => {
+            this.submiitdetail()
+        }).catch((err) => {
+            console.log("err of submitwork", err)
+        });
+    }
+
+    submiitdetail = () => {
+        this.props.client.mutate({
+            mutation: submiitdetail,
+            variables: {
                 "invoiceNumber": this.props.navigation.state.params.id
             }
         }).then((result) => {
@@ -60,9 +72,10 @@ class SubmitJob extends Component {
                 { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
             );
         }).catch((err) => {
-            console.log("err of submitwork", err)
+            console.log("err of submiitdetail", err)
         });
     }
+
 
     tracking = () => {
         console.log("tracking")
@@ -100,7 +113,7 @@ class SubmitJob extends Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title>รายละเอียด</Title>
+                        <Title>ยืนยันการส่งงาน</Title>
                     </Body>
                     <Right />
                 </Header>
@@ -187,6 +200,14 @@ export default withApollo(GraphQL)
 const submitwork = gql`
     mutation submitwork($status:String!, $invoiceNumber:String!){
         submitwork(status: $status, invoiceNumber: $invoiceNumber){
+            status
+        }
+    }
+`
+
+const submiitdetail =gql`
+    mutation submiitdetail($invoiceNumber:String!){
+        submiitdetail(invoiceNumber: $invoiceNumber){
             status
         }
     }
