@@ -171,7 +171,7 @@ class CheckWork extends Component {
                             {
                                 this.state.ShowSUM.map((l, i) => (
                                     <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
-                                        <Text>ราคาทั้งหมด : {l.SUM} </Text>
+                                        <Text>ราคาทั้งหมด : {l.SUM} บาท </Text>
                                         <Text>หมายเหตุ :  </Text>
                                     </View>
                                 ))

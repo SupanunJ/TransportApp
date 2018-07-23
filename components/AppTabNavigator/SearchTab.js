@@ -156,7 +156,7 @@ class SearchTab extends Component {
                               </View>
                               <View style={{ position: 'absolute', right: 10 }}>
                                 <Button transparent
-                                  onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone : l.Zone , NAME:l.DELIVERYNAME, Cusname : l.customerName, refresion: this._RELOAD_MAIN2 })}>
+                                  onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone : l.Zone , address:l.addressShipment, Cusname : l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
                                   <Icon name='ios-arrow-forward' />
                                 </Button>
                               </View>
@@ -169,7 +169,7 @@ class SearchTab extends Component {
                 }
               </View>
             </Content>
-            <Footer style={{
+            {/* <Footer style={{
               backgroundColor: '#66c2ff',
               justifyContent: 'center',
               alignItems: 'center'
@@ -187,7 +187,7 @@ class SearchTab extends Component {
                   <Text style={{ color: 'white', fontWeight: 'bold' }}>CF ALL</Text>
                 </Button>
               </View>
-            </Footer>
+            </Footer> */}
           </Tab>
 
           <Tab heading={<TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-checkbox-outline" /><Text style={{ color: 'white' }}>  ส่งสำเร็จ</Text></TabHeading>}>
@@ -282,6 +282,7 @@ const worksub = gql`
             customerName
             DELIVERYNAME
             Zone
+            addressShipment
         }
     }
 `

@@ -96,11 +96,11 @@ class MainMenu extends Component {
                 )
             } else if (result.data.checkroundout.status == 2) {
                 Alert.alert(
-                    'Confirm Round Out?',
-                    'You want to confirm round out',
+                    'ยืนยันการออกรอบ',
+                    'คุณต้องการออกรอบเลยหรือไม่?',
                     [
                         {
-                            text: 'yes', onPress: () => {
+                            text: 'ยืนยัน', onPress: () => {
                                 navigator.geolocation.getCurrentPosition(
                                     (position) => {
                                         console.log("wokeeey");
@@ -116,7 +116,7 @@ class MainMenu extends Component {
                                 );
                             }
                         },
-                        { text: 'no', onPress: () => console.log("no") },
+                        { text: 'ยกเลิก', onPress: () => console.log("no") },
                     ]
                 )
             } else {

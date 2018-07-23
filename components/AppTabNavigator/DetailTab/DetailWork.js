@@ -28,7 +28,7 @@ class DetailWork extends Component {
             latitude: null,
             longitude: null,
             error: null,
-            ShowMomey:[],
+            ShowMomey: [],
         }
         this.props.client.resetStore();
         this.subDetail();
@@ -38,6 +38,7 @@ class DetailWork extends Component {
     _RELOAD_DETAILWORK = () => {
         this.props.client.resetStore();
         this.subDetail();
+        this.summoneydetail();
     }
 
     _RELOAD_TO_GOBACK = () => {
@@ -69,13 +70,13 @@ class DetailWork extends Component {
                 "invoiceNumber": this.props.navigation.state.params.id
             }
         }).then((result) => {
-            this.submiitdetail()
+            this.submiitdetail(s)
         }).catch((err) => {
             console.log("err of submitwork", err)
         });
     }
 
-    submiitdetail = () => {
+    submiitdetail = (s) => {
         this.props.client.mutate({
             mutation: submiitdetail,
             variables: {
@@ -90,7 +91,7 @@ class DetailWork extends Component {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                         error: null,
-                    }, () => this.tracking());
+                    }, () => this.tracking(s,1));
                 },
                 (error) => this.setState({ error: error.message }),
                 { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
@@ -114,7 +115,7 @@ class DetailWork extends Component {
             console.log(err)
         });
     }
-    tracking = (s) => {
+    tracking = (s, n) => {
         console.log("tracking")
 
         this.props.client.mutate({
@@ -127,7 +128,12 @@ class DetailWork extends Component {
                 "long": this.state.longitude,
             }
         }).then((result) => {
-            console.log("Tracking ", result.data.tracking.status)
+            if (n == 1) {
+                this.props.navigation.state.params.refresion()
+                this.props.navigation.goBack()
+            } else {
+                console.log("Tracking ", result.data.tracking.status)
+            }
         }).catch((err) => {
             console.log("ERR OF TRACKING", err)
         });
@@ -156,11 +162,11 @@ class DetailWork extends Component {
                 <Content>
 
                     <View style={{ margin: 10 }}>
-                    
+
                         <Text>{this.props.navigation.state.params.id}</Text>
-                        <Text>ห้าง : { this.props.navigation.state.params.Zone} </Text>
-                        <Text>ชื่อลูกค้า : { this.props.navigation.state.params.Cusname} </Text>
-                        <Text>ที่อยู่ : { this.props.navigation.state.params.NAME} </Text>
+                        <Text>ห้าง : {this.props.navigation.state.params.Zone} </Text>
+                        <Text>ชื่อลูกค้า : {this.props.navigation.state.params.Cusname} </Text>
+                        <Text>ที่อยู่ : {this.props.navigation.state.params.NAME} </Text>
                     </View>
 
                     <View style={{ justifyContent: 'space-around', flexDirection: 'row' }}>
@@ -183,7 +189,7 @@ class DetailWork extends Component {
                                         <Text>{l.qty - l.qtyCN}</Text>
                                     </View>
                                     <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.amount}</Text>
+                                        <Text>{l.amountedit}</Text>
                                     </View>
 
                                 </View>
@@ -191,15 +197,15 @@ class DetailWork extends Component {
                         }
                     </View>
                     <View>
-                            {
-                                this.state.ShowMomey.map((l, i) => (
-                                    <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
-                                        <Text>ราคาทั้งหมด : {l.SUM} </Text>
-                                        <Text>หมายเหตุ :  </Text>
-                                    </View>
-                                ))
-                            }
-                        </View>
+                        {
+                            this.state.ShowMomey.map((l, i) => (
+                                <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
+                                    <Text>ราคาทั้งหมด : {l.SUM} </Text>
+                                    <Text>หมายเหตุ :  </Text>
+                                </View>
+                            ))
+                        }
+                    </View>
 
                 </Content>
 
@@ -218,7 +224,7 @@ class DetailWork extends Component {
                                         longitude: position.coords.longitude,
                                         error: null,
                                     }, () => {
-                                        this.tracking("7")
+                                        this.tracking("7",0)
                                     });
                                 },
                                 (error) => this.setState({ error: error.message }),
@@ -261,7 +267,7 @@ class DetailWork extends Component {
                                         longitude: position.coords.longitude,
                                         error: null,
                                     }, () => {
-                                        this.tracking("8")
+                                        this.tracking("8",0)
                                         navigate('MapScreen')
                                     });
                                 },
@@ -326,7 +332,7 @@ const subDetail = gql`
             itemName
             qty
             qtyCN
-            amount
+            amountedit
             priceOfUnit
             amountbox
             Note
@@ -348,7 +354,7 @@ const submitwork = gql`
     }
 `
 
-const submiitdetail =gql`
+const submiitdetail = gql`
     mutation submiitdetail($invoiceNumber:String!){
         submiitdetail(invoiceNumber: $invoiceNumber){
             status

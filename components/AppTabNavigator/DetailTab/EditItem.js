@@ -34,7 +34,7 @@ class EditItem extends Component {
                 showWorkEdit: result.data.subDetail
             })
         }).catch((err) => {
-            console.log(err)
+            console.log("ERR OF EDIT WORK",err)
         });
     }
 
@@ -93,8 +93,8 @@ class EditItem extends Component {
             }
         }).then((result) => {
             console.log("Tracking ", result.data.tracking.status)
-            // this.props.navigation.state.params.refresion()
-            // this.props.navigation.goBack()
+            this.props.navigation.state.params.refresion()
+            this.props.navigation.goBack()
         }).catch((err) => {
             console.log("ERR OF TRACKING", err)
         });
@@ -140,8 +140,6 @@ class EditItem extends Component {
                                     error: null,
                                 }, () => {
                                     this.tracking()
-                                    this.props.navigation.state.params.refresion()
-                                    this.props.navigation.goBack()
                                 });
                             },
                             (error) => this.setState({ error: error.message }),
@@ -331,7 +329,7 @@ const subDetail = gql`
             itemName
             qty
             qtyCN
-            amount
+            amountedit
             priceOfUnit
             amountbox
             Note

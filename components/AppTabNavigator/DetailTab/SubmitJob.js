@@ -45,13 +45,14 @@ class SubmitJob extends Component {
                 "invoiceNumber": this.props.navigation.state.params.id
             }
         }).then((result) => {
-            this.submiitdetail()
+            this.submiitdetail(s)
         }).catch((err) => {
             console.log("err of submitwork", err)
         });
     }
 
-    submiitdetail = () => {
+    submiitdetail = (s) => {
+        console.log("submiitdetail")
         this.props.client.mutate({
             mutation: submiitdetail,
             variables: {
@@ -66,7 +67,7 @@ class SubmitJob extends Component {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                         error: null,
-                    }, () => this.tracking());
+                    }, () => this.tracking(s));
                 },
                 (error) => this.setState({ error: error.message }),
                 { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
@@ -77,14 +78,14 @@ class SubmitJob extends Component {
     }
 
 
-    tracking = () => {
+    tracking = (s) => {
         console.log("tracking")
 
         this.props.client.mutate({
             mutation: tracking,
             variables: {
                 "invoice": this.props.navigation.state.params.id,
-                "status": "10",
+                "status": s,
                 "messengerID": global.NameOfMess,
                 "lat": this.state.latitude,
                 "long": this.state.longitude,
