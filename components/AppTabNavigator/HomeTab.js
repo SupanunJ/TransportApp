@@ -99,7 +99,13 @@ class HomeTab extends Component {
             if (result.data.confirmwork.status) {
                 this._Re_worklist_query()
             } else {
-                Alert.alert("Confirm Failed", "Please Confirm Again")
+                Alert.alert(
+                    'ตรวจงานไม่สำเร็จ',
+                    'มีการตรวจงานนี้ไปแล้ว',
+                    [
+                        { text: 'ตกลง', onPress: ()  => console.log("ok") },
+                    ]
+                )
             }
         }).catch((err) => {
             console.log(err)
@@ -230,13 +236,14 @@ class HomeTab extends Component {
                                     'ตรวจงานทั้งหมด',
                                     'คุณต้องการตรวจงานทั้งหมด?',
                                     [
+                                       
+                                        { text: 'ไม่', onPress: () => console.log("no") },
                                         { text: 'ใช่', onPress: () => this.GET_LOCATE() },
-                                        { text: 'ไม่', onPress: () => console.log("no") }
                                     ]
                                 )
                             }
                         >
-                            <Text style={{ color: 'white', fontWeight: 'bold' }}>CONFIRM</Text>
+                            <Text style={{ color: 'white', fontWeight: 'bold' }}>ตรวจงานทั้งหมด</Text>
                         </Button>
                     </View>
                 </Footer>

@@ -39,7 +39,11 @@ class Login extends Component {
                 navigate("mainScreen")
                 // console.log("name Mess",this.state.mess)
             } else {
-                Alert.alert("Login Failed", "Login Failed Please Again")
+                Alert.alert("เข้าสู่ระบบไม่สำเร็จ", "กรุณาเข้าสู่ระบบอีกครั้ง",
+                 [
+                    { text: 'ตกลง', onPress: ()  => console.log("ok") },
+                ]
+            )
             }
 
         }).catch((err) => {
@@ -102,7 +106,7 @@ class Login extends Component {
                                 backgroundColor: 'rgba(0,0,0,0)'
                             }}
                             keyboardType='default'
-                            placeholder='Enter your password'
+                            placeholder='กรุณากรอกรหัสผ่าน'
                             placeholderTextColor="white"
                             secureTextEntry={true}
                             underlineColorAndroid='white'
@@ -115,7 +119,7 @@ class Login extends Component {
                             style={{ height: 20 }}
                             onPress={() => navigate('ForgetPassword')}
                         >
-                            <Text style={{ color: 'white' }}>Forget Password</Text>
+                            <Text style={{ color: 'white' }}>ลืมรหัสผ่าน</Text>
                         </Button>
                     </View>
                     <TouchableOpacity onPress={this.confirmLogin.bind(this)}
@@ -123,7 +127,7 @@ class Login extends Component {
                         <Button rounded
                             style={{ width: 200, backgroundColor: 'white', justifyContent: 'center' }}
                         >
-                            <Text style={{ color: '#0086b3', fontWeight: 'bold' }}>Login</Text>
+                            <Text style={{ color: '#0086b3', fontWeight: 'bold' }}>เข้าสู่ระบบ</Text>
                         </Button>
                     </TouchableOpacity>
                 </ImageBackground>
