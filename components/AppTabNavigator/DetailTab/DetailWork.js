@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
 import { gql, withApollo, compose } from 'react-apollo'
 import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer, Input, Item, Grid, Col, ActionSheet } from 'native-base';
-
+import Communications from 'react-native-communications';
 var BUTTONS = [
     { text: "ลูกค้ากดผิด", icon: "md-arrow-dropright", iconColor: "#2c8ef4", status: "B1" },
     { text: "ร้านปิด", icon: "md-arrow-dropright", iconColor: "#f42ced", status: "B2" },
@@ -29,6 +29,7 @@ class DetailWork extends Component {
             longitude: null,
             error: null,
             ShowMomey: [],
+            showTel:"",
         }
         this.props.client.resetStore();
         this.subDetail();
@@ -115,6 +116,25 @@ class DetailWork extends Component {
             console.log(err)
         });
     }
+    telCustomer = () => {
+        this.props.client.query({
+            query: telCustomer,
+            variables: {
+                "invoiceNumber": this.props.navigation.state.params.id,
+                "MessengerID": global.NameOfMess
+            }
+        }).then((result) => {
+            this.setState({
+                showTel: result.data.telCustomer[0].telCustomer
+            },() => {
+                Communications.phonecall(this.state.showTel, true)
+            })
+            
+            // console.log( result.data.telCustomer)
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
     tracking = (s, n) => {
         console.log("tracking")
 
@@ -131,7 +151,13 @@ class DetailWork extends Component {
             if (n == 1) {
                 this.props.navigation.state.params.refresion()
                 this.props.navigation.goBack()
-            } else {
+            } 
+            else if(n==2){
+                
+               this.telCustomer();
+              
+            }
+            else {
                 console.log("Tracking ", result.data.tracking.status)
             }
         }).catch((err) => {
@@ -216,6 +242,8 @@ class DetailWork extends Component {
                     }}>
                         <TouchableOpacity onPress={() => {
                             navigator.geolocation.getCurrentPosition(
+
+                                
                                 (position) => {
                                     console.log("wokeeey");
                                     console.log(position);
@@ -224,7 +252,7 @@ class DetailWork extends Component {
                                         longitude: position.coords.longitude,
                                         error: null,
                                     }, () => {
-                                        this.tracking("7",0)
+                                        this.tracking("7",2)
                                     });
                                 },
                                 (error) => this.setState({ error: error.message }),
@@ -343,6 +371,13 @@ const summoneydetail = gql`
     query summoneydetail($invoiceNumber:String!){
         summoneydetail(invoiceNumber: $invoiceNumber){
             SUM
+        }
+    }
+`
+const telCustomer = gql`
+    query telCustomer($invoiceNumber:String!, $MessengerID:String!){
+        telCustomer(invoiceNumber: $invoiceNumber, MessengerID: $MessengerID){
+            telCustomer
         }
     }
 `

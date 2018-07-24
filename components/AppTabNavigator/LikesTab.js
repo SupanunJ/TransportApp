@@ -26,6 +26,7 @@ class LikesTab extends Component {
           </Left>
             <Body>
               <Title>ประวัติ</Title>
+              
             </Body>
             <Right />
           </Header>
