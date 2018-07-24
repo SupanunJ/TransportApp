@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Image, TextInput, TouchableOpacity, Alert, Platform,StatusBar } from 'react-native'
+import { Text, StyleSheet, View, Image, TextInput, TouchableOpacity, Alert, Platform, StatusBar } from 'react-native'
 
 import { Icon, Container, Header, Left, Body, Right, Content, Button, Form, Item, Label, Input, Title, Tab } from 'native-base'
 
@@ -31,7 +31,11 @@ class mainScreen extends Component {
     render() {
 
         return (
-            <AppStackNavigator />
+            <Container>
+                {/* <StatusBar backgroundColor="#b3f0ff"
+                    barStyle="light-content" hidden={false} /> */}
+                <AppStackNavigator />
+            </Container>
         );
     }
 }
@@ -83,7 +87,7 @@ const AppStackNavigator = StackNavigator({
                         navigationOptions: () => ({
                             header: null,
                         }),
-                    },  
+                    },
                     DetailWork: {
                         screen: DetailWork,
                         navigationOptions: () => ({
@@ -141,34 +145,34 @@ const AppStackNavigator = StackNavigator({
             ProfileTab: {
                 screen: ProfileTab
             }
-        },{
-            animationEnabled: false,
-            swipeEnabled: false,
-            tabBarPosition: "bottom",
-            tabBarOptions: {
-                style: {
-                    ...Platform.select({
-                        android: {
-                            backgroundColor: 'white'
-                        }
-                    })
-                }, indicatorStyle: {
-                    backgroundColor: '#00BFFF'
+        }, {
+                animationEnabled: false,
+                swipeEnabled: false,
+                tabBarPosition: "bottom",
+                tabBarOptions: {
+                    style: {
+                        ...Platform.select({
+                            android: {
+                                backgroundColor: 'white'
+                            }
+                        })
+                    }, indicatorStyle: {
+                        backgroundColor: '#00BFFF'
+                    },
+                    activeTintColor: '#000',
+                    inactiveTintColor: '#d1cece',
+                    showLabel: true,
+                    showIcon: true,
                 },
-                activeTintColor: '#000',
-                inactiveTintColor: '#d1cece',
-                showLabel: true,
-                showIcon: true,
-            },
-        }),
+            }),
         navigationOptions: () => ({
             header: null
         })
     }
-  },
-  {
-    initialRouteName: 'MainMenu',
-  });
+},
+    {
+        initialRouteName: 'MainMenu',
+    });
 
 const styles = StyleSheet.create({
     container: {

@@ -157,7 +157,7 @@ class SearchTab extends Component {
                               <View style={{ position: 'absolute', right: 10 }}>
                                 <Button transparent
                                   onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone : l.Zone , address:l.addressShipment, Cusname : l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
-                                  <Icon name='ios-arrow-forward' />
+                                  <Icon name='ios-arrow-forward' style={{ color: 'gray' }} />
                                 </Button>
                               </View>
                             </View>

@@ -263,6 +263,8 @@ class MainMenu extends Component {
         return (
 
             <Container style={{ backgroundColor: 'white' }}>
+                {/* <StatusBar backgroundColor="#b3f0ff"
+                    barStyle="light-content" hidden={false} /> */}
                 <Header style={{ backgroundColor: '#66c2ff' }}>
                     <View style={{ justifyContent: 'center' }}>
                         <Image source={require('../assets/dplus.jpg')}

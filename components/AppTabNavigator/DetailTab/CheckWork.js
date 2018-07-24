@@ -195,11 +195,11 @@ class CheckWork extends Component {
                         }}
                             onPress={
                                 () => Alert.alert(
-                                    'Confirm?',
-                                    'You want to confirm?',
+                                    'ตรวจงานนี้',
+                                    'คุณต้องการยืนยันการตรวจงานนี้?',
                                     [
-                                        { text: 'yes', onPress: () => this.GET_LOCATE() },
-                                        { text: 'no', onPress: () => console.log("no") }
+                                        { text: 'ใช่', onPress: () => this.GET_LOCATE() },
+                                        { text: 'ไม่', onPress: () => console.log("no") }
                                     ]
                                 )
                             }

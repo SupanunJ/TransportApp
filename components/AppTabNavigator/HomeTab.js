@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, TouchableOpacity, RefreshControl } from 'react-native'
-import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer } from 'native-base';
-import { List, ListItem } from 'react-native-elements';
+import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer, List, ListItem } from 'native-base';
+// import { List, ListItem } from 'react-native-elements';
 import { gql, withApollo, compose } from 'react-apollo'
 
 console.disableYellowBox = true;
@@ -35,7 +35,7 @@ class HomeTab extends Component {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                     error: null,
-                },() => this.Trackingstatus4());
+                }, () => this.Trackingstatus4());
             },
             (error) => this.setState({ error: error.message }),
             { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
@@ -154,36 +154,60 @@ class HomeTab extends Component {
                     <View>
                         {
                             this.state.showTable.map((l, i) => (
-                                <View style={styles.detailContent}>
-                                    <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                                // <View style={styles.detailContent}>
+                                //     <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                                //         <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                //         <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
+                                //     </View>
+                                //     <View style={{ position: 'absolute', right: 0 }}>
+                                //         <Button transparent
+                                //             onPress={() => navigate('CheckWork', { id: l.invoiceNumber, refresion: this._Re_worklist_query })}>
+                                //             <Icon name='ios-arrow-dropright' />
+                                //         </Button>
+                                //     </View>
+                                // </View>
+                                <ListItem>
+                                    <Body>
                                         <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
-                                        <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
-                                    </View>
-                                    <View style={{ position: 'absolute', right: 0 }}>
+                                        <Text note>{l.DELIVERYNAME}</Text>
+                                    </Body>
+                                    <Right>
                                         <Button transparent
                                             onPress={() => navigate('CheckWork', { id: l.invoiceNumber, refresion: this._Re_worklist_query })}>
-                                            <Icon name='ios-arrow-dropright' />
+                                            <Icon name='ios-arrow-forward' style={{ color: 'gray' }} />
                                         </Button>
-                                    </View>
-                                </View>
+                                    </Right>
+                                </ListItem>
                             ))
                         }
                     </View>
                     <View>
                         {
                             this.state.showTableGreen.map((l, i) => (
-                                <View style={styles.detailContentGREEN}>
-                                    <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                                // <View style={styles.detailContentGREEN}>
+                                //     <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
+                                //         <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                //         <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
+                                //     </View>
+                                //     <View style={{ position: 'absolute', right: 0 }}>
+                                //         <Button transparent
+                                //             onPress={() => navigate('CheckWork', { id: l.invoiceNumber, refresion: this._Re_worklist_query })}>
+                                //             <Icon name='ios-arrow-dropright' />
+                                //         </Button>
+                                //     </View>
+                                // </View>
+                                <ListItem noIndent style={{ backgroundColor: "#A9FC93" }}>
+                                    <Body>
                                         <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
-                                        <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
-                                    </View>
-                                    <View style={{ position: 'absolute', right: 0 }}>
+                                        <Text note>{l.DELIVERYNAME}</Text>
+                                    </Body>
+                                    <Right>
                                         <Button transparent
                                             onPress={() => navigate('CheckWork', { id: l.invoiceNumber, refresion: this._Re_worklist_query })}>
-                                            <Icon name='ios-arrow-dropright' />
+                                            <Icon name='ios-arrow-forward' style={{ color: 'gray' }} />
                                         </Button>
-                                    </View>
-                                </View>
+                                    </Right>
+                                </ListItem>
                             ))
                         }
                     </View>
@@ -203,11 +227,11 @@ class HomeTab extends Component {
                         }}
                             onPress={
                                 () => Alert.alert(
-                                    'Confirm ALL?',
-                                    'You want to confirm all?',
+                                    'ตรวจงานทั้งหมด',
+                                    'คุณต้องการตรวจงานทั้งหมด?',
                                     [
-                                        { text: 'yes', onPress: () => this.GET_LOCATE() },
-                                        { text: 'no', onPress: () => console.log("no") }
+                                        { text: 'ใช่', onPress: () => this.GET_LOCATE() },
+                                        { text: 'ไม่', onPress: () => console.log("no") }
                                     ]
                                 )
                             }
@@ -230,51 +254,51 @@ export default withApollo(GraphQL)
 
 const querywork = gql`
     query querywork($MessengerID:String!){
-        querywork(MessengerID: $MessengerID){
-            invoiceNumber
+                        querywork(MessengerID: $MessengerID){
+                        invoiceNumber
             customerName
-            DELIVERYNAME
-        }
-    }
-`
+                    DELIVERYNAME
+                }
+            }
+        `
 
 const selectwork = gql`
     query selectwork($MessengerID:String!){
-        selectwork(MessengerID: $MessengerID){
-            invoiceNumber
+                        selectwork(MessengerID: $MessengerID){
+                        invoiceNumber
             customerName
-            DELIVERYNAME
-        }
-    }
-`
+                    DELIVERYNAME
+                }
+            }
+        `
 
 const confirmwork = gql`
     mutation confirmwork($MessengerID:String!){
-        confirmwork(MessengerID: $MessengerID){
-            status
-        }
-    }
-`
+                        confirmwork(MessengerID: $MessengerID){
+                        status
+                    }
+                    }
+                `
 
 const Trackingstatus4 = gql`
-    mutation Trackingstatus4(
-        $status:String!,
-        $location:String!,
-        $messengerID:String!,
-        $lat:Float!,
-        $long:Float!
+                    mutation Trackingstatus4(
+                        $status:String!,
+                        $location:String!,
+                        $messengerID:String!,
+                        $lat:Float!,
+                        $long:Float!
     ){
-        Trackingstatus4(
-            status: $status,
-            location: $location,
-            messengerID: $messengerID,
-            lat: $lat,
-            long: $long
+                        Trackingstatus4(
+                            status: $status,
+                    location: $location,
+                    messengerID: $messengerID,
+                    lat: $lat,
+                    long: $long
         ){
-            status
-        }
-    }
-`
+                        status
+                    }
+                    }
+                `
 
 const styles = StyleSheet.create({
     container: {
