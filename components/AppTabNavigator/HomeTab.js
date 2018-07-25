@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, TouchableOpacity, RefreshControl } from 'react-native'
-import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer, List, ListItem } from 'native-base';
+import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, TouchableOpacity, RefreshControl, CheckBox } from 'react-native'
+import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer, List, ListItem, Item } from 'native-base';
 // import { List, ListItem } from 'react-native-elements';
 import { gql, withApollo, compose } from 'react-apollo'
 
@@ -19,6 +19,9 @@ class HomeTab extends Component {
             latitude: null,
             longitude: null,
             error: null,
+            CF_ALL_INVOICE: [],
+            stack_IVOICE: [],
+            status_CHECKBOX: false,
         }
         // this.props.client.resetStore();
         this.worklist_query();
@@ -35,7 +38,16 @@ class HomeTab extends Component {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                     error: null,
-                }, () => this.Trackingstatus4());
+                }, () => {
+                    this.state.CF_ALL_INVOICE.map((val, i) => {
+                        if ((val == true) && ((i + 1) != this.state.CF_ALL_INVOICE.length)) {
+                            this.tracking(this.state.stack_IVOICE[i], 0)
+                        }
+                        else if ((val == true) && ((i + 1) == this.state.CF_ALL_INVOICE.length)) {
+                            this.tracking(this.state.stack_IVOICE[i], 1)
+                        }
+                    });
+                });
             },
             (error) => this.setState({ error: error.message }),
             { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
@@ -72,7 +84,6 @@ class HomeTab extends Component {
             this.setState({
                 showTableGreen: result.data.selectwork
             })
-            // console.log(this.state.showTable)
         }).catch((err) => {
             console.log(err)
         });
@@ -87,7 +98,45 @@ class HomeTab extends Component {
         this.setState({ refreshing_1: false });
     }
 
-    confirmwork = () => {
+    confirmworksome = (inV, i) => {
+        console.log("confirmworksome")
+
+        this.props.client.mutate({
+            mutation: confirmworksome,
+            variables: {
+                "invoiceNumber": inV
+            }
+        }).then((result) => {
+            if (i == 0) {
+                console.log(result)
+            } else if (i == 1) {
+                this._Re_worklist_query();
+            }
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
+    tracking = (inV, i) => {
+        console.log("tracking")
+        this.props.client.mutate({
+            mutation: tracking,
+            variables: {
+                "invoice": inV,
+                "status": "5",
+                "messengerID": global.NameOfMess,
+                "lat": this.state.latitude,
+                "long": this.state.longitude,
+            }
+        }).then((result) => {
+            this.confirmworksome(inV, i)
+        }).catch((err) => {
+            console.log("ERR OF TRACKING", err)
+        });
+    }
+    //--------------------------------------------------------------------------------------------------------------
+    // ยืนยันงานทั้งหมด แบบเก่า
+    /*confirmwork = () => {
         console.log("confirmwork")
 
         this.props.client.mutate({
@@ -124,7 +173,8 @@ class HomeTab extends Component {
         }).catch((err) => {
             console.log(err)
         });
-    }
+    }*/
+    //--------------------------------------------------------------------------------------------------------------
 
     render() {
 
@@ -143,7 +193,9 @@ class HomeTab extends Component {
                     <Body>
                         <Title>ตรวจงาน</Title>
                     </Body>
-                    <Right />
+                    <Right>
+
+                    </Right>
                 </Header>
                 <Content refreshControl={
                     <RefreshControl
@@ -151,24 +203,78 @@ class HomeTab extends Component {
                         onRefresh={this._Re_worklist_query}
                     />
                 }>
+                    <CheckBox
+                        value={this.state.status_CHECKBOX}
+                        onValueChange={() => {
+                            this.setState({ status_CHECKBOX: !this.state.status_CHECKBOX })
+                            this.state.showTable.map((i, k) => {
+                                let n = this.state.CF_ALL_INVOICE;
+                                let s = this.state.stack_IVOICE;
+                                n[k] = !this.state.status_CHECKBOX
+                                s[k] = i.invoiceNumber
+                                this.setState({
+                                    CF_ALL_INVOICE: n,
+                                    stack_IVOICE: s
+                                })
+                            })
+                        }} />
                     <View>
                         {
                             this.state.showTable.map((l, i) => (
-                                // <View style={styles.detailContent}>
-                                //     <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
-                                //         <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
-                                //         <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
-                                //     </View>
-                                //     <View style={{ position: 'absolute', right: 0 }}>
-                                //         <Button transparent
-                                //             onPress={() => navigate('CheckWork', { id: l.invoiceNumber, refresion: this._Re_worklist_query })}>
-                                //             <Icon name='ios-arrow-dropright' />
-                                //         </Button>
-                                //     </View>
-                                // </View>
                                 <ListItem>
                                     <Body>
-                                        <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <View>
+                                                <CheckBox
+                                                    value={this.state.CF_ALL_INVOICE[i]}
+                                                    onValueChange={() => {
+                                                        if (this.state.CF_ALL_INVOICE[i] == true) {
+                                                            let n = this.state.CF_ALL_INVOICE.slice();
+                                                            let s = this.state.stack_IVOICE.slice();
+                                                            n[i] = false
+                                                            s[i] = l.invoiceNumber
+                                                            this.setState({
+                                                                CF_ALL_INVOICE: n,
+                                                                stack_IVOICE: s
+                                                            }, () => {
+                                                                console.log("if 1 CF", this.state.CF_ALL_INVOICE)
+                                                                console.log("if 1 CF", this.state.stack_IVOICE)
+                                                            })
+
+                                                        }
+                                                        else if (this.state.CF_ALL_INVOICE[i] == false) {
+                                                            let n = this.state.CF_ALL_INVOICE.slice();
+                                                            let s = this.state.stack_IVOICE.slice();
+                                                            n[i] = true
+                                                            s[i] = l.invoiceNumber
+                                                            this.setState({
+                                                                CF_ALL_INVOICE: n,
+                                                                stack_IVOICE: s
+                                                            }, () => {
+                                                                console.log("if 2 CF", this.state.CF_ALL_INVOICE)
+                                                                console.log("if 1 CF", this.state.stack_IVOICE)
+                                                            })
+
+                                                        }
+                                                        else {
+                                                            let n = this.state.CF_ALL_INVOICE.slice();
+                                                            let s = this.state.stack_IVOICE.slice();
+                                                            n[i] = true
+                                                            s[i] = l.invoiceNumber
+                                                            this.setState({
+                                                                CF_ALL_INVOICE: n,
+                                                                stack_IVOICE: s
+                                                            }, () => {
+                                                                console.log("if 3 CF", this.state.CF_ALL_INVOICE)
+                                                                console.log("if 1 CF", this.state.stack_IVOICE)
+                                                            })
+
+                                                        }
+
+                                                    }} />
+                                            </View>
+                                            <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                        </View>
                                         <Text note>{l.DELIVERYNAME}</Text>
                                     </Body>
                                     <Right>
@@ -184,18 +290,6 @@ class HomeTab extends Component {
                     <View>
                         {
                             this.state.showTableGreen.map((l, i) => (
-                                // <View style={styles.detailContentGREEN}>
-                                //     <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
-                                //         <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
-                                //         <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
-                                //     </View>
-                                //     <View style={{ position: 'absolute', right: 0 }}>
-                                //         <Button transparent
-                                //             onPress={() => navigate('CheckWork', { id: l.invoiceNumber, refresion: this._Re_worklist_query })}>
-                                //             <Icon name='ios-arrow-dropright' />
-                                //         </Button>
-                                //     </View>
-                                // </View>
                                 <ListItem noIndent style={{ backgroundColor: "#A9FC93" }}>
                                     <Body>
                                         <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
@@ -272,33 +366,62 @@ const selectwork = gql`
             }
         `
 
-const confirmwork = gql`
-    mutation confirmwork($MessengerID:String!){
-                        confirmwork(MessengerID: $MessengerID){
-                        status
-                    }
-                    }
-                `
+const confirmworksome = gql`
+    mutation confirmworksome($invoiceNumber:String!){
+        confirmworksome(invoiceNumber: $invoiceNumber){
+            status
+        }
+    }
+`
 
-const Trackingstatus4 = gql`
-                    mutation Trackingstatus4(
-                        $status:String!,
-                        $location:String!,
-                        $messengerID:String!,
-                        $lat:Float!,
-                        $long:Float!
+const tracking = gql`
+    mutation tracking(
+        $invoice:String!,
+        $status:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
     ){
-                        Trackingstatus4(
-                            status: $status,
-                    location: $location,
-                    messengerID: $messengerID,
-                    lat: $lat,
-                    long: $long
+        tracking(
+            invoice: $invoice,
+            status: $status,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
         ){
-                        status
-                    }
-                    }
-                `
+            status
+        }
+    }
+`
+//-----------------------------------------------------------------------------------------------
+// const confirmwork = gql`
+//     mutation confirmwork($MessengerID:String!){
+//                         confirmwork(MessengerID: $MessengerID){
+//                         status
+//                     }
+//                     }
+//                 `
+
+// const Trackingstatus4 = gql`
+//     mutation Trackingstatus4(
+//             $status:String!,
+//             $location:String!,
+//             $messengerID:String!,
+//             $lat:Float!,
+//             $long:Float!
+//         ){
+//         Trackingstatus4(
+//                 status: $status,
+//                 location: $location,
+//                 messengerID: $messengerID,
+//                 lat: $lat,
+//                 long: $long
+//             ){
+//                 status
+//             }
+//         }
+//     `
+//-----------------------------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
     container: {

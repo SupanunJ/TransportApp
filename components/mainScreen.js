@@ -18,6 +18,7 @@ import EditItem from './AppTabNavigator/DetailTab/EditItem';
 import SubmitJob from './AppTabNavigator/DetailTab/SubmitJob';
 import DetailBill from './AppTabNavigator/DetailTab/DetailBill';
 import SumBill from './AppTabNavigator/DetailTab/SumBill';
+import SubmitALLJob from './AppTabNavigator/DetailTab/SubmitALLJob';
 
 import { StackNavigator, TabNavigator } from "react-navigation";
 
@@ -84,6 +85,12 @@ const AppStackNavigator = StackNavigator({
                 screen: StackNavigator({
                     Search: {
                         screen: SearchTab,
+                        navigationOptions: () => ({
+                            header: null,
+                        }),
+                    },
+                    SubmitALLJob: {
+                        screen: SubmitALLJob,
                         navigationOptions: () => ({
                             header: null,
                         }),

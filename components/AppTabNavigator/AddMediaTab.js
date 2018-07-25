@@ -61,7 +61,7 @@ class AddMediaTab extends Component {
           <View>
             {/* <Switch /> */}
             <CheckBox
-              value={this.state.checked}
+              value={true}
               onValueChange={() => {
                 this.setState({ checked: !this.state.checked })
                 console.log("CHECK BOX",!this.state.checked)

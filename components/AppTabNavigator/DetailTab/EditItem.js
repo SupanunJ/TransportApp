@@ -13,6 +13,7 @@ class EditItem extends Component {
             text_arr: [],
             showWorkEdit: [],
             item_arr: [],
+            inputvalue: [],
             visibleModal: null,
             reason: "",
             latitude: null,
@@ -34,7 +35,7 @@ class EditItem extends Component {
                 showWorkEdit: result.data.subDetail
             })
         }).catch((err) => {
-            console.log("ERR OF EDIT WORK",err)
+            console.log("ERR OF EDIT WORK", err)
         });
     }
 
@@ -201,16 +202,38 @@ class EditItem extends Component {
                                             placeholder={l.qtyCN.toString()}
                                             placeholderTextColor="gray"
                                             underlineColorAndroid='white'
+                                            value={this.state.inputvalue[i]}
                                             onChangeText={
                                                 (text) => {
-                                                    let a = this.state.text_arr.slice();
-                                                    let b = this.state.item_arr.slice();
-                                                    b[i] = l.itemCode
-                                                    a[i] = text
-                                                    this.setState({
-                                                        text_arr: a,
-                                                        item_arr: b
-                                                    })
+                                                    if (parseInt(text) > l.qty) {
+                                                        Alert.alert(
+                                                            "คุณใส่ค่าเกินจำนวน",
+                                                            "กรุณาใส่ค่าใหม่อีกครั้ง",
+                                                            [
+                                                                {
+                                                                    text: 'OK', onPress: () => {
+                                                                        let v = this.state.inputvalue.slice();
+                                                                        v[i] = ''
+                                                                        this.setState({inputvalue: v})
+                                                                    }
+                                                                }
+                                                            ]
+                                                        )
+                                                    }
+                                                    else {
+                                                        let a = this.state.text_arr.slice();
+                                                        let b = this.state.item_arr.slice();
+                                                        let v = this.state.inputvalue.slice();
+                                                        b[i] = l.itemCode
+                                                        a[i] = text
+                                                        v[i] = text
+                                                        this.setState({
+                                                            text_arr: a,
+                                                            item_arr: b,
+                                                            inputvalue: v
+                                                        })
+
+                                                    }
                                                 }
                                             } />
                                     </Item>

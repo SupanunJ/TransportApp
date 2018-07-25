@@ -1,11 +1,19 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Dimensions, RefreshControl, CheckBox } from 'react-native'
-import { Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Separator, ListItem, Content, Badge, Accordion, Footer } from 'native-base';
+import { Text, StyleSheet, View, Dimensions, RefreshControl, CheckBox, Alert } from 'react-native'
+import { Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Separator, ListItem, Content, Badge, Accordion, Footer, ActionSheet } from 'native-base';
 import { gql, withApollo, compose } from 'react-apollo'
 
-// import SuccessWorkTab from './WorkTab/SuccessWorkTab';
-// import UnsuccessWorkTab from './WorkTab/UnsuccessWorkTab';
-
+var BUTTONS = [
+  { text: "ลูกค้ากดผิด", icon: "md-arrow-dropright", iconColor: "#2c8ef4", status: "B1" },
+  { text: "ร้านปิด", icon: "md-arrow-dropright", iconColor: "#f42ced", status: "B2" },
+  { text: "Order ซ้ำ", icon: "md-arrow-dropright", iconColor: "#ea943b", status: "B3" },
+  { text: "สินค้าผิด", icon: "md-arrow-dropright", iconColor: "#fa213b", status: "B4" },
+  { text: "เซลล์ key ผิด", icon: "md-arrow-dropright", iconColor: "#2c8ef4", status: "B5" },
+  { text: "ลูกค้าสั่งร้านอื่นมาแล้ว", icon: "md-arrow-dropright", iconColor: "#f42ced", status: "B6" },
+  { text: "เซลล์บอกราคาลูกค้าผิด", icon: "md-arrow-dropright", iconColor: "#ea943b", status: "B7" },
+  { text: "Cancel", icon: "close", iconColor: "#25de5b" }
+];
+var CANCEL_INDEX = 4;
 
 class SearchTab extends Component {
 
@@ -17,11 +25,21 @@ class SearchTab extends Component {
       show_SUC: [],
       refreshing_2: false,
       CF_ALL_INVOICE: [],
+      stack_IVOICE: [],
+      status_CHECKBOX: false,
     }
     // this.props.client.resetStore();
+    this.addBeer = this.addBeer.bind(this);
     this.queryZONE();
     this.worksub();
     this.sucesswork();
+  }
+
+  addBeer(itemValue, itemIndex) {
+
+    this.setState((state) => {
+      beer: [...state.beer, itemValue]
+    });
   }
 
   _RELOAD_MAIN2 = () => {
@@ -87,6 +105,69 @@ class SearchTab extends Component {
     });
   }
 
+  submitwork = (s, in_V, n) => {
+    this.props.client.mutate({
+      mutation: submitwork,
+      variables: {
+        "status": s,
+        "invoiceNumber": in_V
+      }
+    }).then((result) => {
+      this.submiitdetail(s, in_V, n)
+    }).catch((err) => {
+      console.log("err of submitwork", err)
+    });
+  }
+
+  submiitdetail = (s, in_V, n) => {
+    this.props.client.mutate({
+      mutation: submiitdetail,
+      variables: {
+        "invoiceNumber": in_V
+      }
+    }).then((result) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log("wokeeey");
+          console.log(position);
+          this.setState({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            error: null,
+          }, () => this.tracking(s, in_V, n));
+        },
+        (error) => this.setState({ error: error.message }),
+        { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+      );
+    }).catch((err) => {
+      console.log("err of submiitdetail", err)
+    });
+  }
+
+  tracking = (s, in_V, n) => {
+    console.log("tracking")
+
+    this.props.client.mutate({
+      mutation: tracking,
+      variables: {
+        "invoice": in_V,
+        "status": s,
+        "messengerID": global.NameOfMess,
+        "lat": this.state.latitude,
+        "long": this.state.longitude,
+      }
+    }).then((result) => {
+      if (n == 0) {
+        console.log("Tracking ", result.data.tracking.status)
+      } else if (n == 1) {
+        this._RELOAD_MAIN2()
+      }
+    }).catch((err) => {
+      console.log("ERR OF TRACKING", err)
+    });
+  }
+
+
   render() {
 
     const { navigate } = this.props.navigation
@@ -117,9 +198,28 @@ class SearchTab extends Component {
                 />
               }
             >
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <CheckBox
+                  value={this.state.status_CHECKBOX}
+                  onValueChange={() => {
+                    this.setState({ status_CHECKBOX: !this.state.status_CHECKBOX })
+                    this.state.showWork.map((i, k) => {
+                      let n = this.state.CF_ALL_INVOICE;
+                      let s = this.state.stack_IVOICE;
+                      n[k] = !this.state.status_CHECKBOX
+                      s[k] = i.invoiceNumber
+                      this.setState({
+                        CF_ALL_INVOICE: n,
+                        stack_IVOICE: s
+                      })
+                    })
+                  }} />
+                <Text>เลือกทั้งหมด</Text>
+              </View>
+
               <View>
                 {
-                  this.state.showZone.map(val => (
+                  this.state.showZone.map((val, j) => (
                     <Accordion
                       dataArray={[{ test: "test" }]}
                       renderHeader={(expanded) => (
@@ -134,29 +234,64 @@ class SearchTab extends Component {
                             : <Icon style={{ fontSize: 18 }} name="add-circle" />}
                         </View>
                       )}
-                      renderContent={() => this.state.showWork.map(l => {
+                      renderContent={() => this.state.showWork.map((l, i) => {
                         if (l.Zone == val.Zone) {
                           return (
                             <View style={styles.detailContent}>
-                              <View style={{ paddingLeft: 10, flexDirection: 'row' }}>
-                                {/* <CheckBox
-                                  value={this.state.checked}
+                              <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
+                                <CheckBox
+                                  value={this.state.CF_ALL_INVOICE[i]}
                                   onValueChange={() => {
-                                    this.setState({ checked: !this.state.checked })
-                                    // if (!this.state.checked == true) {
-                                    //   let n = this.state.CF_ALL_INVOICE.slice();
-                                    //   n[val][l] = l.invoiceNumber
-                                    //   this.setState({
-                                    //     CF_ALL_INVOICE: n
-                                    //   })
-                                    // }
-                                  }} /> */}
+                                    if (this.state.CF_ALL_INVOICE[i] == true) {
+                                      let n = this.state.CF_ALL_INVOICE.slice();
+                                      let s = this.state.stack_IVOICE.slice();
+                                      n[i] = false
+                                      s[i] = l.invoiceNumber
+                                      this.setState({
+                                        CF_ALL_INVOICE: n,
+                                        stack_IVOICE: s
+                                      }, () => {
+                                        console.log("if 1 CF", this.state.CF_ALL_INVOICE)
+                                        console.log("if 1 CF", this.state.stack_IVOICE)
+                                      })
+
+                                    }
+                                    else if (this.state.CF_ALL_INVOICE[i] == false) {
+                                      let n = this.state.CF_ALL_INVOICE.slice();
+                                      let s = this.state.stack_IVOICE.slice();
+                                      n[i] = true
+                                      s[i] = l.invoiceNumber
+                                      this.setState({
+                                        CF_ALL_INVOICE: n,
+                                        stack_IVOICE: s
+                                      }, () => {
+                                        console.log("if 2 CF", this.state.CF_ALL_INVOICE)
+                                        console.log("if 1 CF", this.state.stack_IVOICE)
+                                      })
+
+                                    }
+                                    else {
+                                      let n = this.state.CF_ALL_INVOICE.slice();
+                                      let s = this.state.stack_IVOICE.slice();
+                                      n[i] = true
+                                      s[i] = l.invoiceNumber
+                                      this.setState({
+                                        CF_ALL_INVOICE: n,
+                                        stack_IVOICE: s
+                                      }, () => {
+                                        console.log("if 3 CF", this.state.CF_ALL_INVOICE)
+                                        console.log("if 1 CF", this.state.stack_IVOICE)
+                                      })
+
+                                    }
+
+                                  }} />
                                 <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
                                 <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
                               </View>
                               <View style={{ position: 'absolute', right: 10 }}>
                                 <Button transparent
-                                  onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone : l.Zone , address:l.addressShipment, Cusname : l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
+                                  onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
                                   <Icon name='ios-arrow-forward' style={{ color: 'gray' }} />
                                 </Button>
                               </View>
@@ -169,14 +304,43 @@ class SearchTab extends Component {
                 }
               </View>
             </Content>
-            {/* <Footer style={{
+            <Footer style={{
               backgroundColor: '#66c2ff',
               justifyContent: 'center',
               alignItems: 'center'
             }}>
               <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Button warning
-                  onPress={() => console.log("CF ALL",this.state.CF_ALL_INVOICE)}
+                  onPress={() => {
+                    Alert.alert(
+                      "ส่งงานไม่ได้",
+                      "คุณต้องการยืนยัน การส่งงานไม่ได้? ",
+                      [
+                        {
+                          text: "ไม่", onPress: () =>
+                            ActionSheet.show(
+                              {
+                                options: BUTTONS,
+                                cancelButtonIndex: CANCEL_INDEX,
+                                title: "รายงานการส่ง"
+                              },
+                              buttonIndex => {
+                                this.state.CF_ALL_INVOICE.map((val, i) => {
+                                  if ((val == true) && ((i + 1) != this.state.CF_ALL_INVOICE.length)) {
+                                    this.submitwork(BUTTONS[buttonIndex].status,this.state.stack_IVOICE[i],0)
+                                  }
+                                  else if ((val == true) && ((i + 1) == this.state.CF_ALL_INVOICE.length)) {
+                                    this.submitwork(BUTTONS[buttonIndex].status,this.state.stack_IVOICE[i],1)
+                                  }
+                                });
+                                
+                              }
+                            )
+                        },
+                        { text: "ใช่", onPress: () => navigate("SubmitALLJob", { check_box: this.state.CF_ALL_INVOICE, in_V: this.state.stack_IVOICE, refresion: this._RELOAD_MAIN2 }) }
+                      ]
+                    )
+                  }}
                   style={{
                     width: 200,
                     height: '80%',
@@ -184,12 +348,12 @@ class SearchTab extends Component {
                     alignItems: 'center'
                   }}
                 >
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>CF ALL</Text>
+                  <Text style={{ color: 'white', fontWeight: 'bold' }}>ยืนยันการส่งงาน</Text>
                 </Button>
               </View>
-            </Footer> */}
+            </Footer>
           </Tab>
-
+          {/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */}
           <Tab heading={<TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-checkbox-outline" /><Text style={{ color: 'white' }}>  ส่งสำเร็จ</Text></TabHeading>}>
             <Content
               refreshControl={
@@ -303,6 +467,42 @@ const sucesswork = gql`
           DELIVERYNAME
       }
   }
+`
+
+const submitwork = gql`
+    mutation submitwork($status:String!, $invoiceNumber:String!){
+        submitwork(status: $status, invoiceNumber: $invoiceNumber){
+            status
+        }
+    }
+`
+
+const submiitdetail = gql`
+    mutation submiitdetail($invoiceNumber:String!){
+        submiitdetail(invoiceNumber: $invoiceNumber){
+            status
+        }
+    }
+`
+
+const tracking = gql`
+    mutation tracking(
+        $invoice:String!,
+        $status:String!,
+        $messengerID:String!,
+        $lat:Float!,
+        $long:Float!
+    ){
+        tracking(
+            invoice: $invoice,
+            status: $status,
+            messengerID: $messengerID,
+            lat: $lat,
+            long: $long
+        ){
+            status
+        }
+    }
 `
 
 
