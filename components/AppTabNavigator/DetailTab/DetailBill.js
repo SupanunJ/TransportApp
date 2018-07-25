@@ -94,12 +94,12 @@ class DetailBill extends Component {
                                   </View>
                                   <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                                   <Text >{l.qty}</Text>
-                                 <Text >ชิ้น</Text>
+                                 <Text style={{ paddingHorizontal: 5  }}>ชิ้น</Text>
                                  </View>
                                   <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                                   <Text >{l.amount}</Text>
                                   
-                                  <Text >บาท</Text>
+                                  <Text style={{ paddingHorizontal: 5  }}>บาท</Text>
 
                                 </View>
                               </ListItem>
