@@ -18,7 +18,7 @@ import mainService from "./components/services/mainService";
 
 
 const networkInterface = createNetworkInterface({
-  uri: 'http://10.0.2.2:3009/api/graphql'
+  uri: 'http://192.168.3.14:3009/api/graphql'
 })
 
 const client = new ApolloClient({
