@@ -209,21 +209,26 @@ class HomeTab extends Component {
                         onRefresh={this._Re_worklist_query}
                     />
                 }>
-                    <CheckBox
-                        value={this.state.status_CHECKBOX}
-                        onValueChange={() => {
-                            this.setState({ status_CHECKBOX: !this.state.status_CHECKBOX })
-                            this.state.showTable.map((i, k) => {
-                                let n = this.state.CF_ALL_INVOICE;
-                                let s = this.state.stack_IVOICE;
-                                n[k] = !this.state.status_CHECKBOX
-                                s[k] = i.invoiceNumber
-                                this.setState({
-                                    CF_ALL_INVOICE: n,
-                                    stack_IVOICE: s
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <CheckBox
+                            value={this.state.status_CHECKBOX}
+                            onValueChange={() => {
+                                this.setState({ status_CHECKBOX: !this.state.status_CHECKBOX })
+                                this.state.showTable.map((i, k) => {
+                                    let n = this.state.CF_ALL_INVOICE;
+                                    let s = this.state.stack_IVOICE;
+                                    n[k] = !this.state.status_CHECKBOX
+                                    s[k] = i.invoiceNumber
+                                    this.setState({
+                                        CF_ALL_INVOICE: n,
+                                        stack_IVOICE: s
+                                    })
                                 })
-                            })
-                        }} />
+                            }} />
+                        <Text>เลือกทั้งหมด</Text>
+                    </View>
+                    
                     <View>
                         {
                             this.state.showTable.map((l, i) => (
@@ -330,7 +335,7 @@ class HomeTab extends Component {
                                     'ตรวจงานทั้งหมด',
                                     'คุณต้องการตรวจงานทั้งหมด?',
                                     [
-                                       
+
                                         { text: 'ไม่', onPress: () => console.log("no") },
                                         { text: 'ใช่', onPress: () => this.GET_LOCATE() },
                                     ]
