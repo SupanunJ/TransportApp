@@ -287,9 +287,11 @@ class SearchTab extends Component {
 
                                   }} />
                                 <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
-                                <Text style={{ paddingHorizontal: 5 }}>{l.DELIVERYNAME}</Text>
+                                <Text style={{ paddingHorizontal: 10 }}>{l.DELIVERYNAME}</Text>
                               </View>
-                              <View style={{ position: 'absolute', right: 10 }}>
+                             
+                              <View style={{ position: 'absolute', right: 10 , flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+                              <Text style={{ paddingHorizontal: 5  }}>{l.SUM} บาท </Text>
                                 <Button transparent
                                   onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
                                   <Icon name='ios-arrow-forward' style={{ color: 'gray' }} />
@@ -369,7 +371,9 @@ class SearchTab extends Component {
                     <View>
                       <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
                         <Text style={styles.storeLabel}>{k.invoiceNumber}</Text>
-                        <Text style={{ paddingHorizontal: 5 }}>{k.DELIVERYNAME}</Text>
+                        <Text style={{ paddingHorizontal: 10 }}>{k.DELIVERYNAME}</Text>
+                         <Text style={{ paddingHorizontal: 30 }}>{k.SUM} บาท </Text>
+                        
                       </View>
                     </View>
                     <View style={{ position: 'absolute', right: 3 }}>
@@ -447,6 +451,7 @@ const worksub = gql`
             DELIVERYNAME
             Zone
             addressShipment
+            SUM
         }
     }
 `
@@ -465,6 +470,7 @@ const sucesswork = gql`
           invoiceNumber
           status
           DELIVERYNAME
+          SUM
       }
   }
 `

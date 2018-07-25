@@ -80,7 +80,14 @@ class CheckWork extends Component {
             if (result.data.confirmworksome.status) {
                 this.tracking()
             } else {
-                Alert.alert("Confirm Failed", "Please Confirm Again")
+           
+                     Alert.alert(
+                        'ตรวจงานไม่สำเร็จ',
+                        'มีการตรวจงานนี้ไปแล้ว',
+                        [
+                            { text: 'ตกลง', onPress: ()  => console.log("ok") },
+                        ]
+                    )
             }
         }).catch((err) => {
             console.log(err)
@@ -198,13 +205,13 @@ class CheckWork extends Component {
                                     'ตรวจงานนี้',
                                     'คุณต้องการยืนยันการตรวจงานนี้?',
                                     [
+                                        { text: 'ไม่', onPress: () => console.log("no") },
                                         { text: 'ใช่', onPress: () => this.GET_LOCATE() },
-                                        { text: 'ไม่', onPress: () => console.log("no") }
                                     ]
                                 )
                             }
                         >
-                            <Text style={{ color: 'white', fontWeight: 'bold' }}>CONFIRM</Text>
+                            <Text style={{ color: 'white', fontWeight: 'bold' }}>ยืนยันการตรวจงาน</Text>
                         </Button>
                     </View>
                 </Footer>
