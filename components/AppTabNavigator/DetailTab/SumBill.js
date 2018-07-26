@@ -151,23 +151,41 @@ class SumBill extends Component {
                             this.state.showsummoney.map((l, i) => (
                                 <View>
                                     <View style={{ margin: 30, justifyContent: 'center' }}>
-                                        <Text>สรุปยอดเงินที่ต้องโอน  </Text>
+                                        <Text style={{ fontWeight: 'bold' }}>สรุปยอดเงินที่ต้องโอน  </Text>
                                     </View>
 
                                     <View style={{ margin: 45, marginTop: 5, justifyContent: 'center' }}>
-                                        <Text>ยอดงเงินตามบิลจริง :                {l.amountBill}           บาท</Text>
-                                        <Text>ยอดเงินที่เก็บได้ :                     {l.amountActual}         บาท </Text>
-                                        <View>
-                                            {
-                                                this.state.showmoneyfile.map((V, i) => (
-                                                    <Text>ยอดที่เก็บไม่ได้ :                      {V.amountBill}        บาท </Text>
-                                                ))
-                                            }
+
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text style={{ width: Dimensions.get('window').width / 1.6 }} >ยอดงเงินตามบิลจริง : </Text>
+                                            <Text style={{ width: Dimensions.get('window').width / 1.6, fontSize: 15, color: 'orange' }} >{l.amountBill} ฿ </Text>
                                         </View>
+
+                                        <View style={{  flexDirection: 'row' }}>
+                                            <Text style={{ width: Dimensions.get('window').width / 1.6}} >ยอดเงินที่เก็บได้ : </Text>
+                                            <Text style={{ width: Dimensions.get('window').width / 1.6, fontSize: 15, color: 'orange' }} >{l.amountActual} ฿ </Text>
+                                        </View>
+
+                                        <View style={{  flexDirection: 'row' }}>
+                                            <Text style={{ width: Dimensions.get('window').width / 1.6 }} >ยอดที่เก็บไม่ได้ : </Text>
+                                            <View style={{ width: Dimensions.get('window').width / 1.6 }} >
+                                                {
+                                                    this.state.showmoneyfile.map((V, i) => (
+                                                        <Text style={{ fontSize: 15, color: 'orange' }}>{V.amountBill} ฿ </Text>
+                                                    ))
+                                                }
+                                            </View>
+                                        </View>
+
                                     </View>
-                                    <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
-                                        <Text>ยอดเงินที่ต้องโอนเข้าบัญชีของบริษัท    {l.amountActual}     บาท</Text>
+
+                                    <View style={{  margin: 30, marginTop: 5, justifyContent: 'center' }}>
+                                    <View style={{  flexDirection: 'row' }}>
+                                        <Text style={{ width: Dimensions.get('window').width /  1.5,fontWeight: 'bold'  }} >ยอดเงินที่ต้องโอนเข้าบัญชีของบริษัท : </Text>
+                                        <Text style={{ width: Dimensions.get('window').width /  1.5, fontSize: 16.5, color: 'orange',fontWeight: 'bold'  }} >{l.amountActual} ฿ </Text>
                                     </View>
+                                    </View>
+
 
                                     <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
                                         <Text>หมายเลขบัญชี 476-800-083-7  </Text>
@@ -188,16 +206,16 @@ class SumBill extends Component {
                         paddingLeft: 5,
                         backgroundColor: '#ff6c00',
                     }}>
-                       
-                       <TouchableOpacity  onPress={
-                                    this._PRESS_SearchTab.bind(this)
-                                }//navigate('HomeTab')
-                               
-                               >
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>เคลียร์งาน</Text>
-                        {/* </Button> */}
+
+                        <TouchableOpacity onPress={
+                            this._PRESS_SearchTab.bind(this)
+                        }//navigate('HomeTab')
+
+                        >
+                            <Text style={{ color: 'white', fontWeight: 'bold' }}>เคลียร์งาน</Text>
+                            {/* </Button> */}
                         </TouchableOpacity>
-                        </View>
+                    </View>
 
                     <View style={{
                         width: Dimensions.get('window').width / 2,
@@ -208,9 +226,9 @@ class SumBill extends Component {
                     }}>
 
                         <TouchableOpacity onPress={() => navigate('DetailBill')}>
-                          
+
                             <Text style={{ color: 'white', fontWeight: 'bold' }}>รายละเอียดยอดเงิน</Text>
-                           
+
                         </TouchableOpacity>
 
                     </View>
