@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Dimensions, RefreshControl, CheckBox, Alert } from 'react-native'
-import { Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Separator, ListItem, Content, Badge, Accordion, Footer, ActionSheet } from 'native-base';
+import { Text, StyleSheet, View, Dimensions, RefreshControl, CheckBox, Alert, TouchableOpacity } from 'react-native'
+import { Icon, Container, Header, Left, Body, Title, Right, Tab, Tabs, TabHeading, Button, Subtitle, ListItem, Content, Badge, Accordion, Footer, ActionSheet } from 'native-base';
 import { gql, withApollo, compose } from 'react-apollo'
 
 var BUTTONS = [
@@ -286,71 +286,73 @@ class SearchTab extends Component {
                 }
               </View>
             </Content>
-            <Footer style={{
-              backgroundColor: '#66c2ff',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <Button warning
-                  onPress={() => {
-                    Alert.alert(
-                      "ส่งงานไม่ได้",
-                      "คุณต้องการยืนยัน การส่งงานไม่ได้? ",
-                      [
+            <TouchableOpacity onPress={() => {
+              Alert.alert(
+                "ส่งงานไม่ได้",
+                "คุณต้องการยืนยัน การส่งงานไม่ได้? ",
+                [
+                  {
+                    text: "ไม่", onPress: () =>
+                      ActionSheet.show(
                         {
-                          text: "ไม่", onPress: () =>
-                            ActionSheet.show(
-                              {
-                                options: BUTTONS,
-                                cancelButtonIndex: CANCEL_INDEX,
-                                title: "รายงานการส่ง"
-                              },
-                              buttonIndex => {
-                                this.state.CF_ALL_INVOICE.map((val, i) => {
-                                  if ((val == true) && ((i + 1) != this.state.CF_ALL_INVOICE.length)) {
-                                    navigator.geolocation.getCurrentPosition(
-                                      (position) => {
-                                        console.log("wokeeey");
-                                        console.log(position);
-                                        this.setState({
-                                          latitude: position.coords.latitude,
-                                          longitude: position.coords.longitude,
-                                          error: null,
-                                        }, () => {
-                                          this.submitwork(BUTTONS[buttonIndex].status, this.state.stack_IVOICE[i], 0)
-                                        })
-                                      },
-                                      (error) => this.setState({ error: error.message }),
-                                      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-                                    );
-                                  }
-                                  else if ((val == true) && ((i + 1) == this.state.CF_ALL_INVOICE.length)) {
-                                    navigator.geolocation.getCurrentPosition(
-                                      (position) => {
-                                        console.log("wokeeey");
-                                        console.log(position);
-                                        this.setState({
-                                          latitude: position.coords.latitude,
-                                          longitude: position.coords.longitude,
-                                          error: null,
-                                        }, () => {
-                                          this.submitwork(BUTTONS[buttonIndex].status, this.state.stack_IVOICE[i], 1)
-                                        })
-                                      },
-                                      (error) => this.setState({ error: error.message }),
-                                      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-                                    );
-                                  }
-                                });
-
-                              }
-                            )
+                          options: BUTTONS,
+                          cancelButtonIndex: CANCEL_INDEX,
+                          title: "รายงานการส่ง"
                         },
-                        { text: "ใช่", onPress: () => navigate("SubmitALLJob", { check_box: this.state.CF_ALL_INVOICE, in_V: this.state.stack_IVOICE, refresionTO: this._RELOAD_MAIN2 }) }
-                      ]
-                    )
-                  }}
+                        buttonIndex => {
+                          this.state.CF_ALL_INVOICE.map((val, i) => {
+                            if ((val == true) && ((i + 1) != this.state.CF_ALL_INVOICE.length)) {
+                              navigator.geolocation.getCurrentPosition(
+                                (position) => {
+                                  console.log("wokeeey");
+                                  console.log(position);
+                                  this.setState({
+                                    latitude: position.coords.latitude,
+                                    longitude: position.coords.longitude,
+                                    error: null,
+                                  }, () => {
+                                    this.submitwork(BUTTONS[buttonIndex].status, this.state.stack_IVOICE[i], 0)
+                                  })
+                                },
+                                (error) => this.setState({ error: error.message }),
+                                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                              );
+                            }
+                            else if ((val == true) && ((i + 1) == this.state.CF_ALL_INVOICE.length)) {
+                              navigator.geolocation.getCurrentPosition(
+                                (position) => {
+                                  console.log("wokeeey");
+                                  console.log(position);
+                                  this.setState({
+                                    latitude: position.coords.latitude,
+                                    longitude: position.coords.longitude,
+                                    error: null,
+                                  }, () => {
+                                    this.submitwork(BUTTONS[buttonIndex].status, this.state.stack_IVOICE[i], 1)
+                                  })
+                                },
+                                (error) => this.setState({ error: error.message }),
+                                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                              );
+                            }
+                          });
+
+                        }
+                      )
+                  },
+                  { text: "ใช่", onPress: () => navigate("SubmitALLJob", { check_box: this.state.CF_ALL_INVOICE, in_V: this.state.stack_IVOICE, refresionTO: this._RELOAD_MAIN2 }) }
+                ]
+              )
+            }}>
+              <Footer style={{
+                backgroundColor: '#ff6c00',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{ color: 'white', fontWeight: 'bold' }}>ยืนยันการส่งงาน</Text>
+                  {/* <Button warning
+                
                   style={{
                     width: 200,
                     height: '80%',
@@ -358,10 +360,11 @@ class SearchTab extends Component {
                     alignItems: 'center'
                   }}
                 >
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>ยืนยันการส่งงาน</Text>
-                </Button>
-              </View>
-            </Footer>
+                 
+                </Button> */}
+                </View>
+              </Footer>
+            </TouchableOpacity>
           </Tab>
           {/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */}
           <Tab heading={<TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-checkbox-outline" /><Text style={{ color: 'white' }}>  ส่งสำเร็จ</Text></TabHeading>}>
@@ -375,40 +378,49 @@ class SearchTab extends Component {
             >
               {
                 this.state.show_SUC.map(k => (
-                  <ListItem>
+                  <ListItem style={{ paddingTop : 5  }}>
                     <View>
                       <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
                         <Text style={styles.storeLabel}>{k.invoiceNumber}</Text>
-                        <Text style={{ paddingHorizontal: 10 }}>{k.DELIVERYNAME}</Text>
-                        <Text style={{ paddingHorizontal: 30 }}>{k.SUM} บาท </Text>
+
+                      </View>
+                      <View style={{ paddingLeft: 0, flexDirection: 'row' ,paddingEnd : 0 }}>
+
+                        <Text style={{ fontSize: 12 }}>{k.DELIVERYNAME}</Text>
 
                       </View>
                     </View>
-                    <View style={{ position: 'absolute', right: 10 , flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
-                    <Text style={{ paddingHorizontal: 30 }}>{k.SUM} บาท </Text>
+                    <View style={{ position: 'absolute', right: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                      <Text style={{ fontSize: 13, color: 'orange', paddingHorizontal: 30 }}>{k.SUM} ฿ </Text>
                       {
                         (() => {
                           if (k.status == "A1") {
                             return (
-
-                              <Badge success>
-                                <Text>ส่งสำเร็จ</Text>
-                              </Badge>
-
+                              <View style={{ alignItems: 'center', justifyContent: 'center' }} >
+                                <Badge success style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
+                                  <Text style={{ fontSize: 12,color: 'white' }}>ส่งสำเร็จ</Text>
+                                </Badge>
+                              </View>
                             )
                           } else if (k.status == "A2") {
                             return (
-                              <Badge warning>
-                                <Text>ส่งสำเร็จมีการแก้ไข</Text>
-                              </Badge>
+
+                              <View style={{ alignItems: 'center', justifyContent: 'center' }} >
+                                <Badge warning style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
+                                  <Text style={{ fontSize: 12,color: 'white' }}>มีการแก้ไข</Text>
+                                </Badge>
+                              </View>
 
                             )
                           } else {
                             return (
-                              <Badge >
-                                <Text>ส่งไม่สำเร็จ</Text>
-                              </Badge>
+                              <View style={{ alignItems: 'center', justifyContent: 'center' }} >
+                                <Badge style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
 
+                                  <Text style={{ fontSize: 12,color: 'white' }}>ส่งไม่สำเร็จ</Text>
+
+                                </Badge>
+                              </View>
                             )
                           }
                         })()
@@ -418,25 +430,20 @@ class SearchTab extends Component {
                 ))
               }
             </Content>
-            <Footer style={{
-              backgroundColor: '#66c2ff',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <Button warning
-                  onPress={() => navigate('SumBill')}
-                  style={{
-                    width: 200,
-                    height: '80%',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>สรุปยอดเงิน</Text>
-                </Button>
-              </View>
-            </Footer>
+
+
+            <TouchableOpacity onPress={() => navigate('SumBill')}>
+              <Footer style={{
+                backgroundColor: '#ff6c00',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }} >
+
+                <Text style={{ color: 'white', fontWeight: 'bold' }}>สรุปยอดเงิน</Text>
+
+
+              </Footer>
+            </TouchableOpacity>
           </Tab>
 
         </Tabs>

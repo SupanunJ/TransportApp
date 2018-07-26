@@ -329,19 +329,7 @@ class HomeTab extends Component {
                     </View>
 
                 </Content>
-                <Footer style={{
-                    backgroundColor: '#66c2ff',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                        <Button success style={{
-                            width: 200,
-                            height: '80%',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                            onPress={
+                <TouchableOpacity  onPress={
                                 () => Alert.alert(
                                     'ตรวจงานทั้งหมด',
                                     'คุณต้องการตรวจงานทั้งหมด?',
@@ -353,10 +341,16 @@ class HomeTab extends Component {
                                 )
                             }
                         >
+                <Footer style={{
+                    backgroundColor: '#ff6c00',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                   
                             <Text style={{ color: 'white', fontWeight: 'bold' }}>ตรวจงานทั้งหมด</Text>
-                        </Button>
-                    </View>
+                       
                 </Footer>
+                </TouchableOpacity>
             </Container >
 
         );

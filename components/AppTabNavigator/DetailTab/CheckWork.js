@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, ScrollView } from 'react-native'
+import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, TouchableOpacity } from 'react-native'
 import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer } from 'native-base';
 import { gql, withApollo, compose } from 'react-apollo'
 
@@ -187,34 +187,27 @@ class CheckWork extends Component {
                     </View>
 
                 </Content>
-
+                <TouchableOpacity onPress={
+                    () => Alert.alert(
+                        'ตรวจงานนี้',
+                        'คุณต้องการยืนยันการตรวจงานนี้?',
+                        [
+                            { text: 'ไม่', onPress: () => console.log("no") },
+                            { text: 'ใช่', onPress: () => this.GET_LOCATE() },
+                        ]
+                    )
+                }>
                 <Footer style={{
-                    backgroundColor: '#66c2ff',
+                    backgroundColor: '#ff6c00',
                     justifyContent: 'center',
                     alignItems: 'center'
-                }}>
-                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                        <Button success style={{
-                            width: 200,
-                            height: '80%',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                            onPress={
-                                () => Alert.alert(
-                                    'ตรวจงานนี้',
-                                    'คุณต้องการยืนยันการตรวจงานนี้?',
-                                    [
-                                        { text: 'ไม่', onPress: () => console.log("no") },
-                                        { text: 'ใช่', onPress: () => this.GET_LOCATE() },
-                                    ]
-                                )
-                            }
-                        >
-                            <Text style={{ color: 'white', fontWeight: 'bold' }}>ยืนยันการตรวจงาน</Text>
-                        </Button>
-                    </View>
+                }} >
+                
+                      <Text style={{ color: 'white', fontWeight: 'bold' }}>ยืนยันการตรวจงาน</Text>
+                           
+                    
                 </Footer>
+                </TouchableOpacity>
             </Container>
 
         )
