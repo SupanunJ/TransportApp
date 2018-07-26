@@ -384,7 +384,8 @@ class SearchTab extends Component {
 
                       </View>
                     </View>
-                    <View style={{ position: 'absolute', right: 3 }}>
+                    <View style={{ position: 'absolute', right: 10 , flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+                    <Text style={{ paddingHorizontal: 30 }}>{k.SUM} บาท </Text>
                       {
                         (() => {
                           if (k.status == "A1") {
