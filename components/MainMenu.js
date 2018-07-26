@@ -270,7 +270,7 @@ class MainMenu extends Component {
                     barStyle="light-content" hidden={false} /> */}
                 <Header style={{ backgroundColor: '#66c2ff' }}>
                     <View style={{ justifyContent: 'center' }}>
-                        <Image source={require('../assets/dplus.jpg')}
+                        <Image source={require('../assets/dplus.png')}
                             style={{ width: 40, height: 40 }} />
                     </View>
                 </Header>

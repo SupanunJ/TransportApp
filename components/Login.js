@@ -85,10 +85,10 @@ class Login extends Component {
                     barStyle="light-content" hidden={false} />
 
                 <ImageBackground style={styles.container}
-                    source={require('../assets/loader.jpg')}>
+                    source={require('../assets/loader.png')}>
                     <View style={{ marginBottom: 20 }}>
-                        <Image source={require('../assets/dplus.jpg')}
-                            style={{ width: 160, height: 133 }}
+                        <Image source={require('../assets/dplus.png')}
+                            style={{ width: 160, height: 160 }}
                         />
                     </View>
                     <Text style={{ fontSize: 24, fontWeight: 'bold', fontStyle: 'italic', color: 'white' }}>
@@ -119,7 +119,7 @@ class Login extends Component {
                             style={{ height: 20 }}
                             onPress={() => navigate('ForgetPassword')}
                         >
-                            <Text style={{ color: 'white' }}>ลืมรหัสผ่าน</Text>
+                            <Text style={{ color: 'white' }}>ลืมรหัสผ่าน?</Text>
                         </Button>
                     </View>
                     <TouchableOpacity onPress={this.confirmLogin.bind(this)}

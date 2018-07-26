@@ -45,9 +45,9 @@ export default class App extends React.Component {
   renderLoad = () => {
     return (
       <ImageBackground style={styles.container}
-        source={require('./assets/loader.jpg')}>
-        <Image source={require('./assets/dplus.jpg')}
-          style={{ width: 160, height: 133 }} />
+        source={require('./assets/loader.png')}>
+        <Image source={require('./assets/dplus.png')}
+          style={{ width: 160, height: 160 }} />
       </ImageBackground>
     );
   }
