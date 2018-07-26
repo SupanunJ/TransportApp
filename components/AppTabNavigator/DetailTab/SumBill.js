@@ -180,40 +180,38 @@ class SumBill extends Component {
 
 
                 </Content>
-                <Footer style={{
-                    backgroundColor: '#66c2ff',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', paddingLeft: 10 }}>
-                        <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center', paddingLeft: 5 }}>
-                            <Button success
-                                onPress={
+                <Footer  >
+                    <View style={{
+                        width: Dimensions.get('window').width / 2,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingLeft: 5,
+                        backgroundColor: '#ff6c00',
+                    }}>
+                       
+                       <TouchableOpacity  onPress={
                                     this._PRESS_SearchTab.bind(this)
                                 }//navigate('HomeTab')
-                                style={{
-                                    width: Dimensions.get('window').width / 2.3,
-                                    height: '80%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}
-                            >
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>เคลียร์งาน</Text>
-                            </Button>
+                               
+                               >
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>เคลียร์งาน</Text>
+                        {/* </Button> */}
+                        </TouchableOpacity>
                         </View>
-                        <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
-                            <Button warning
-                                onPress={() => navigate('DetailBill')}
-                                style={{
-                                    width: Dimensions.get('window').width / 2.3,
-                                    height: '80%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}
-                            >
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>รายละเอียดยอดเงิน</Text>
-                            </Button>
-                        </View>
+
+                    <View style={{
+                        width: Dimensions.get('window').width / 2,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingLeft: 5,
+                        backgroundColor: '#7fffd4',
+                    }}>
+
+                        <TouchableOpacity onPress={() => navigate('DetailBill')}>
+                          
+                            <Text style={{ color: 'white', fontWeight: 'bold' }}>รายละเอียดยอดเงิน</Text>
+                           
+                        </TouchableOpacity>
 
                     </View>
 
@@ -232,42 +230,42 @@ export default withApollo(GraphQL)
 
 const summoney = gql`
 query summoney($MessengerID:String!){
-  summoney(MessengerID: $MessengerID){
-    amountBill
+                    summoney(MessengerID: $MessengerID){
+                    amountBill
     amountActual
-  }
-}
-`
+                }
+              }
+              `
 const summoneyfail = gql`
 query summoneyfail($MessengerID:String!){
-    summoneyfail(MessengerID: $MessengerID){
-    amountBill
+                    summoneyfail(MessengerID: $MessengerID){
+                    amountBill
     amountActual
-  }
-}
-`
+                }
+              }
+              `
 
 const reportsubmitwork = gql`
     mutation reportsubmitwork($MessengerID:String!){
-        reportsubmitwork(MessengerID: $MessengerID){
-            status
-        }
-    }
-`
+                    reportsubmitwork(MessengerID: $MessengerID){
+                    status
+                }
+                }
+            `
 const reportdetail = gql`
     mutation reportdetail($invoiceNumber:String!){
-        reportdetail(invoiceNumber: $invoiceNumber){
-            status
-        }
-    }
-`
+                    reportdetail(invoiceNumber: $invoiceNumber){
+                    status
+                }
+                }
+            `
 const checkinvoicereport = gql`
     query checkinvoicereport($MessengerID:String!){
-        checkinvoicereport(MessengerID: $MessengerID){
-            invoiceNumber
-        }
-    }
-`
+                    checkinvoicereport(MessengerID: $MessengerID){
+                    invoiceNumber
+                }
+                }
+            `
 
 const styles = StyleSheet.create({
 
