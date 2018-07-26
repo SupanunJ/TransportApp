@@ -73,6 +73,8 @@ class MainMenu extends Component {
                     'คุณยังมีรายการที่ยังไม่ได้ตรวจ',
                     'ต้องการออกรอบเลยหรือไม่',
                     [
+                        { text: 'ยกเลิก', onPress: () => console.log("no") },
+                        { text: 'กลับไปตรวจงาน', onPress: () => navigate("Home") },
                         {
                             text: 'ตกลง', onPress: () => {
                                 navigator.geolocation.getCurrentPosition(
@@ -90,8 +92,6 @@ class MainMenu extends Component {
                                 );
                             }
                         },
-                        { text: 'กลับไปตรวจงาน', onPress: () => navigate("Home") },
-                        { text: 'ยกเลิก', onPress: () => console.log("no") },
                     ]
                 )
             } else if (result.data.checkroundout.status == 2) {
@@ -130,7 +130,10 @@ class MainMenu extends Component {
     roundout = () => {
         const { navigate } = this.props.navigation
         this.props.client.mutate({
-            mutation: roundout
+            mutation: roundout,
+            variables: {
+                "MessengerID": global.NameOfMess
+            }
         }).then((result) => {
             navigate('Search')
         }).catch((err) => {
@@ -364,8 +367,8 @@ const checkroundout = gql`
 `
 
 const roundout = gql`
-    mutation roundout{
-        roundout{
+    mutation roundout($MessengerID:String!){
+        roundout(MessengerID: $MessengerID){
             status
         }
     }

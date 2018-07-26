@@ -29,17 +29,9 @@ class SearchTab extends Component {
       status_CHECKBOX: false,
     }
     // this.props.client.resetStore();
-    this.addBeer = this.addBeer.bind(this);
     this.queryZONE();
     this.worksub();
     this.sucesswork();
-  }
-
-  addBeer(itemValue, itemIndex) {
-
-    this.setState((state) => {
-      beer: [...state.beer, itemValue]
-    });
   }
 
   _RELOAD_MAIN2 = () => {
@@ -126,19 +118,7 @@ class SearchTab extends Component {
         "invoiceNumber": in_V
       }
     }).then((result) => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          console.log("wokeeey");
-          console.log(position);
-          this.setState({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            error: null,
-          }, () => this.tracking(s, in_V, n));
-        },
-        (error) => this.setState({ error: error.message }),
-        { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-      );
+      this.tracking(s, in_V, n)
     }).catch((err) => {
       console.log("err of submiitdetail", err)
     });
@@ -190,7 +170,7 @@ class SearchTab extends Component {
 
         <Tabs locked>
           <Tab heading={<TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-cart" /><Text style={{ color: 'white' }}>  รายการส่ง</Text></TabHeading>}>
-            <Content padder
+            <Content
               refreshControl={
                 <RefreshControl
                   refreshing={this.state.refreshing_2}
@@ -198,7 +178,7 @@ class SearchTab extends Component {
                 />
               }
             >
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
                 <CheckBox
                   value={this.state.status_CHECKBOX}
                   onValueChange={() => {
@@ -289,9 +269,9 @@ class SearchTab extends Component {
                                 <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
                                 <Text style={{ paddingHorizontal: 10 }}>{l.DELIVERYNAME}</Text>
                               </View>
-                             
-                              <View style={{ position: 'absolute', right: 10 , flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
-                              <Text style={{ paddingHorizontal: 5  }}>{l.SUM} บาท </Text>
+
+                              <View style={{ position: 'absolute', right: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                <Text style={{ paddingHorizontal: 5 }}>{l.SUM} บาท </Text>
                                 <Button transparent
                                   onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
                                   <Icon name='ios-arrow-forward' style={{ color: 'gray' }} />
@@ -329,17 +309,45 @@ class SearchTab extends Component {
                               buttonIndex => {
                                 this.state.CF_ALL_INVOICE.map((val, i) => {
                                   if ((val == true) && ((i + 1) != this.state.CF_ALL_INVOICE.length)) {
-                                    this.submitwork(BUTTONS[buttonIndex].status,this.state.stack_IVOICE[i],0)
+                                    navigator.geolocation.getCurrentPosition(
+                                      (position) => {
+                                        console.log("wokeeey");
+                                        console.log(position);
+                                        this.setState({
+                                          latitude: position.coords.latitude,
+                                          longitude: position.coords.longitude,
+                                          error: null,
+                                        }, () => {
+                                          this.submitwork(BUTTONS[buttonIndex].status, this.state.stack_IVOICE[i], 0)
+                                        })
+                                      },
+                                      (error) => this.setState({ error: error.message }),
+                                      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                    );
                                   }
                                   else if ((val == true) && ((i + 1) == this.state.CF_ALL_INVOICE.length)) {
-                                    this.submitwork(BUTTONS[buttonIndex].status,this.state.stack_IVOICE[i],1)
+                                    navigator.geolocation.getCurrentPosition(
+                                      (position) => {
+                                        console.log("wokeeey");
+                                        console.log(position);
+                                        this.setState({
+                                          latitude: position.coords.latitude,
+                                          longitude: position.coords.longitude,
+                                          error: null,
+                                        }, () => {
+                                          this.submitwork(BUTTONS[buttonIndex].status, this.state.stack_IVOICE[i], 1)
+                                        })
+                                      },
+                                      (error) => this.setState({ error: error.message }),
+                                      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                    );
                                   }
                                 });
-                                
+
                               }
                             )
                         },
-                        { text: "ใช่", onPress: () => navigate("SubmitALLJob", { check_box: this.state.CF_ALL_INVOICE, in_V: this.state.stack_IVOICE, refresion: this._RELOAD_MAIN2 }) }
+                        { text: "ใช่", onPress: () => navigate("SubmitALLJob", { check_box: this.state.CF_ALL_INVOICE, in_V: this.state.stack_IVOICE, refresionTO: this._RELOAD_MAIN2 }) }
                       ]
                     )
                   }}
@@ -372,8 +380,8 @@ class SearchTab extends Component {
                       <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
                         <Text style={styles.storeLabel}>{k.invoiceNumber}</Text>
                         <Text style={{ paddingHorizontal: 10 }}>{k.DELIVERYNAME}</Text>
-                         <Text style={{ paddingHorizontal: 30 }}>{k.SUM} บาท </Text>
-                        
+                        <Text style={{ paddingHorizontal: 30 }}>{k.SUM} บาท </Text>
+
                       </View>
                     </View>
                     <View style={{ position: 'absolute', right: 3 }}>

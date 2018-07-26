@@ -28,9 +28,9 @@ class SubmitALLJob extends Component {
             }
         }).then((result) => {
             if (result.data.submitedit.status) {
-                this.submitwork("A2", INVOICE)
+                this.submitwork("A2", INVOICE, i)
             } else {
-                this.submitwork("A1", INVOICE)
+                this.submitwork("A1", INVOICE, i)
             }
         }).catch((err) => {
             console.log(err)
@@ -45,7 +45,7 @@ class SubmitALLJob extends Component {
                 "invoiceNumber": INVOICE
             }
         }).then((result) => {
-            this.submiitdetail(s, INVOICE)
+            this.submiitdetail(s, INVOICE, i)
         }).catch((err) => {
             console.log("err of submitwork", err)
         });
@@ -59,19 +59,7 @@ class SubmitALLJob extends Component {
                 "invoiceNumber": INVOICE
             }
         }).then((result) => {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    console.log("wokeeey");
-                    console.log(position);
-                    this.setState({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                        error: null,
-                    }, () => this.tracking(s, INVOICE, i));
-                },
-                (error) => this.setState({ error: error.message }),
-                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-            );
+            this.tracking(s, INVOICE, i)
         }).catch((err) => {
             console.log("err of submiitdetail", err)
         });
@@ -94,7 +82,8 @@ class SubmitALLJob extends Component {
             if (i == 0) {
                 console.log("Tracking ", result.data.tracking.status)
             } else if (i == 1) {
-                this.props.navigation.state.params.refresion()
+                console.log("refresionTO")
+                this.props.navigation.state.params.refresionTO()
                 this.props.navigation.goBack()
             }
         }).catch((err) => {
@@ -112,7 +101,7 @@ class SubmitALLJob extends Component {
                 <Header style={{ backgroundColor: '#66c2ff' }}>
                     <Left>
                         <Button transparent
-                            onPress={() => navigate('DetailWork')}>
+                            onPress={() => navigate('Search')}>
                             <Icon name='arrow-back' />
                         </Button>
                     </Left>
@@ -180,10 +169,38 @@ class SubmitALLJob extends Component {
                                         text: "ยืนยัน", onPress: () => {
                                             this.props.navigation.state.params.check_box.map((val, i) => {
                                                 if ((val == true) && ((i + 1) != this.props.navigation.state.params.check_box.length)) {
-                                                    this.submitedit(this.props.navigation.state.params.in_V[i], 0)
+                                                    navigator.geolocation.getCurrentPosition(
+                                                        (position) => {
+                                                            console.log("wokeeey");
+                                                            console.log(position);
+                                                            this.setState({
+                                                                latitude: position.coords.latitude,
+                                                                longitude: position.coords.longitude,
+                                                                error: null,
+                                                            }, () => {
+                                                                this.submitedit(this.props.navigation.state.params.in_V[i], 0)
+                                                            });
+                                                        },
+                                                        (error) => this.setState({ error: error.message }),
+                                                        { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                                    );
                                                 }
                                                 else if ((val == true) && ((i + 1) == this.props.navigation.state.params.check_box.length)) {
-                                                    this.submitedit(this.props.navigation.state.params.in_V[i], 1)
+                                                    navigator.geolocation.getCurrentPosition(
+                                                        (position) => {
+                                                            console.log("wokeeey");
+                                                            console.log(position);
+                                                            this.setState({
+                                                                latitude: position.coords.latitude,
+                                                                longitude: position.coords.longitude,
+                                                                error: null,
+                                                            }, () => {
+                                                                this.submitedit(this.props.navigation.state.params.in_V[i], 1)
+                                                            });
+                                                        },
+                                                        (error) => this.setState({ error: error.message }),
+                                                        { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                                    );
                                                 }
                                             });
                                         }

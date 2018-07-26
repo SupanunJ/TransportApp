@@ -107,11 +107,22 @@ class HomeTab extends Component {
                 "invoiceNumber": inV
             }
         }).then((result) => {
-            if (i == 0) {
-                console.log(result)
-            } else if (i == 1) {
-                this._Re_worklist_query();
+            if (!result.data.confirmworksome.status) {
+                Alert.alert(
+                    'ตรวจงานไม่สำเร็จ',
+                    'มีการตรวจงานไปแล้ว',
+                    [
+                        { text: 'ตกลง', onPress: () => console.log("ok") },
+                    ]
+                )
+            } else {
+                if (i == 0) {
+                    console.log(result)
+                } else if (i == 1) {
+                    this._Re_worklist_query();
+                }
             }
+
         }).catch((err) => {
             console.log(err)
         });
@@ -210,7 +221,7 @@ class HomeTab extends Component {
                     />
                 }>
 
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
                         <CheckBox
                             value={this.state.status_CHECKBOX}
                             onValueChange={() => {
@@ -228,7 +239,7 @@ class HomeTab extends Component {
                             }} />
                         <Text>เลือกทั้งหมด</Text>
                     </View>
-                    
+
                     <View>
                         {
                             this.state.showTable.map((l, i) => (
