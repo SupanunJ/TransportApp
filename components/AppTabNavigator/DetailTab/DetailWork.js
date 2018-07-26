@@ -190,8 +190,8 @@ class DetailWork extends Component {
                     <View style={{ margin: 10 }}>
 
                         <Text>รหัสบิล : {this.props.navigation.state.params.id}</Text>
-                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}>ห้าง : {this.props.navigation.state.params.Zone} </Text>
-                        <Text>ชื่อลูกค้า : {this.props.navigation.state.params.Cusname} </Text>
+                        <Text >ห้าง : {this.props.navigation.state.params.Zone} </Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}>ชื่อลูกค้า : {this.props.navigation.state.params.Cusname} </Text>
                         <Text>ที่อยู่ : {this.props.navigation.state.params.address} </Text>
                     </View>
 
@@ -228,10 +228,10 @@ class DetailWork extends Component {
                                 <View  >
                                     <View style={{  flexDirection: 'row' }}>
                                         <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ fontWeight: 'bold' }}>ราคาทั้งหมด : </Text>
+                                            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>ราคาทั้งหมด : </Text>
                                         </View>
                                         <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ color: 'orange', fontWeight: 'bold' }}> {l.SUM} ฿</Text>
+                                            <Text style={{ color: 'orange', fontWeight: 'bold', fontSize: 17 }}> {l.SUM} ฿</Text>
                                         </View>
                                     </View>
                                     <View style={{ margin: 26, marginTop: 5, justifyContent: 'center'}}>
