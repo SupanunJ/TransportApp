@@ -4,7 +4,8 @@ import {
   StyleSheet,
   View,
   ImageBackground,
-  Image
+  Image,
+  StatusBar
 } from 'react-native'
 import { StackNavigator } from "react-navigation";
 import { ApolloClient, ApolloProvider, createNetworkInterface } from 'react-apollo'
@@ -57,6 +58,8 @@ export default class App extends React.Component {
 
       <ApolloProvider client={client}>
         <Root>
+          <StatusBar backgroundColor="#33adff"
+            barStyle="light-content" hidden={false} />
           {this.state.loaded ? this.renderSection() : this.renderLoad()}
         </Root>
       </ApolloProvider>

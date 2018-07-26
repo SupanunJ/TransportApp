@@ -81,7 +81,7 @@ class Login extends Component {
 
             <Container>
 
-                <StatusBar backgroundColor="#b3f0ff"
+                <StatusBar backgroundColor="#33adff"
                     barStyle="light-content" hidden={false} />
 
                 <ImageBackground style={styles.container}

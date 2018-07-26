@@ -33,7 +33,7 @@ class mainScreen extends Component {
 
         return (
             <Container>
-                {/* <StatusBar backgroundColor="#b3f0ff"
+                {/* <StatusBar backgroundColor="#33adff"
                     barStyle="light-content" hidden={false} /> */}
                 <AppStackNavigator />
             </Container>
@@ -173,12 +173,14 @@ const AppStackNavigator = StackNavigator({
                 },
             }),
         navigationOptions: () => ({
-            header: null
+            header: null,
+            // statusBarBackgroundColor: '#33adff'
         })
     }
 },
     {
         initialRouteName: 'MainMenu',
+        // statusBarBackgroundColor: '#33adff'
     });
 
 const styles = StyleSheet.create({
