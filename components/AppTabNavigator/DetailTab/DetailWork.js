@@ -29,7 +29,7 @@ class DetailWork extends Component {
             longitude: null,
             error: null,
             ShowMomey: [],
-            showTel:"",
+            showTel: "",
         }
         this.props.client.resetStore();
         this.subDetail();
@@ -92,7 +92,7 @@ class DetailWork extends Component {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                         error: null,
-                    }, () => this.tracking(s,1));
+                    }, () => this.tracking(s, 1));
                 },
                 (error) => this.setState({ error: error.message }),
                 { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
@@ -126,10 +126,10 @@ class DetailWork extends Component {
         }).then((result) => {
             this.setState({
                 showTel: result.data.telCustomer[0].telCustomer
-            },() => {
+            }, () => {
                 Communications.phonecall(this.state.showTel, true)
             })
-            
+
             // console.log( result.data.telCustomer)
         }).catch((err) => {
             console.log(err)
@@ -151,11 +151,11 @@ class DetailWork extends Component {
             if (n == 1) {
                 this.props.navigation.state.params.refresion()
                 this.props.navigation.goBack()
-            } 
-            else if(n==2){
-                
-               this.telCustomer();
-              
+            }
+            else if (n == 2) {
+
+                this.telCustomer();
+
             }
             else {
                 console.log("Tracking ", result.data.tracking.status)
@@ -189,8 +189,8 @@ class DetailWork extends Component {
 
                     <View style={{ margin: 10 }}>
 
-                        <Text>{this.props.navigation.state.params.id}</Text>
-                        <Text>ห้าง : {this.props.navigation.state.params.Zone} </Text>
+                        <Text>รหัสบิล : {this.props.navigation.state.params.id}</Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}>ห้าง : {this.props.navigation.state.params.Zone} </Text>
                         <Text>ชื่อลูกค้า : {this.props.navigation.state.params.Cusname} </Text>
                         <Text>ที่อยู่ : {this.props.navigation.state.params.address} </Text>
                     </View>
@@ -215,7 +215,7 @@ class DetailWork extends Component {
                                         <Text>{l.qty - l.qtyCN}</Text>
                                     </View>
                                     <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.amountedit}</Text>
+                                        <Text style={{ color: 'orange', fontWeight: 'bold' }}>{l.amountedit} ฿</Text>
                                     </View>
 
                                 </View>
@@ -225,9 +225,18 @@ class DetailWork extends Component {
                     <View>
                         {
                             this.state.ShowMomey.map((l, i) => (
-                                <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
-                                    <Text>ราคาทั้งหมด : {l.SUM} </Text>
-                                    <Text>หมายเหตุ :  </Text>
+                                <View  >
+                                    <View style={{  flexDirection: 'row' }}>
+                                        <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontWeight: 'bold' }}>ราคาทั้งหมด : </Text>
+                                        </View>
+                                        <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ color: 'orange', fontWeight: 'bold' }}> {l.SUM} ฿</Text>
+                                        </View>
+                                    </View>
+                                    <View style={{ margin: 26, marginTop: 5, justifyContent: 'center'}}>
+                                        <Text style={{ fontWeight: 'bold' }}>หมายเหตุ :  </Text>
+                                    </View>
                                 </View>
                             ))
                         }
@@ -243,7 +252,7 @@ class DetailWork extends Component {
                         <TouchableOpacity onPress={() => {
                             navigator.geolocation.getCurrentPosition(
 
-                                
+
                                 (position) => {
                                     console.log("wokeeey");
                                     console.log(position);
@@ -252,7 +261,7 @@ class DetailWork extends Component {
                                         longitude: position.coords.longitude,
                                         error: null,
                                     }, () => {
-                                        this.tracking("7",2)
+                                        this.tracking("7", 2)
                                     });
                                 },
                                 (error) => this.setState({ error: error.message }),
@@ -295,7 +304,7 @@ class DetailWork extends Component {
                                         longitude: position.coords.longitude,
                                         error: null,
                                     }, () => {
-                                        this.tracking("8",0)
+                                        this.tracking("8", 0)
                                         navigate('MapScreen')
                                     });
                                 },
