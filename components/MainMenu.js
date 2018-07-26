@@ -285,7 +285,7 @@ class MainMenu extends Component {
                                 width: 150, height: 150, backgroundColor: '#0099CC',
                                 justifyContent: 'center', alignItems: 'center'
                             }}>
-                                <Image source={require('../assets/icon/check.png')}
+                                <Image source={require('../assets/icon/medical-history.png')}
                                     style={{ width: 100, height: 100 }} />
                                 <Text style={{ fontWeight: 'bold', marginTop: 5 }}>ตรวจงาน</Text>
                             </View>
@@ -296,10 +296,10 @@ class MainMenu extends Component {
                             }//navigate('SearchTab')
                             style={{ paddingHorizontal: 10 }}>
                             <View style={{
-                                width: 150, height: 150, backgroundColor: '#CCFFCC',
+                                width: 150, height: 150, backgroundColor: '#1e90ff',
                                 justifyContent: 'center', alignItems: 'center'
                             }}>
-                                <Image source={require('../assets/icon/car.png')}
+                                <Image source={require('../assets/icon/motorbike.png')}
                                     style={{ width: 100, height: 100 }} />
                                 <Text style={{ fontWeight: 'bold', marginTop: 5 }}>ส่งงาน</Text>
                             </View>
@@ -309,10 +309,10 @@ class MainMenu extends Component {
                         <TouchableOpacity onPress={() => navigate('AddMediaTab')}
                             style={{ paddingHorizontal: 10 }}>
                             <View style={{
-                                width: 100, height: 100, backgroundColor: '#CCFFCC',
+                                width: 100, height: 100, backgroundColor: '#48d1cc',
                                 justifyContent: 'center', alignItems: 'center'
                             }}>
-                                <Image source={require('../assets/icon/clam.png')}
+                                <Image source={require('../assets/icon/shuffle.png')}
                                     style={{ width: 65, height: 65 }} />
                                 <Text style={{ fontWeight: 'bold', marginTop: 2 }}>เคลม</Text>
                             </View>
@@ -323,7 +323,7 @@ class MainMenu extends Component {
                                 width: 100, height: 100, backgroundColor: '#66CCFF',
                                 justifyContent: 'center', alignItems: 'center'
                             }}>
-                                <Image source={require('../assets/icon/folder.png')}
+                                <Image source={require('../assets/icon/history.png')}
                                     style={{ width: 65, height: 65 }} />
                                 <Text style={{ fontWeight: 'bold', marginTop: 2 }}>ประวัติ</Text>
                             </View>
