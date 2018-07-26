@@ -40,7 +40,12 @@ class SearchTab extends Component {
     this.queryZONE();
     this.worksub();
     this.sucesswork();
+    this.setState({ CF_ALL_INVOICE: [], stack_IVOICE: [] })
     this.setState({ refreshing_2: false });
+  }
+
+  checkDATA = (e) => {
+    return (e == null) || (e == false)
   }
 
   worksub = () => {
@@ -178,7 +183,7 @@ class SearchTab extends Component {
                 />
               }
             >
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 5 }}>
                 <CheckBox
                   value={this.state.status_CHECKBOX}
                   onValueChange={() => {
@@ -266,16 +271,24 @@ class SearchTab extends Component {
                                     }
 
                                   }} />
-                                <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
-                                <Text style={{ paddingHorizontal: 10 }}>{l.DELIVERYNAME}</Text>
+                                <TouchableOpacity style={{ position: 'absolute', left: "8%", right: 0, justifyContent: 'center' }} onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
+                                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                    <Text style={{ paddingHorizontal: 3 }}>{l.DELIVERYNAME}</Text>
+                                  </View>
+                                </TouchableOpacity>
                               </View>
 
+
                               <View style={{ position: 'absolute', right: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <Text style={{ paddingHorizontal: 5 }}>{l.SUM} บาท </Text>
-                                <Button transparent
-                                  onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
-                                  <Icon name='ios-arrow-forward' style={{ color: 'gray' }} />
-                                </Button>
+                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
+                                  <Text style={{ paddingHorizontal: 5 }}>{l.SUM} บาท </Text>
+                                  <Button transparent
+                                    onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}
+                                  >
+                                    <Icon name='ios-arrow-forward' style={{ color: 'gray' }} />
+                                  </Button>
+                                </TouchableOpacity>
                               </View>
                             </View>
                           )
@@ -287,62 +300,69 @@ class SearchTab extends Component {
               </View>
             </Content>
             <TouchableOpacity onPress={() => {
-              Alert.alert(
-                "ส่งงานไม่ได้",
-                "คุณต้องการยืนยัน การส่งงานไม่ได้? ",
-                [
-                  {
-                    text: "ไม่", onPress: () =>
-                      ActionSheet.show(
-                        {
-                          options: BUTTONS,
-                          cancelButtonIndex: CANCEL_INDEX,
-                          title: "รายงานการส่ง"
-                        },
-                        buttonIndex => {
-                          this.state.CF_ALL_INVOICE.map((val, i) => {
-                            if ((val == true) && ((i + 1) != this.state.CF_ALL_INVOICE.length)) {
-                              navigator.geolocation.getCurrentPosition(
-                                (position) => {
-                                  console.log("wokeeey");
-                                  console.log(position);
-                                  this.setState({
-                                    latitude: position.coords.latitude,
-                                    longitude: position.coords.longitude,
-                                    error: null,
-                                  }, () => {
-                                    this.submitwork(BUTTONS[buttonIndex].status, this.state.stack_IVOICE[i], 0)
-                                  })
-                                },
-                                (error) => this.setState({ error: error.message }),
-                                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-                              );
-                            }
-                            else if ((val == true) && ((i + 1) == this.state.CF_ALL_INVOICE.length)) {
-                              navigator.geolocation.getCurrentPosition(
-                                (position) => {
-                                  console.log("wokeeey");
-                                  console.log(position);
-                                  this.setState({
-                                    latitude: position.coords.latitude,
-                                    longitude: position.coords.longitude,
-                                    error: null,
-                                  }, () => {
-                                    this.submitwork(BUTTONS[buttonIndex].status, this.state.stack_IVOICE[i], 1)
-                                  })
-                                },
-                                (error) => this.setState({ error: error.message }),
-                                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-                              );
-                            }
-                          });
+              if (this.state.CF_ALL_INVOICE.every(this.checkDATA)) {
+                Alert.alert(
+                  'ไม่สามารถส่งงานได้',
+                  'กรุณาเลือกงานที่จะส่ง'
+                )
+              } else {
+                Alert.alert(
+                  "ยืนยันการส่งงาน",
+                  "คุณต้องการยืนยัน การส่งงาน -สำเร็จ- หรือ -ไม่สำเร็จ- ?",
+                  [
+                    {
+                      text: "ไม่สำเร็จ", onPress: () =>
+                        ActionSheet.show(
+                          {
+                            options: BUTTONS,
+                            cancelButtonIndex: CANCEL_INDEX,
+                            title: "รายงานการส่ง"
+                          },
+                          buttonIndex => {
+                            this.state.CF_ALL_INVOICE.map((val, i) => {
+                              if ((val == true) && ((i + 1) != this.state.CF_ALL_INVOICE.length)) {
+                                navigator.geolocation.getCurrentPosition(
+                                  (position) => {
+                                    console.log("wokeeey");
+                                    console.log(position);
+                                    this.setState({
+                                      latitude: position.coords.latitude,
+                                      longitude: position.coords.longitude,
+                                      error: null,
+                                    }, () => {
+                                      this.submitwork(BUTTONS[buttonIndex].status, this.state.stack_IVOICE[i], 0)
+                                    })
+                                  },
+                                  (error) => this.setState({ error: error.message }),
+                                  { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                );
+                              }
+                              else if ((val == true) && ((i + 1) == this.state.CF_ALL_INVOICE.length)) {
+                                navigator.geolocation.getCurrentPosition(
+                                  (position) => {
+                                    console.log("wokeeey");
+                                    console.log(position);
+                                    this.setState({
+                                      latitude: position.coords.latitude,
+                                      longitude: position.coords.longitude,
+                                      error: null,
+                                    }, () => {
+                                      this.submitwork(BUTTONS[buttonIndex].status, this.state.stack_IVOICE[i], 1)
+                                    })
+                                  },
+                                  (error) => this.setState({ error: error.message }),
+                                  { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                );
+                              }
+                            });
 
-                        }
-                      )
-                  },
-                  { text: "ใช่", onPress: () => navigate("SubmitALLJob", { check_box: this.state.CF_ALL_INVOICE, in_V: this.state.stack_IVOICE, refresionTO: this._RELOAD_MAIN2 }) }
-                ]
-              )
+                          }
+                        )
+                    },
+                    { text: "สำเร็จ", onPress: () => navigate("SubmitALLJob", { check_box: this.state.CF_ALL_INVOICE, in_V: this.state.stack_IVOICE, refresionTO: this._RELOAD_MAIN2 }) }
+                  ]
+                )
+              }
             }}>
               <Footer style={{
                 backgroundColor: '#ff6c00',
@@ -351,17 +371,6 @@ class SearchTab extends Component {
               }}>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                   <Text style={{ color: 'white', fontWeight: 'bold' }}>ยืนยันการส่งงาน</Text>
-                  {/* <Button warning
-                
-                  style={{
-                    width: 200,
-                    height: '80%',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}
-                >
-                 
-                </Button> */}
                 </View>
               </Footer>
             </TouchableOpacity>
@@ -378,13 +387,13 @@ class SearchTab extends Component {
             >
               {
                 this.state.show_SUC.map(k => (
-                  <ListItem style={{ paddingTop : 5  }}>
+                  <ListItem style={{ paddingTop: 5 }}>
                     <View>
                       <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
                         <Text style={styles.storeLabel}>{k.invoiceNumber}</Text>
 
                       </View>
-                      <View style={{ paddingLeft: 0, flexDirection: 'row' ,paddingEnd : 0 }}>
+                      <View style={{ paddingLeft: 0, flexDirection: 'row', paddingEnd: 0 }}>
 
                         <Text style={{ fontSize: 12 }}>{k.DELIVERYNAME}</Text>
 
@@ -398,7 +407,7 @@ class SearchTab extends Component {
                             return (
                               <View style={{ alignItems: 'center', justifyContent: 'center' }} >
                                 <Badge success style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
-                                  <Text style={{ fontSize: 12,color: 'white' }}>ส่งสำเร็จ</Text>
+                                  <Text style={{ fontSize: 12, color: 'white' }}>ส่งสำเร็จ</Text>
                                 </Badge>
                               </View>
                             )
@@ -407,7 +416,7 @@ class SearchTab extends Component {
 
                               <View style={{ alignItems: 'center', justifyContent: 'center' }} >
                                 <Badge warning style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
-                                  <Text style={{ fontSize: 12,color: 'white' }}>มีการแก้ไข</Text>
+                                  <Text style={{ fontSize: 12, color: 'white' }}>มีการแก้ไข</Text>
                                 </Badge>
                               </View>
 
@@ -417,7 +426,7 @@ class SearchTab extends Component {
                               <View style={{ alignItems: 'center', justifyContent: 'center' }} >
                                 <Badge style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
 
-                                  <Text style={{ fontSize: 12,color: 'white' }}>ส่งไม่สำเร็จ</Text>
+                                  <Text style={{ fontSize: 12, color: 'white' }}>ส่งไม่สำเร็จ</Text>
 
                                 </Badge>
                               </View>
@@ -461,29 +470,29 @@ export default withApollo(GraphQL)
 
 const worksub = gql`
     query worksub($MessengerID:String!){
-      worksub(MessengerID: $MessengerID){
+            worksub(MessengerID: $MessengerID){
             invoiceNumber
             customerName
-            DELIVERYNAME
-            Zone
-            addressShipment
-            SUM
-        }
-    }
-`
-
-const queryZONE = gql`
-  query queryZONE($MessengerID:String!){
-    queryZONE(MessengerID: $MessengerID){
+          DELIVERYNAME
           Zone
+          addressShipment
+          SUM
       }
   }
 `
 
+const queryZONE = gql`
+  query queryZONE($MessengerID:String!){
+            queryZONE(MessengerID: $MessengerID){
+            Zone
+          }
+          }
+        `
+
 const sucesswork = gql`
   query sucesswork($MessengerID:String!){
-    sucesswork(MessengerID: $MessengerID){
-          invoiceNumber
+            sucesswork(MessengerID: $MessengerID){
+            invoiceNumber
           status
           DELIVERYNAME
           SUM
@@ -493,39 +502,39 @@ const sucesswork = gql`
 
 const submitwork = gql`
     mutation submitwork($status:String!, $invoiceNumber:String!){
-        submitwork(status: $status, invoiceNumber: $invoiceNumber){
+            submitwork(status: $status, invoiceNumber: $invoiceNumber){
             status
-        }
-    }
-`
+          }
+          }
+      `
 
 const submiitdetail = gql`
     mutation submiitdetail($invoiceNumber:String!){
-        submiitdetail(invoiceNumber: $invoiceNumber){
+            submiitdetail(invoiceNumber: $invoiceNumber){
             status
-        }
-    }
-`
+          }
+          }
+      `
 
 const tracking = gql`
-    mutation tracking(
-        $invoice:String!,
-        $status:String!,
-        $messengerID:String!,
-        $lat:Float!,
-        $long:Float!
+          mutation tracking(
+              $invoice:String!,
+              $status:String!,
+              $messengerID:String!,
+              $lat:Float!,
+              $long:Float!
     ){
-        tracking(
-            invoice: $invoice,
-            status: $status,
-            messengerID: $messengerID,
-            lat: $lat,
-            long: $long
+            tracking(
+              invoice: $invoice,
+          status: $status,
+          messengerID: $messengerID,
+          lat: $lat,
+          long: $long
         ){
             status
-        }
-    }
-`
+          }
+          }
+      `
 
 
 const styles = StyleSheet.create({
@@ -542,11 +551,11 @@ const styles = StyleSheet.create({
   detailContent: {
     width: Dimensions.get('window').width,
     backgroundColor: 'white',
-    borderColor: 'white',
-    borderRightWidth: 2,
-    borderLeftWidth: 2,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    borderColor: 'gray',
+    borderRightWidth: 1,
+    borderLeftWidth: 1,
+    borderTopWidth: 0.15,
+    borderBottomWidth: 0.15,
     height: 50,
     justifyContent: 'center'
   }

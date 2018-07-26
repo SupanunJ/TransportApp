@@ -28,6 +28,10 @@ class HomeTab extends Component {
         this.selectwork();
     }
 
+    checkDATA = (e) => {
+        return (e == null) || (e == false)
+    }
+
     GET_LOCATE = () => {
         console.log("componentDidMount")
         navigator.geolocation.getCurrentPosition(
@@ -95,6 +99,7 @@ class HomeTab extends Component {
         this.setState({ refreshing_1: true });
         this.worklist_query();
         this.selectwork();
+        this.setState({ CF_ALL_INVOICE: [], stack_IVOICE: [] })
         this.setState({ refreshing_1: false });
     }
 
@@ -221,83 +226,87 @@ class HomeTab extends Component {
                     />
                 }>
 
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
-                        <CheckBox
-                            value={this.state.status_CHECKBOX}
-                            onValueChange={() => {
-                                this.setState({ status_CHECKBOX: !this.state.status_CHECKBOX })
-                                this.state.showTable.map((i, k) => {
-                                    let n = this.state.CF_ALL_INVOICE;
-                                    let s = this.state.stack_IVOICE;
-                                    n[k] = !this.state.status_CHECKBOX
-                                    s[k] = i.invoiceNumber
-                                    this.setState({
-                                        CF_ALL_INVOICE: n,
-                                        stack_IVOICE: s
+                    <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width, borderBottomColor: 'gray', borderBottomWidth: 0.15 }}>
+                        <View style={{ marginLeft: 20 }}>
+                            <CheckBox
+                                value={this.state.status_CHECKBOX}
+                                onValueChange={() => {
+                                    this.setState({ status_CHECKBOX: !this.state.status_CHECKBOX })
+                                    this.state.showTable.map((i, k) => {
+                                        let n = this.state.CF_ALL_INVOICE;
+                                        let s = this.state.stack_IVOICE;
+                                        n[k] = !this.state.status_CHECKBOX
+                                        s[k] = i.invoiceNumber
+                                        this.setState({
+                                            CF_ALL_INVOICE: n,
+                                            stack_IVOICE: s
+                                        })
                                     })
-                                })
-                            }} />
+                                }} />
+                        </View>
                         <Text>เลือกทั้งหมด</Text>
                     </View>
 
                     <View>
                         {
                             this.state.showTable.map((l, i) => (
-                                <ListItem>
+                                <ListItem noIndent >
+                                    <CheckBox
+                                        value={this.state.CF_ALL_INVOICE[i]}
+                                        onValueChange={() => {
+                                            if (this.state.CF_ALL_INVOICE[i] == true) {
+                                                let n = this.state.CF_ALL_INVOICE.slice();
+                                                let s = this.state.stack_IVOICE.slice();
+                                                n[i] = false
+                                                s[i] = l.invoiceNumber
+                                                this.setState({
+                                                    CF_ALL_INVOICE: n,
+                                                    stack_IVOICE: s
+                                                }, () => {
+                                                    console.log("if 1 CF", this.state.CF_ALL_INVOICE)
+                                                    console.log("if 1 CF", this.state.stack_IVOICE)
+                                                })
+
+                                            }
+                                            else if (this.state.CF_ALL_INVOICE[i] == false) {
+                                                let n = this.state.CF_ALL_INVOICE.slice();
+                                                let s = this.state.stack_IVOICE.slice();
+                                                n[i] = true
+                                                s[i] = l.invoiceNumber
+                                                this.setState({
+                                                    CF_ALL_INVOICE: n,
+                                                    stack_IVOICE: s
+                                                }, () => {
+                                                    console.log("if 2 CF", this.state.CF_ALL_INVOICE)
+                                                    console.log("if 1 CF", this.state.stack_IVOICE)
+                                                })
+
+                                            }
+                                            else {
+                                                let n = this.state.CF_ALL_INVOICE.slice();
+                                                let s = this.state.stack_IVOICE.slice();
+                                                n[i] = true
+                                                s[i] = l.invoiceNumber
+                                                this.setState({
+                                                    CF_ALL_INVOICE: n,
+                                                    stack_IVOICE: s
+                                                }, () => {
+                                                    console.log("if 3 CF", this.state.CF_ALL_INVOICE)
+                                                    console.log("if 1 CF", this.state.stack_IVOICE)
+                                                })
+
+                                            }
+
+                                        }} />
                                     <Body>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <View>
-                                                <CheckBox
-                                                    value={this.state.CF_ALL_INVOICE[i]}
-                                                    onValueChange={() => {
-                                                        if (this.state.CF_ALL_INVOICE[i] == true) {
-                                                            let n = this.state.CF_ALL_INVOICE.slice();
-                                                            let s = this.state.stack_IVOICE.slice();
-                                                            n[i] = false
-                                                            s[i] = l.invoiceNumber
-                                                            this.setState({
-                                                                CF_ALL_INVOICE: n,
-                                                                stack_IVOICE: s
-                                                            }, () => {
-                                                                console.log("if 1 CF", this.state.CF_ALL_INVOICE)
-                                                                console.log("if 1 CF", this.state.stack_IVOICE)
-                                                            })
-
-                                                        }
-                                                        else if (this.state.CF_ALL_INVOICE[i] == false) {
-                                                            let n = this.state.CF_ALL_INVOICE.slice();
-                                                            let s = this.state.stack_IVOICE.slice();
-                                                            n[i] = true
-                                                            s[i] = l.invoiceNumber
-                                                            this.setState({
-                                                                CF_ALL_INVOICE: n,
-                                                                stack_IVOICE: s
-                                                            }, () => {
-                                                                console.log("if 2 CF", this.state.CF_ALL_INVOICE)
-                                                                console.log("if 1 CF", this.state.stack_IVOICE)
-                                                            })
-
-                                                        }
-                                                        else {
-                                                            let n = this.state.CF_ALL_INVOICE.slice();
-                                                            let s = this.state.stack_IVOICE.slice();
-                                                            n[i] = true
-                                                            s[i] = l.invoiceNumber
-                                                            this.setState({
-                                                                CF_ALL_INVOICE: n,
-                                                                stack_IVOICE: s
-                                                            }, () => {
-                                                                console.log("if 3 CF", this.state.CF_ALL_INVOICE)
-                                                                console.log("if 1 CF", this.state.stack_IVOICE)
-                                                            })
-
-                                                        }
-
-                                                    }} />
-                                            </View>
-                                            <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                        <View style={{ left: 0, right: 0, top: 0, bottom: 0, }}>
+                                            <TouchableOpacity style={{ left: 0, right: 0, top: 0, bottom: 0, justifyContent: 'center' }}
+                                                onPress={() => navigate('CheckWork', { id: l.invoiceNumber, refresion: this._Re_worklist_query })}
+                                            >
+                                                <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                                <Text note>{l.DELIVERYNAME}</Text>
+                                            </TouchableOpacity>
                                         </View>
-                                        <Text note>{l.DELIVERYNAME}</Text>
                                     </Body>
                                     <Right>
                                         <Button transparent
@@ -314,8 +323,12 @@ class HomeTab extends Component {
                             this.state.showTableGreen.map((l, i) => (
                                 <ListItem noIndent style={{ backgroundColor: "#A9FC93" }}>
                                     <Body>
-                                        <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
-                                        <Text note>{l.DELIVERYNAME}</Text>
+                                        <TouchableOpacity style={{ left: 0, right: 0, top: 0, bottom: 0, justifyContent: 'center' }}
+                                            onPress={() => navigate('CheckWork', { id: l.invoiceNumber, refresion: this._Re_worklist_query })}
+                                        >
+                                            <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                            <Text note>{l.DELIVERYNAME}</Text>
+                                        </TouchableOpacity>
                                     </Body>
                                     <Right>
                                         <Button transparent
@@ -329,27 +342,38 @@ class HomeTab extends Component {
                     </View>
 
                 </Content>
-                <TouchableOpacity  onPress={
-                                () => Alert.alert(
-                                    'ตรวจงานทั้งหมด',
-                                    'คุณต้องการตรวจงานทั้งหมด?',
-                                    [
+                <TouchableOpacity onPress={
+                    () => {
+                        console.log(this.state.CF_ALL_INVOICE)
+                        if (this.state.CF_ALL_INVOICE.every(this.checkDATA)) {
+                            Alert.alert(
+                                'ไม่สามารถตรวจงานได้',
+                                'กรุณาเลือกงาน'
+                            )
+                        } else {
+                            Alert.alert(
+                                'ตรวจงานทั้งหมด',
+                                'คุณต้องการตรวจงานทั้งหมด?',
+                                [
 
-                                        { text: 'ไม่', onPress: () => console.log("no") },
-                                        { text: 'ใช่', onPress: () => this.GET_LOCATE() },
-                                    ]
-                                )
-                            }
-                        >
-                <Footer style={{
-                    backgroundColor: '#ff6c00',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                   
-                            <Text style={{ color: 'white', fontWeight: 'bold' }}>ตรวจงานทั้งหมด</Text>
-                       
-                </Footer>
+                                    { text: 'ไม่', onPress: () => console.log("no") },
+                                    { text: 'ใช่', onPress: () => this.GET_LOCATE() },
+                                ]
+                            )
+                        }
+
+                    }
+                }
+                >
+                    <Footer style={{
+                        backgroundColor: '#ff6c00',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>ตรวจงานทั้งหมด</Text>
+
+                    </Footer>
                 </TouchableOpacity>
             </Container >
 
