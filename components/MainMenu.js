@@ -99,6 +99,7 @@ class MainMenu extends Component {
                     'ยืนยันการออกรอบ',
                     'คุณต้องการออกรอบเลยหรือไม่?',
                     [
+                        { text: 'ยกเลิก', onPress: () => console.log("no") },
                         {
                             text: 'ยืนยัน', onPress: () => {
                                 navigator.geolocation.getCurrentPosition(
@@ -116,7 +117,6 @@ class MainMenu extends Component {
                                 );
                             }
                         },
-                        { text: 'ยกเลิก', onPress: () => console.log("no") },
                     ]
                 )
             } else {
@@ -305,7 +305,7 @@ class MainMenu extends Component {
 
                     <View style={{ flexDirection: 'row', justifyContent: "center", paddingVertical: 5 }}>
                         <TouchableOpacity
-                            onPress={()=> navigate('LikesTab')}
+                            onPress={() => navigate('LikesTab')}
                             style={{ paddingHorizontal: 5 }}>
                             <View style={{
                                 width: Dimensions.get('window').width / 3, height: Dimensions.get('window').height / 3.8, backgroundColor: 'white',
@@ -313,7 +313,7 @@ class MainMenu extends Component {
                             }}>
                                 <Image source={require('../assets/icon/history.png')}
                                     style={{ width: 100, height: 100 }} />
-                                <Text style={{  marginTop: 20, fontSize: 20, color: '#0099CC' }}>ประวัติ</Text>
+                                <Text style={{ marginTop: 20, fontSize: 20, color: '#0099CC' }}>ประวัติ</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -352,7 +352,7 @@ class MainMenu extends Component {
                                 }}>
                                     <Image source={require('../assets/icon/shuffle.png')}
                                         style={{ width: 65, height: 65 }} />
-                                    <Text style={{  marginTop: 3, fontSize: 20, color: '#0099CC' }}>เคลม</Text>
+                                    <Text style={{ marginTop: 3, fontSize: 20, color: '#0099CC' }}>เคลม</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => navigate('ProfileTab')}
@@ -363,7 +363,7 @@ class MainMenu extends Component {
                                 }}>
                                     <Image source={require('../assets/icon/newspaper.png')}
                                         style={{ width: 65, height: 65 }} />
-                                    <Text style={{  marginTop: 3, fontSize: 20, color: '#0099CC' }}>ข่าวสาร</Text>
+                                    <Text style={{ marginTop: 3, fontSize: 20, color: '#0099CC' }}>ข่าวสาร</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>

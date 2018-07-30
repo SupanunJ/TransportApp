@@ -370,7 +370,7 @@ class SearchTab extends Component {
                 alignItems: 'center'
               }}>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>ยืนยันการส่งงาน</Text>
+                  <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>ยืนยันการส่งงาน</Text>
                 </View>
               </Footer>
             </TouchableOpacity>
@@ -448,7 +448,7 @@ class SearchTab extends Component {
                 alignItems: 'center'
               }} >
 
-                <Text style={{ color: 'white', fontWeight: 'bold' }}>สรุปยอดเงิน</Text>
+                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>สรุปยอดเงิน</Text>
 
 
               </Footer>

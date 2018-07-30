@@ -29,7 +29,7 @@ class DetailWork extends Component {
             longitude: null,
             error: null,
             ShowMomey: [],
-            showTel:"",
+            showTel: "",
         }
         this.props.client.resetStore();
         this.subDetail();
@@ -92,7 +92,7 @@ class DetailWork extends Component {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                         error: null,
-                    }, () => this.tracking(s,1));
+                    }, () => this.tracking(s, 1));
                 },
                 (error) => this.setState({ error: error.message }),
                 { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
@@ -126,10 +126,10 @@ class DetailWork extends Component {
         }).then((result) => {
             this.setState({
                 showTel: result.data.telCustomer[0].telCustomer
-            },() => {
+            }, () => {
                 Communications.phonecall(this.state.showTel, true)
             })
-            
+
             // console.log( result.data.telCustomer)
         }).catch((err) => {
             console.log(err)
@@ -151,11 +151,11 @@ class DetailWork extends Component {
             if (n == 1) {
                 this.props.navigation.state.params.refresion()
                 this.props.navigation.goBack()
-            } 
-            else if(n==2){
-                
-               this.telCustomer();
-              
+            }
+            else if (n == 2) {
+
+                this.telCustomer();
+
             }
             else {
                 console.log("Tracking ", result.data.tracking.status)
@@ -195,11 +195,19 @@ class DetailWork extends Component {
                         <Text>ที่อยู่ : {this.props.navigation.state.params.address} </Text>
                     </View>
 
-                    <View style={{ justifyContent: 'space-around', flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row', width: Dimensions.get('window').width, borderBottomColor: 'gray', borderBottomWidth: 0.5 }}>
 
-                        <Text>ชื่อ</Text>
-                        <Text>จำนวน</Text>
-                        <Text>ราคา</Text>
+                        <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>ชื่อ</Text>
+                        </View>
+
+                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>จำนวน</Text>
+                        </View>
+                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>ราคา</Text>
+
+                        </View>
 
                     </View>
 
@@ -208,14 +216,14 @@ class DetailWork extends Component {
                             this.state.showDetailWork.map((l, i) => (
                                 <View style={{ flexDirection: 'row' }}>
 
-                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.itemName}</Text>
                                     </View>
-                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.qty - l.qtyCN}</Text>
                                     </View>
-                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.amountedit}</Text>
+                                    <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text>{l.amountedit} ฿</Text>
                                     </View>
 
                                 </View>
@@ -243,7 +251,7 @@ class DetailWork extends Component {
                         <TouchableOpacity onPress={() => {
                             navigator.geolocation.getCurrentPosition(
 
-                                
+
                                 (position) => {
                                     console.log("wokeeey");
                                     console.log(position);
@@ -252,7 +260,7 @@ class DetailWork extends Component {
                                         longitude: position.coords.longitude,
                                         error: null,
                                     }, () => {
-                                        this.tracking("7",2)
+                                        this.tracking("7", 2)
                                     });
                                 },
                                 (error) => this.setState({ error: error.message }),
@@ -295,7 +303,7 @@ class DetailWork extends Component {
                                         longitude: position.coords.longitude,
                                         error: null,
                                     }, () => {
-                                        this.tracking("8",0)
+                                        this.tracking("8", 0)
                                         navigate('MapScreen')
                                     });
                                 },
