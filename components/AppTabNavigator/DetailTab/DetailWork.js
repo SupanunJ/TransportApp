@@ -217,7 +217,7 @@ class DetailWork extends Component {
                                 <View style={{ flexDirection: 'row' }}>
 
                                     <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.itemName}</Text>
+                                        <Text style={{ paddingLeft: 5 }}>{i+1}). {l.itemName}</Text>
                                     </View>
                                     <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.qty - l.qtyCN}</Text>
