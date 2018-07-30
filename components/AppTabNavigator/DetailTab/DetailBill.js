@@ -87,20 +87,19 @@ class DetailBill extends Component {
                         if (l.invoiceNumber == val.invoiceNumber) {
                           return (
                             <View style={styles.detailContent}>
-                              <ListItem style={{ backgroundColor: 'white', borderColor: 'white', paddingLeft: 0 }} >
-
-                                <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                                  <Text >{l.itemName}</Text>
+                              <ListItem style={{ backgroundColor: 'white', borderColor: 'white', paddingLeft: 0}} >
+                                <View style={{  justifyContent: 'center', alignItems: 'center', flexDirection: 'row', borderBottomColor: 'gray', borderBottomWidth: 0.5  }}>
+                                  <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                                    <Text >{l.itemName}</Text>
                                   </View>
-                                  <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                                  <Text >{l.qty}</Text>
-                                 <Text style={{ paddingHorizontal: 5  }}>ชิ้น</Text>
-                                 </View>
-                                  <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                                  <Text >{l.amount}</Text>
-                                  
-                                  <Text style={{ paddingHorizontal: 5  }}>บาท</Text>
-
+                                  <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                                    <Text >{l.qty}</Text>
+                                    <Text style={{ paddingHorizontal: 5 }}>ชิ้น</Text>
+                                  </View>
+                                  <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                                    <Text >{l.amount}</Text>
+                                    <Text style={{ paddingHorizontal: 5 }}>บาท</Text>
+                                  </View>
                                 </View>
                               </ListItem>
                             </View>

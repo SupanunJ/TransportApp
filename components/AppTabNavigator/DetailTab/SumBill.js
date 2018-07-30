@@ -161,12 +161,12 @@ class SumBill extends Component {
                                             <Text style={{ width: Dimensions.get('window').width / 1.6, fontSize: 15, color: 'orange' }} >{l.amountBill} ฿ </Text>
                                         </View>
 
-                                        <View style={{  flexDirection: 'row' }}>
-                                            <Text style={{ width: Dimensions.get('window').width / 1.6}} >ยอดเงินที่เก็บได้ : </Text>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text style={{ width: Dimensions.get('window').width / 1.6 }} >ยอดเงินที่เก็บได้ : </Text>
                                             <Text style={{ width: Dimensions.get('window').width / 1.6, fontSize: 15, color: 'orange' }} >{l.amountActual} ฿ </Text>
                                         </View>
 
-                                        <View style={{  flexDirection: 'row' }}>
+                                        <View style={{ flexDirection: 'row' }}>
                                             <Text style={{ width: Dimensions.get('window').width / 1.6 }} >ยอดที่เก็บไม่ได้ : </Text>
                                             <View style={{ width: Dimensions.get('window').width / 1.6 }} >
                                                 {
@@ -179,11 +179,11 @@ class SumBill extends Component {
 
                                     </View>
 
-                                    <View style={{  margin: 30, marginTop: 5, justifyContent: 'center' }}>
-                                    <View style={{  flexDirection: 'row' }}>
-                                        <Text style={{ width: Dimensions.get('window').width /  1.5,fontWeight: 'bold'  }} >ยอดเงินที่ต้องโอนเข้าบัญชีของบริษัท : </Text>
-                                        <Text style={{ width: Dimensions.get('window').width /  1.5, fontSize: 16.5, color: 'orange',fontWeight: 'bold'  }} >{l.amountActual} ฿ </Text>
-                                    </View>
+                                    <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text style={{ width: Dimensions.get('window').width / 1.5, fontWeight: 'bold' }} >ยอดเงินที่ต้องโอนเข้าบัญชีของบริษัท : </Text>
+                                            <Text style={{ width: Dimensions.get('window').width / 1.5, fontSize: 16.5, color: 'orange', fontWeight: 'bold' }} >{l.amountActual} ฿ </Text>
+                                        </View>
                                     </View>
 
 
@@ -199,40 +199,34 @@ class SumBill extends Component {
 
                 </Content>
                 <Footer  >
-                    <View style={{
-                        width: Dimensions.get('window').width / 2,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        paddingLeft: 5,
-                        backgroundColor: '#ff6c00',
-                    }}>
-
-                        <TouchableOpacity onPress={
-                            this._PRESS_SearchTab.bind(this)
-                        }//navigate('HomeTab')
-
-                        >
+                    <TouchableOpacity onPress={
+                        this._PRESS_SearchTab.bind(this)
+                    }//navigate('HomeTab')
+                    >
+                        <View style={{
+                            width: Dimensions.get('window').width / 2,
+                            height:'100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            paddingLeft: 5,
+                            backgroundColor: '#ff6c00',
+                        }}>
                             <Text style={{ color: 'white', fontWeight: 'bold' }}>เคลียร์งาน</Text>
-                            {/* </Button> */}
-                        </TouchableOpacity>
-                    </View>
+                        </View>
+                    </TouchableOpacity>
 
-                    <View style={{
-                        width: Dimensions.get('window').width / 2,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        paddingLeft: 5,
-                        backgroundColor: '#7fffd4',
-                    }}>
-
-                        <TouchableOpacity onPress={() => navigate('DetailBill')}>
-
+                    <TouchableOpacity onPress={() => navigate('DetailBill')}>
+                        <View style={{
+                            width: Dimensions.get('window').width / 2,
+                            height:'100%',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            paddingLeft: 5,
+                            backgroundColor: '#7fffd4',
+                        }}>
                             <Text style={{ color: 'white', fontWeight: 'bold' }}>รายละเอียดยอดเงิน</Text>
-
-                        </TouchableOpacity>
-
-                    </View>
-
+                        </View>
+                    </TouchableOpacity>
 
                 </Footer>
             </Container>

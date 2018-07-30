@@ -272,9 +272,16 @@ class SearchTab extends Component {
 
                                   }} />
                                 <TouchableOpacity style={{ position: 'absolute', left: "8%", right: 0, justifyContent: 'center' }} onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
-                                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                  {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
                                     <Text style={{ paddingHorizontal: 3 }}>{l.DELIVERYNAME}</Text>
+                                  </View> */}
+
+                                  <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
+                                    <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                  </View>
+                                  <View style={{ paddingLeft: 0, flexDirection: 'row', marginBottom: 5 }}>
+                                    <Text style={{ fontSize: 12 }}>{l.DELIVERYNAME}</Text>
                                   </View>
                                 </TouchableOpacity>
                               </View>
@@ -282,7 +289,7 @@ class SearchTab extends Component {
 
                               <View style={{ position: 'absolute', right: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
-                                  <Text style={{fontWeight: 'bold', fontSize: 13, color: 'orange', paddingHorizontal: 5 }}>{l.SUM} ฿ </Text>
+                                  <Text style={{ fontWeight: 'bold', fontSize: 13, color: 'orange', paddingHorizontal: 5 }}>{l.SUM} ฿ </Text>
                                   <Button transparent
                                     onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}
                                   >
@@ -375,7 +382,9 @@ class SearchTab extends Component {
               </Footer>
             </TouchableOpacity>
           </Tab>
+
           {/* ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */}
+
           <Tab heading={<TabHeading style={{ backgroundColor: '#66c2ff' }}><Icon name="md-checkbox-outline" /><Text style={{ color: 'white' }}>  ส่งสำเร็จ</Text></TabHeading>}>
             <Content
               refreshControl={
@@ -391,12 +400,9 @@ class SearchTab extends Component {
                     <View>
                       <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
                         <Text style={styles.storeLabel}>{k.invoiceNumber}</Text>
-
                       </View>
                       <View style={{ paddingLeft: 0, flexDirection: 'row', paddingEnd: 0 }}>
-
                         <Text style={{ fontSize: 12 }}>{k.DELIVERYNAME}</Text>
-
                       </View>
                     </View>
                     <View style={{ position: 'absolute', right: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -554,8 +560,9 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRightWidth: 1,
     borderLeftWidth: 1,
-    borderTopWidth: 0.15,
-    borderBottomWidth: 0.15,
+    borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
+    paddingBottom:5,
     height: 50,
     justifyContent: 'center'
   }
