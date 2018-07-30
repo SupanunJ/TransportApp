@@ -226,7 +226,7 @@ class HomeTab extends Component {
                     />
                 }>
 
-                    <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width, borderBottomColor: 'gray', borderBottomWidth: 0.15 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', width: Dimensions.get('window').width, borderBottomColor: 'gray', borderBottomWidth: 0.5, marginBottom: 5 }}>
                         <View style={{ marginLeft: 20 }}>
                             <CheckBox
                                 value={this.state.status_CHECKBOX}
@@ -371,7 +371,7 @@ class HomeTab extends Component {
                         alignItems: 'center'
                     }}>
 
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>ตรวจงานทั้งหมด</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>ตรวจงานทั้งหมด</Text>
 
                     </Footer>
                 </TouchableOpacity>

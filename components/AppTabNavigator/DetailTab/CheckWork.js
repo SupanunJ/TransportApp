@@ -80,14 +80,14 @@ class CheckWork extends Component {
             if (result.data.confirmworksome.status) {
                 this.tracking()
             } else {
-           
-                     Alert.alert(
-                        'ตรวจงานไม่สำเร็จ',
-                        'มีการตรวจงานนี้ไปแล้ว',
-                        [
-                            { text: 'ตกลง', onPress: ()  => console.log("ok") },
-                        ]
-                    )
+
+                Alert.alert(
+                    'ตรวจงานไม่สำเร็จ',
+                    'มีการตรวจงานนี้ไปแล้ว',
+                    [
+                        { text: 'ตกลง', onPress: () => console.log("ok") },
+                    ]
+                )
             }
         }).catch((err) => {
             console.log(err)
@@ -139,14 +139,23 @@ class CheckWork extends Component {
                 <Content>
 
                     <View style={{ margin: 10 }}>
-                        <Text>{this.props.navigation.state.params.id}</Text>
+                        <Text style={{ fontWeight: 'bold', color: 'black' }}>รหัสบิล: {this.props.navigation.state.params.id}</Text>
                     </View>
 
-                    <View style={{ justifyContent: 'space-around', flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row', width: Dimensions.get('window').width, borderBottomColor: 'gray', borderBottomWidth: 0.5 }}>
 
-                        <Text>ชื่อ</Text>
-                        <Text>จำนวน</Text>
-                        <Text>ราคา</Text>
+                        <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>ชื่อ</Text>
+                        </View>
+
+                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>จำนวน</Text>
+                        </View>
+                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>ราคา</Text>
+
+                        </View>
+
 
                     </View>
 
@@ -157,14 +166,14 @@ class CheckWork extends Component {
 
                                 <View>
                                     <View style={{ flexDirection: 'row' }}>
-                                        <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                        <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
                                             <Text>{l.itemCode}</Text>
                                         </View>
-                                        <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text>{l.qty}</Text>
+                                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontWeight: 'bold' }}>{l.qty}</Text>
                                         </View>
-                                        <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text>{l.amount}</Text>
+                                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontWeight: 'bold', color: 'orange' }}>{l.amount} ฿</Text>
                                         </View>
 
                                     </View>
@@ -173,13 +182,26 @@ class CheckWork extends Component {
 
                             ))
                         }
-                      
-                        <View>
+
+                        <View style={{ borderTopWidth: 0.5, borderTopColor: 'gray' }}>
                             {
                                 this.state.ShowSUM.map((l, i) => (
-                                    <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
-                                        <Text>ราคาทั้งหมด : {l.SUM} บาท </Text>
-                                        <Text>หมายเหตุ :  </Text>
+                                    // <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
+                                    //     <Text style={{ fontWeight: 'bold' }}>ราคาทั้งหมด : </Text>
+                                    //     <Text>หมายเหตุ :  </Text>
+                                    // </View>
+                                    <View style={{ marginTop: 25 }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                                <Text style={{ fontWeight: 'bold' }}>ราคาทั้งหมด : </Text>
+                                            </View>
+                                            <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                                <Text style={{ color: 'orange', fontWeight: 'bold' }}> {l.SUM} ฿</Text>
+                                            </View>
+                                        </View>
+                                        <View style={{ margin: 26, marginTop: 5, justifyContent: 'center' }}>
+                                            <Text style={{ fontWeight: 'bold' }}>หมายเหตุ :  </Text>
+                                        </View>
                                     </View>
                                 ))
                             }
@@ -197,16 +219,16 @@ class CheckWork extends Component {
                         ]
                     )
                 }>
-                <Footer style={{
-                    backgroundColor: '#ff6c00',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }} >
-                
-                      <Text style={{ color: 'white', fontWeight: 'bold' }}>ยืนยันการตรวจงาน</Text>
-                           
-                    
-                </Footer>
+                    <Footer style={{
+                        backgroundColor: '#ff6c00',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }} >
+
+                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>ยืนยันการตรวจงาน</Text>
+
+
+                    </Footer>
                 </TouchableOpacity>
             </Container>
 

@@ -195,11 +195,19 @@ class DetailWork extends Component {
                         <Text>ที่อยู่ : {this.props.navigation.state.params.address} </Text>
                     </View>
 
-                    <View style={{ justifyContent: 'space-around', flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row', width: Dimensions.get('window').width, borderBottomColor: 'gray', borderBottomWidth: 0.5 }}>
 
-                        <Text>ชื่อ</Text>
-                        <Text>จำนวน</Text>
-                        <Text>ราคา</Text>
+                        <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>ชื่อ</Text>
+                        </View>
+
+                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>จำนวน</Text>
+                        </View>
+                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>ราคา</Text>
+
+                        </View>
 
                     </View>
 
@@ -208,13 +216,13 @@ class DetailWork extends Component {
                             this.state.showDetailWork.map((l, i) => (
                                 <View style={{ flexDirection: 'row' }}>
 
-                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.itemName}</Text>
                                     </View>
-                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.qty - l.qtyCN}</Text>
                                     </View>
-                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text style={{ color: 'orange', fontWeight: 'bold' }}>{l.amountedit} ฿</Text>
                                     </View>
 
@@ -222,10 +230,10 @@ class DetailWork extends Component {
                             ))
                         }
                     </View>
-                    <View>
+                    <View style={{ borderTopWidth: 0.5, borderTopColor: 'gray' }}>
                         {
                             this.state.ShowMomey.map((l, i) => (
-                                <View  >
+                                <View style={{marginTop: 20}} >
                                     <View style={{  flexDirection: 'row' }}>
                                         <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
                                             <Text style={{ fontWeight: 'bold', fontSize: 17 }}>ราคาทั้งหมด : </Text>
