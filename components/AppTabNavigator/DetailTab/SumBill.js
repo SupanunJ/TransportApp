@@ -209,7 +209,7 @@ class SumBill extends Component {
                             justifyContent: 'center',
                             alignItems: 'center',
                             paddingLeft: 5,
-                            backgroundColor: '#ff6c00',
+                            backgroundColor: '#33CC33',
                         }}>
                             <Text style={{ color: 'white', fontWeight: 'bold' }}>เคลียร์งาน</Text>
                         </View>
@@ -222,7 +222,7 @@ class SumBill extends Component {
                             justifyContent: 'center',
                             alignItems: 'center',
                             paddingLeft: 5,
-                            backgroundColor: '#7fffd4',
+                            backgroundColor: '#ff6c00',
                         }}>
                             <Text style={{ color: 'white', fontWeight: 'bold' }}>รายละเอียดยอดเงิน</Text>
                         </View>
