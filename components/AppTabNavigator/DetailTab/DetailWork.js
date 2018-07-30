@@ -189,9 +189,9 @@ class DetailWork extends Component {
 
                     <View style={{ margin: 10 }}>
 
-                        <Text>{this.props.navigation.state.params.id}</Text>
-                        <Text>ห้าง : {this.props.navigation.state.params.Zone} </Text>
-                        <Text>ชื่อลูกค้า : {this.props.navigation.state.params.Cusname} </Text>
+                        <Text>รหัสบิล : {this.props.navigation.state.params.id}</Text>
+                        <Text >ห้าง : {this.props.navigation.state.params.Zone} </Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}>ชื่อลูกค้า : {this.props.navigation.state.params.Cusname} </Text>
                         <Text>ที่อยู่ : {this.props.navigation.state.params.address} </Text>
                     </View>
 
@@ -223,19 +223,28 @@ class DetailWork extends Component {
                                         <Text>{l.qty - l.qtyCN}</Text>
                                     </View>
                                     <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.amountedit} ฿</Text>
+                                        <Text style={{ color: 'orange', fontWeight: 'bold' }}>{l.amountedit} ฿</Text>
                                     </View>
 
                                 </View>
                             ))
                         }
                     </View>
-                    <View>
+                    <View style={{ borderTopWidth: 0.5, borderTopColor: 'gray' }}>
                         {
                             this.state.ShowMomey.map((l, i) => (
-                                <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
-                                    <Text>ราคาทั้งหมด : {l.SUM} </Text>
-                                    <Text>หมายเหตุ :  </Text>
+                                <View style={{marginTop: 20}} >
+                                    <View style={{  flexDirection: 'row' }}>
+                                        <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>ราคาทั้งหมด : </Text>
+                                        </View>
+                                        <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Text style={{ color: 'orange', fontWeight: 'bold', fontSize: 17 }}> {l.SUM} ฿</Text>
+                                        </View>
+                                    </View>
+                                    <View style={{ margin: 26, marginTop: 5, justifyContent: 'center'}}>
+                                        <Text style={{ fontWeight: 'bold' }}>หมายเหตุ :  </Text>
+                                    </View>
                                 </View>
                             ))
                         }
