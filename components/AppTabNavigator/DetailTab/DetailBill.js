@@ -87,18 +87,18 @@ class DetailBill extends Component {
                         if (l.invoiceNumber == val.invoiceNumber) {
                           return (
                             <View style={styles.detailContent}>
-                              <ListItem style={{ backgroundColor: 'white', borderColor: 'white', paddingLeft: 0}} >
+                              <ListItem style={{ backgroundColor: 'white',paddingLeft: 0, paddingTop: 5 }}>
                                 <View style={{  justifyContent: 'center', alignItems: 'center', flexDirection: 'row', borderBottomColor: 'gray', borderBottomWidth: 0.5  }}>
-                                  <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                                    <Text >{l.itemName}</Text>
+                                  <View style={{padding:10, width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                                    <Text style={{fontSize:12}} >{l.itemName}</Text>
                                   </View>
                                   <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                                    <Text >{l.qty}</Text>
-                                    <Text style={{ paddingHorizontal: 5 }}>ชิ้น</Text>
+                                    <Text style={{fontSize:12}}  >{l.qty}</Text>
+                                    <Text style={{fontSize:12}} >ชิ้น</Text>
                                   </View>
                                   <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                                    <Text >{l.amount}</Text>
-                                    <Text style={{ paddingHorizontal: 5 }}>บาท</Text>
+                                    <Text style={{ color: 'orange', fontWeight: 'bold',fontSize:12 }} >{l.amount}</Text>
+                                    <Text  style={{ color: 'orange', fontWeight: 'bold',fontSize:12 }}>฿</Text>
                                   </View>
                                 </View>
                               </ListItem>
