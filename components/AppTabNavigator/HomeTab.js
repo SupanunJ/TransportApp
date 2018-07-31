@@ -165,6 +165,100 @@ class HomeTab extends Component {
         });
     }
 
+    checkinvoice = () => {
+        const { navigate } = this.props.navigation
+        this.props.client.query({
+            query: checkinvoice,
+            variables: {
+                "MessengerID": global.NameOfMess
+            }
+        }).then((result) => {
+            this.setState({ showINVOICE_ID: result.data.checkinvoice })
+            if (this.state.showINVOICE_ID.length > 0) {
+                this.billTOapp();
+            } else {
+                this.roundout();
+            }
+        }).catch((err) => {
+            console.log("err of checkinvoice", err)
+        });
+    }
+
+    billTOapp = () => {
+        const { navigate } = this.props.navigation
+        console.log("billTOapp")
+        this.props.client.mutate({
+            mutation: billTOapp,
+            variables: {
+                "MessengerID": global.NameOfMess
+            }
+        }).then((result) => {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log("wokeeey");
+                    console.log(position);
+                    this.setState({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        error: null,
+                    }, () => {
+                        console.log(global.NameOfMess)
+                        console.log("result", result.data.billTOapp)
+                        this.state.showINVOICE_ID.map(l => {
+                            this.detailtoapp(l.INVOICEID);
+                        });
+                        Alert.alert(
+                            "คุณมีรายการอื่นที่ยังไม่ได้ตรวจ",
+                            "ต้องการกลับไปตรวจหรือออกรอบเลย",
+                            [
+                                { text: "ยกเลิก", onPress: () => this._Re_worklist_query() },
+                                { text: "ยืนยัน", onPress: () => this.roundout()}
+                            ]
+                        )
+                    });
+                },
+                (error) => this.setState({ error: error.message }),
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
+            );
+        }).catch((err) => {
+            console.log("error of billTOapp", err)
+        });
+    }
+
+    detailtoapp = (id) => {
+        console.log("detailtoapp")
+
+        this.props.client.mutate({
+            mutation: detailtoapp,
+            variables: {
+                "INVOICEID": id
+            }
+        }).then((result) => {
+            this.tracking2(id, "4", global.NameOfMess, this.state.latitude, this.state.longitude);
+        }).catch((err) => {
+            console.log("error", err)
+        });
+    }
+
+    tracking2 = (invoice, status, messID, lat, long) => {
+        console.log("tracking")
+
+        this.props.client.mutate({
+            mutation: tracking,
+            variables: {
+                "invoice": invoice,
+                "status": status,
+                "messengerID": messID,
+                "lat": lat,
+                "long": long,
+            }
+        }).then((result) => {
+            console.log("Tracking ", result.data.tracking.status)
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
     //--------------------------------------------------------------------------------------------------------------
     // ยืนยันงานทั้งหมด แบบเก่า
     /*confirmwork = () => {
@@ -408,7 +502,7 @@ class HomeTab extends Component {
                                                 [
 
                                                     { text: 'ยกเลิก', onPress: () => console.log("no") },
-                                                    { text: 'ยืนยัน', onPress: () => {this.roundout()} },
+                                                    { text: 'ยืนยัน', onPress: () => { this.checkinvoice() } },
                                                 ]
                                             )
                                         }
@@ -463,6 +557,30 @@ const confirmworksome = gql`
     mutation confirmworksome($invoiceNumber:String!){
         confirmworksome(invoiceNumber: $invoiceNumber){
             status
+        }
+    }
+`
+
+const billTOapp = gql`
+    mutation billTOapp($MessengerID:String!){
+        billTOapp(MessengerID: $MessengerID){
+            status
+        }
+    }
+`
+
+const detailtoapp = gql`
+    mutation detailtoapp($INVOICEID:String!){
+        detailtoapp(INVOICEID: $INVOICEID){
+            status
+        }
+    }
+`
+
+const checkinvoice = gql`
+    query checkinvoice($MessengerID:String!){
+        checkinvoice(MessengerID: $MessengerID){
+            INVOICEID
         }
     }
 `

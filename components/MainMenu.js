@@ -41,6 +41,11 @@ class MainMenu extends Component {
     //     );
     // }
 
+    // _reset = () => {
+    //     this.props.client.resetStore();
+    //     this.user();
+    // }
+
     user = () => {
         const IMEI = require('react-native-imei');
 
@@ -58,6 +63,8 @@ class MainMenu extends Component {
     }
 
     checkroundout = () => {
+
+        this.props.client.resetStore();
 
         const { navigate } = this.props.navigation
 
@@ -250,7 +257,6 @@ class MainMenu extends Component {
             mutation: Trackingstatus5,
             variables: {
                 "status": "6",
-                "location": "NULL",
                 "messengerID": global.NameOfMess,
                 "lat": this.state.latitude,
                 "long": this.state.longitude,
@@ -458,14 +464,12 @@ const tracking = gql`
 const Trackingstatus5 = gql`
     mutation Trackingstatus5(
         $status:String!,
-        $location:String!,
         $messengerID:String!,
         $lat:Float!,
         $long:Float!
     ){
         Trackingstatus5(
             status: $status,
-            location: $location,
             messengerID: $messengerID,
             lat: $lat,
             long: $long

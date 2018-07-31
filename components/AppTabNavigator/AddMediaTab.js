@@ -16,7 +16,7 @@ class AddMediaTab extends Component {
   }
 
   static navigationOptions = {
-    tabBarLabel: "่เครม",
+    tabBarLabel: "่เคลม",
     tabBarIcon: ({ tintColor }) => (
       <Icon name="ios-construct" style={{
         color:
@@ -53,7 +53,7 @@ class AddMediaTab extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>เครม</Title>
+            <Title>เคลม</Title>
           </Body>
           <Right />
         </Header>
