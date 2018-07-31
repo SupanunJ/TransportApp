@@ -171,7 +171,7 @@ class SumBill extends Component {
 
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text style={{ width: Dimensions.get('window').width / 3 }} >ยอดงเงินตามบิลจริง : </Text>
-                                            <View style={{ width: Dimensions.get('window').width / 3, alignItems: 'center', justifyContent: 'center' }}>
+                                            <View style={{ width: Dimensions.get('window').width / 4, alignItems: 'center', justifyContent: 'center' }}>
                                                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                                     <Badge success style={{ height: 19,alignItems: 'center', justifyContent: 'center' }} >
                                                         <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>{l.CountBill}</Text>
@@ -183,7 +183,7 @@ class SumBill extends Component {
 
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text style={{ width: Dimensions.get('window').width / 3 }} >ยอดเงินที่เก็บได้ : </Text>
-                                            <View style={{ width: Dimensions.get('window').width / 3, alignItems: 'center', justifyContent: 'center' }}>
+                                            <View style={{ width: Dimensions.get('window').width / 4, alignItems: 'center', justifyContent: 'center' }}>
                                                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                                     <Badge warning style={{ height: 19,alignItems: 'center', justifyContent: 'center' }} >
                                                         <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>{l.CountBill}</Text>
@@ -199,7 +199,7 @@ class SumBill extends Component {
                                                 {
                                                     this.state.showmoneyfile.map((V, i) => (
                                                         <View style={{ flexDirection: 'row' }}>
-                                                            <View style={{ width: Dimensions.get('window').width / 3, alignItems: 'center', justifyContent: 'center' }}>
+                                                            <View style={{ width: Dimensions.get('window').width / 4, alignItems: 'center', justifyContent: 'center' }}>
                                                                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                                                     <Badge style={{ height: 19,alignItems: 'center', justifyContent: 'center' }} >
                                                                         <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>{V.CountBill}</Text>

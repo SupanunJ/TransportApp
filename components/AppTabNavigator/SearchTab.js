@@ -429,7 +429,7 @@ class SearchTab extends Component {
                         (() => {
                           if (k.status == "A1") {
                             return (
-                              <View style={{ alignItems: 'center', justifyContent: 'center', width: Dimensions.get('window').width / 6 }} >
+                              <View style={{ alignItems: 'center', justifyContent: 'center', width: Dimensions.get('window').width / 5.5 }} >
                                 <Badge success style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
                                   <Text style={{ fontSize: 12, color: 'white' }}>ส่งสำเร็จ</Text>
                                 </Badge>
@@ -438,7 +438,7 @@ class SearchTab extends Component {
                           } else if (k.status == "A2") {
                             return (
 
-                              <View style={{ alignItems: 'center', justifyContent: 'center', width: Dimensions.get('window').width / 6  }} >
+                              <View style={{ alignItems: 'center', justifyContent: 'center', width: Dimensions.get('window').width / 5.5  }} >
                                 <Badge warning style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
                                   <Text style={{ fontSize: 12, color: 'white' }}>มีการแก้ไข</Text>
                                 </Badge>
@@ -447,7 +447,7 @@ class SearchTab extends Component {
                             )
                           } else {
                             return (
-                              <View style={{ alignItems: 'center', justifyContent: 'center', width: Dimensions.get('window').width / 6  }} >
+                              <View style={{ alignItems: 'center', justifyContent: 'center', width: Dimensions.get('window').width / 5.5  }} >
                                 <Badge style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
 
                                   <Text style={{ fontSize: 12, color: 'white' }}>ส่งไม่สำเร็จ</Text>
