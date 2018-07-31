@@ -31,7 +31,7 @@ class CheckWork extends Component {
                 }, () => this.confirmworksome());
             },
             (error) => this.setState({ error: error.message }),
-            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
         );
     }
 
@@ -151,7 +151,7 @@ class CheckWork extends Component {
                         <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
                             <Text>จำนวน</Text>
                         </View>
-                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={{ width: Dimensions.get('window').width / 4, right: 0, justifyContent: 'center', alignItems: 'center' }}>
                             <Text>ราคา</Text>
 
                         </View>
@@ -166,14 +166,16 @@ class CheckWork extends Component {
 
                                 <View>
                                     <View style={{ flexDirection: 'row' }}>
-                                        <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text>{l.itemCode}</Text>
+                                        <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center' }}>
+                                            <Text style={{ paddingLeft: 5 }}>{i + 1}). {l.itemName}</Text>
                                         </View>
                                         <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
                                             <Text style={{ fontWeight: 'bold' }}>{l.qty}</Text>
                                         </View>
-                                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ fontWeight: 'bold', color: 'orange' }}>{l.amount} ฿</Text>
+                                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignSelf: 'flex-end', right: 5 }}>
+                                            <View style={{ right: 5 ,  alignSelf: 'flex-end'}}>
+                                                <Text style={{ fontWeight: 'bold', color: 'orange', right: 0 }}>{l.amount} ฿</Text>
+                                            </View>
                                         </View>
 
                                     </View>

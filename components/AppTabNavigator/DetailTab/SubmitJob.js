@@ -70,7 +70,7 @@ class SubmitJob extends Component {
                     }, () => this.tracking(s));
                 },
                 (error) => this.setState({ error: error.message }),
-                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
             );
         }).catch((err) => {
             console.log("err of submiitdetail", err)

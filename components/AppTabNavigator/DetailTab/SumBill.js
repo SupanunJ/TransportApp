@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
 
-import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer, Input, Item, Grid, Col } from 'native-base';
+import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer, Input, Item, Grid, Col, Badge } from 'native-base';
 import { gql, withApollo, compose } from 'react-apollo'
 
 class SumBill extends Component {
@@ -68,7 +68,14 @@ class SumBill extends Component {
             if (this.state.showinvoicedetail_ID.length > 0) {
                 this.reportsubmitwork();
             } else {
-                navigate('SumBill')
+                Alert.alert(
+                    "เคลียร์งานไม่สำเร็จ",
+                    "คุณได้เคลียร์งานไปแล้ว",
+                    [
+                        { text: "OK", onPress: () => navigate('SumBill') }
+                    ],
+                    { cancelable: false }
+                )
             }
 
         }).catch((err) => {
@@ -105,8 +112,14 @@ class SumBill extends Component {
                 "invoiceNumber": id
             }
         }).then((result) => {
-            console.log("...")
-            navigate('MainMenu')
+            Alert.alert(
+                "เคลียร์งานสำเร็จแล้ว",
+                "คุณได้เคลียร์งานสำเร็จแล้ว",
+                [
+                    { text: "OK", onPress: () => navigate('MainMenu') }
+                ],
+                { cancelable: false }
+            )
         }).catch((err) => {
             console.log("error", err)
         });
@@ -150,28 +163,51 @@ class SumBill extends Component {
                         {
                             this.state.showsummoney.map((l, i) => (
                                 <View>
-                                    <View style={{ margin: 30, justifyContent: 'center' }}>
+                                    <View style={{ marginHorizontal: 10, marginTop: 20, justifyContent: 'center' }}>
                                         <Text style={{ fontWeight: 'bold' }}>สรุปยอดเงินที่ต้องโอน  </Text>
                                     </View>
 
-                                    <View style={{ margin: 45, marginTop: 5, justifyContent: 'center' }}>
+                                    <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
 
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ width: Dimensions.get('window').width / 1.6 }} >ยอดงเงินตามบิลจริง : </Text>
-                                            <Text style={{ width: Dimensions.get('window').width / 1.6, fontSize: 15, color: 'orange' }} >{l.amountBill} ฿ </Text>
+                                            <Text style={{ width: Dimensions.get('window').width / 3 }} >ยอดงเงินตามบิลจริง : </Text>
+                                            <View style={{ width: Dimensions.get('window').width / 3, alignItems: 'center', justifyContent: 'center' }}>
+                                                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                                    <Badge success style={{ height: 19,alignItems: 'center', justifyContent: 'center' }} >
+                                                        <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>{l.CountBill}</Text>
+                                                    </Badge>
+                                                </View>
+                                            </View>
+                                            <Text style={{ width: Dimensions.get('window').width / 3, fontSize: 15, color: 'orange' }} >{l.amountBill} ฿ </Text>
                                         </View>
 
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ width: Dimensions.get('window').width / 1.6 }} >ยอดเงินที่เก็บได้ : </Text>
-                                            <Text style={{ width: Dimensions.get('window').width / 1.6, fontSize: 15, color: 'orange' }} >{l.amountActual} ฿ </Text>
+                                            <Text style={{ width: Dimensions.get('window').width / 3 }} >ยอดเงินที่เก็บได้ : </Text>
+                                            <View style={{ width: Dimensions.get('window').width / 3, alignItems: 'center', justifyContent: 'center' }}>
+                                                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                                    <Badge warning style={{ height: 19,alignItems: 'center', justifyContent: 'center' }} >
+                                                        <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>{l.CountBill}</Text>
+                                                    </Badge>
+                                                </View>
+                                            </View>
+                                            <Text style={{ width: Dimensions.get('window').width / 3, fontSize: 15, color: 'orange' }} >{l.amountActual} ฿ </Text>
                                         </View>
 
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ width: Dimensions.get('window').width / 1.6 }} >ยอดที่เก็บไม่ได้ : </Text>
-                                            <View style={{ width: Dimensions.get('window').width / 1.6 }} >
+                                            <Text style={{ width: Dimensions.get('window').width / 3 }} >ยอดที่เก็บไม่ได้ : </Text>
+                                            <View >
                                                 {
                                                     this.state.showmoneyfile.map((V, i) => (
-                                                        <Text style={{ fontSize: 15, color: 'orange' }}>{V.amountBill} ฿ </Text>
+                                                        <View style={{ flexDirection: 'row' }}>
+                                                            <View style={{ width: Dimensions.get('window').width / 3, alignItems: 'center', justifyContent: 'center' }}>
+                                                                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                                                    <Badge style={{ height: 19,alignItems: 'center', justifyContent: 'center' }} >
+                                                                        <Text style={{ fontSize: 12, color: 'white', fontWeight: 'bold' }}>{V.CountBill}</Text>
+                                                                    </Badge>
+                                                                </View>
+                                                            </View>
+                                                            <Text style={{ fontSize: 15, color: 'orange', width: Dimensions.get('window').width / 3 }}>{V.amountBill} ฿ </Text>
+                                                        </View>
                                                     ))
                                                 }
                                             </View>
@@ -179,7 +215,7 @@ class SumBill extends Component {
 
                                     </View>
 
-                                    <View style={{ margin: 30, marginTop: 5, justifyContent: 'center' }}>
+                                    <View style={{ margin: 10, marginTop: 5, justifyContent: 'center' }}>
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text style={{ width: Dimensions.get('window').width / 1.5, fontWeight: 'bold' }} >ยอดเงินที่ต้องโอนเข้าบัญชีของบริษัท : </Text>
                                             <Text style={{ width: Dimensions.get('window').width / 1.5, fontSize: 16.5, color: 'orange', fontWeight: 'bold' }} >{l.amountActual} ฿ </Text>
@@ -205,7 +241,7 @@ class SumBill extends Component {
                     >
                         <View style={{
                             width: Dimensions.get('window').width / 2,
-                            height:'100%',
+                            height: '100%',
                             justifyContent: 'center',
                             alignItems: 'center',
                             paddingLeft: 5,
@@ -218,7 +254,7 @@ class SumBill extends Component {
                     <TouchableOpacity onPress={() => navigate('DetailBill')}>
                         <View style={{
                             width: Dimensions.get('window').width / 2,
-                            height:'100%',
+                            height: '100%',
                             justifyContent: 'center',
                             alignItems: 'center',
                             paddingLeft: 5,
@@ -242,17 +278,19 @@ export default withApollo(GraphQL)
 
 const summoney = gql`
 query summoney($MessengerID:String!){
-                    summoney(MessengerID: $MessengerID){
-                    amountBill
+    summoney(MessengerID: $MessengerID){
+    amountBill
     amountActual
-                }
-              }
-              `
+    CountBill
+}
+}
+`
 const summoneyfail = gql`
 query summoneyfail($MessengerID:String!){
                     summoneyfail(MessengerID: $MessengerID){
                     amountBill
     amountActual
+    CountBill
                 }
               }
               `

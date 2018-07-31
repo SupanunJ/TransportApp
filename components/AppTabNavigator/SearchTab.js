@@ -202,109 +202,127 @@ class SearchTab extends Component {
                 <Text>เลือกทั้งหมด</Text>
               </View>
 
-              <View>
-                {
-                  this.state.showZone.map((val, j) => (
-                    <Accordion
-                      dataArray={[{ test: "test" }]}
-                      renderHeader={(expanded) => (
-                        <View
-                          style={{ flexDirection: "row", padding: 10, justifyContent: "space-between", alignItems: "center", backgroundColor: "#E2E2E1" }}
-                        >
-                          <Text style={{ fontWeight: "600" }}>
-                            {"  "}{val.Zone}
-                          </Text>
-                          {expanded
-                            ? <Icon style={{ fontSize: 18 }} name="remove-circle" />
-                            : <Icon style={{ fontSize: 18 }} name="add-circle" />}
-                        </View>
-                      )}
-                      renderContent={() => this.state.showWork.map((l, i) => {
-                        if (l.Zone == val.Zone) {
-                          return (
-                            <View style={styles.detailContent}>
-                              <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
-                                <CheckBox
-                                  value={this.state.CF_ALL_INVOICE[i]}
-                                  onValueChange={() => {
-                                    if (this.state.CF_ALL_INVOICE[i] == true) {
-                                      let n = this.state.CF_ALL_INVOICE.slice();
-                                      let s = this.state.stack_IVOICE.slice();
-                                      n[i] = false
-                                      s[i] = l.invoiceNumber
-                                      this.setState({
-                                        CF_ALL_INVOICE: n,
-                                        stack_IVOICE: s
-                                      }, () => {
-                                        console.log("if 1 CF", this.state.CF_ALL_INVOICE)
-                                        console.log("if 1 CF", this.state.stack_IVOICE)
-                                      })
+              {
+                (() => {
+                  if (this.state.showWork.length > 0) {
+                    return (
+                      <View>
+                        {
+                          this.state.showZone.map((val, j) => (
+                            <Accordion
+                              dataArray={[{ test: "test" }]}
+                              renderHeader={(expanded) => (
+                                <View
+                                  style={{ flexDirection: "row", padding: 10, justifyContent: "space-between", alignItems: "center", backgroundColor: "#E2E2E1" }}
+                                >
+                                  <Text style={{ fontWeight: "600" }}>
+                                    {"  "}{val.Zone}
+                                  </Text>
+                                  {expanded
+                                    ? <Icon style={{ fontSize: 18 }} name="remove-circle" />
+                                    : <Icon style={{ fontSize: 18 }} name="add-circle" />}
+                                </View>
+                              )}
+                              renderContent={() => this.state.showWork.map((l, i) => {
+                                if (l.Zone == val.Zone) {
+                                  return (
+                                    <View style={styles.detailContent}>
+                                      <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
+                                        <CheckBox
+                                          value={this.state.CF_ALL_INVOICE[i]}
+                                          onValueChange={() => {
+                                            if (this.state.CF_ALL_INVOICE[i] == true) {
+                                              let n = this.state.CF_ALL_INVOICE.slice();
+                                              let s = this.state.stack_IVOICE.slice();
+                                              n[i] = false
+                                              s[i] = l.invoiceNumber
+                                              this.setState({
+                                                CF_ALL_INVOICE: n,
+                                                stack_IVOICE: s
+                                              }, () => {
+                                                console.log("if 1 CF", this.state.CF_ALL_INVOICE)
+                                                console.log("if 1 CF", this.state.stack_IVOICE)
+                                              })
 
-                                    }
-                                    else if (this.state.CF_ALL_INVOICE[i] == false) {
-                                      let n = this.state.CF_ALL_INVOICE.slice();
-                                      let s = this.state.stack_IVOICE.slice();
-                                      n[i] = true
-                                      s[i] = l.invoiceNumber
-                                      this.setState({
-                                        CF_ALL_INVOICE: n,
-                                        stack_IVOICE: s
-                                      }, () => {
-                                        console.log("if 2 CF", this.state.CF_ALL_INVOICE)
-                                        console.log("if 1 CF", this.state.stack_IVOICE)
-                                      })
+                                            }
+                                            else if (this.state.CF_ALL_INVOICE[i] == false) {
+                                              let n = this.state.CF_ALL_INVOICE.slice();
+                                              let s = this.state.stack_IVOICE.slice();
+                                              n[i] = true
+                                              s[i] = l.invoiceNumber
+                                              this.setState({
+                                                CF_ALL_INVOICE: n,
+                                                stack_IVOICE: s
+                                              }, () => {
+                                                console.log("if 2 CF", this.state.CF_ALL_INVOICE)
+                                                console.log("if 1 CF", this.state.stack_IVOICE)
+                                              })
 
-                                    }
-                                    else {
-                                      let n = this.state.CF_ALL_INVOICE.slice();
-                                      let s = this.state.stack_IVOICE.slice();
-                                      n[i] = true
-                                      s[i] = l.invoiceNumber
-                                      this.setState({
-                                        CF_ALL_INVOICE: n,
-                                        stack_IVOICE: s
-                                      }, () => {
-                                        console.log("if 3 CF", this.state.CF_ALL_INVOICE)
-                                        console.log("if 1 CF", this.state.stack_IVOICE)
-                                      })
+                                            }
+                                            else {
+                                              let n = this.state.CF_ALL_INVOICE.slice();
+                                              let s = this.state.stack_IVOICE.slice();
+                                              n[i] = true
+                                              s[i] = l.invoiceNumber
+                                              this.setState({
+                                                CF_ALL_INVOICE: n,
+                                                stack_IVOICE: s
+                                              }, () => {
+                                                console.log("if 3 CF", this.state.CF_ALL_INVOICE)
+                                                console.log("if 1 CF", this.state.stack_IVOICE)
+                                              })
 
-                                    }
+                                            }
 
-                                  }} />
-                                <TouchableOpacity style={{ position: 'absolute', left: "8%", right: 0, justifyContent: 'center' }} onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
-                                  {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                          }} />
+                                        <TouchableOpacity style={{ position: 'absolute', left: "8%", right: 0, justifyContent: 'center' }} onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
+                                          {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
                                     <Text style={{ paddingHorizontal: 3 }}>{l.DELIVERYNAME}</Text>
                                   </View> */}
 
-                                  <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
-                                    <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
-                                  </View>
-                                  <View style={{ paddingLeft: 0, flexDirection: 'row', marginBottom: 5 }}>
-                                    <Text style={{ fontSize: 12 }}>{l.DELIVERYNAME}</Text>
-                                  </View>
-                                </TouchableOpacity>
-                              </View>
+                                          <View style={{ paddingLeft: 0, flexDirection: 'row' }}>
+                                            <Text style={styles.storeLabel}>{l.invoiceNumber}</Text>
+                                          </View>
+                                          <View style={{ paddingLeft: 0, flexDirection: 'row', marginBottom: 5 }}>
+                                            <Text style={{ fontSize: 12 }}>{l.DELIVERYNAME}</Text>
+                                          </View>
+                                        </TouchableOpacity>
+                                      </View>
 
 
-                              <View style={{ position: 'absolute', right: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
-                                  <Text style={{ fontWeight: 'bold', fontSize: 13, color: 'orange', paddingHorizontal: 5 }}>{l.SUM} ฿ </Text>
-                                  <Button transparent
-                                    onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}
-                                  >
-                                    <Icon name='ios-arrow-forward' style={{ color: 'gray' }} />
-                                  </Button>
-                                </TouchableOpacity>
-                              </View>
-                            </View>
-                          )
+                                      <View style={{ position: 'absolute', right: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}>
+                                          <Text style={{ fontWeight: 'bold', fontSize: 13, color: 'orange', paddingHorizontal: 5 }}>{l.SUM} ฿ </Text>
+                                          <Button transparent
+                                            onPress={() => navigate('DetailWork', { id: l.invoiceNumber, Zone: l.Zone, address: l.addressShipment, Cusname: l.DELIVERYNAME, refresion: this._RELOAD_MAIN2 })}
+                                          >
+                                            <Icon name='ios-arrow-forward' style={{ color: 'gray' }} />
+                                          </Button>
+                                        </TouchableOpacity>
+                                      </View>
+                                    </View>
+                                  )
+                                }
+                              })}
+                            />
+                          ))
                         }
-                      })}
-                    />
-                  ))
-                }
-              </View>
+                      </View>
+                    )
+                  } else {
+                    return (
+                      <View style={{ alignItems: 'center', marginTop: 20, borderColor: 'gray', borderWidth: 0.5 }}>
+                        <Text>คุณไม่มีงานที่ต้องส่ง</Text>
+                        <Text> หรือ </Text>
+                        <Text>กรุณาลากลงเพื่อทำการรีโหลด</Text>
+                      </View>
+                    )
+                  }
+                })()
+              }
+
+
             </Content>
             <TouchableOpacity onPress={() => {
               if (this.state.CF_ALL_INVOICE.every(this.checkDATA)) {
@@ -341,7 +359,7 @@ class SearchTab extends Component {
                                     })
                                   },
                                   (error) => this.setState({ error: error.message }),
-                                  { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                  { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
                                 );
                               }
                               else if ((val == true) && ((i + 1) == this.state.CF_ALL_INVOICE.length)) {
@@ -358,7 +376,7 @@ class SearchTab extends Component {
                                     })
                                   },
                                   (error) => this.setState({ error: error.message }),
-                                  { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                  { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
                                 );
                               }
                             });
@@ -405,13 +423,13 @@ class SearchTab extends Component {
                         <Text style={{ fontSize: 12 }}>{k.DELIVERYNAME}</Text>
                       </View>
                     </View>
-                    <View style={{ position: 'absolute', right: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ position: 'absolute', right: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                       <Text style={{ fontSize: 13, color: 'orange', paddingHorizontal: 30 }}>{k.SUM} ฿ </Text>
                       {
                         (() => {
                           if (k.status == "A1") {
                             return (
-                              <View style={{ alignItems: 'center', justifyContent: 'center' }} >
+                              <View style={{ alignItems: 'center', justifyContent: 'center', width: Dimensions.get('window').width / 6 }} >
                                 <Badge success style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
                                   <Text style={{ fontSize: 12, color: 'white' }}>ส่งสำเร็จ</Text>
                                 </Badge>
@@ -420,7 +438,7 @@ class SearchTab extends Component {
                           } else if (k.status == "A2") {
                             return (
 
-                              <View style={{ alignItems: 'center', justifyContent: 'center' }} >
+                              <View style={{ alignItems: 'center', justifyContent: 'center', width: Dimensions.get('window').width / 6  }} >
                                 <Badge warning style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
                                   <Text style={{ fontSize: 12, color: 'white' }}>มีการแก้ไข</Text>
                                 </Badge>
@@ -429,7 +447,7 @@ class SearchTab extends Component {
                             )
                           } else {
                             return (
-                              <View style={{ alignItems: 'center', justifyContent: 'center' }} >
+                              <View style={{ alignItems: 'center', justifyContent: 'center', width: Dimensions.get('window').width / 6  }} >
                                 <Badge style={{ height: 19, alignItems: 'center', justifyContent: 'center' }} >
 
                                   <Text style={{ fontSize: 12, color: 'white' }}>ส่งไม่สำเร็จ</Text>
@@ -562,7 +580,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderTopWidth: 0.5,
     borderBottomWidth: 0.5,
-    paddingBottom:5,
+    paddingBottom: 5,
     height: 50,
     justifyContent: 'center'
   }

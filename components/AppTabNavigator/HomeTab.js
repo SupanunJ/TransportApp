@@ -33,7 +33,7 @@ class HomeTab extends Component {
     }
 
     GET_LOCATE = () => {
-        console.log("componentDidMount")
+        // console.log("componentDidMount")
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 console.log("wokeeey");
@@ -54,7 +54,7 @@ class HomeTab extends Component {
                 });
             },
             (error) => this.setState({ error: error.message }),
-            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
         );
     }
 
@@ -150,6 +150,21 @@ class HomeTab extends Component {
             console.log("ERR OF TRACKING", err)
         });
     }
+
+    roundout = () => {
+        const { navigate } = this.props.navigation
+        this.props.client.mutate({
+            mutation: roundout,
+            variables: {
+                "MessengerID": global.NameOfMess
+            }
+        }).then((result) => {
+            navigate('Search')
+        }).catch((err) => {
+            console.log("error", err)
+        });
+    }
+
     //--------------------------------------------------------------------------------------------------------------
     // ยืนยันงานทั้งหมด แบบเก่า
     /*confirmwork = () => {
@@ -342,39 +357,76 @@ class HomeTab extends Component {
                     </View>
 
                 </Content>
-                <TouchableOpacity onPress={
-                    () => {
-                        console.log(this.state.CF_ALL_INVOICE)
-                        if (this.state.CF_ALL_INVOICE.every(this.checkDATA)) {
-                            Alert.alert(
-                                'ไม่สามารถตรวจงานได้',
-                                'กรุณาเลือกงาน'
-                            )
-                        } else {
-                            Alert.alert(
-                                'ตรวจงานทั้งหมด',
-                                'คุณต้องการตรวจงานทั้งหมด?',
-                                [
 
-                                    { text: 'ไม่', onPress: () => console.log("no") },
-                                    { text: 'ใช่', onPress: () => this.GET_LOCATE() },
-                                ]
+                {
+                    (() => {
+                        console.log("this.state.showTable", this.state.showTable.length)
+                        if (this.state.showTable.length > 0) {
+                            return (
+                                <TouchableOpacity
+                                    onPress={
+                                        () => {
+                                            console.log(this.state.CF_ALL_INVOICE)
+                                            if (this.state.CF_ALL_INVOICE.every(this.checkDATA)) {
+                                                Alert.alert(
+                                                    'ไม่สามารถตรวจงานได้',
+                                                    'กรุณาเลือกงาน'
+                                                )
+                                            } else {
+                                                Alert.alert(
+                                                    'ตรวจงานทั้งหมด',
+                                                    'คุณต้องการตรวจงานทั้งหมด?',
+                                                    [
+
+                                                        { text: 'ไม่', onPress: () => console.log("no") },
+                                                        { text: 'ใช่', onPress: () => this.GET_LOCATE() },
+                                                    ]
+                                                )
+                                            }
+
+                                        }
+                                    }
+                                >
+                                    <Footer style={{
+                                        backgroundColor: '#ff6c00',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>ตรวจงานทั้งหมด</Text>
+                                    </Footer>
+
+                                </TouchableOpacity>
+                            )
+                        } else if (this.state.showTable.length == 0) {
+                            return (
+                                <TouchableOpacity
+                                    onPress={
+                                        () => {
+                                            Alert.alert(
+                                                'ยืนยันการออกรอบ',
+                                                'คุณต้องการออกรอบเลยหรือไม่?',
+                                                [
+
+                                                    { text: 'ยกเลิก', onPress: () => console.log("no") },
+                                                    { text: 'ยืนยัน', onPress: () => {this.roundout()} },
+                                                ]
+                                            )
+                                        }
+                                    }
+                                >
+                                    <Footer style={{
+                                        backgroundColor: '#33CC33',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>ส่งงาน</Text>
+                                    </Footer>
+                                </TouchableOpacity>
                             )
                         }
-
-                    }
+                    })()
                 }
-                >
-                    <Footer style={{
-                        backgroundColor: '#ff6c00',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}>
 
-                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>ตรวจงานทั้งหมด</Text>
-
-                    </Footer>
-                </TouchableOpacity>
             </Container >
 
         );
@@ -434,6 +486,15 @@ const tracking = gql`
         }
     }
 `
+
+const roundout = gql`
+    mutation roundout($MessengerID:String!){
+        roundout(MessengerID: $MessengerID){
+            status
+        }
+    }
+`
+
 //-----------------------------------------------------------------------------------------------
 // const confirmwork = gql`
 //     mutation confirmwork($MessengerID:String!){

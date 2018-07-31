@@ -182,7 +182,7 @@ class SubmitALLJob extends Component {
                                                             });
                                                         },
                                                         (error) => this.setState({ error: error.message }),
-                                                        { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                                        { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
                                                     );
                                                 }
                                                 else if ((val == true) && ((i + 1) == this.props.navigation.state.params.check_box.length)) {
@@ -199,7 +199,7 @@ class SubmitALLJob extends Component {
                                                             });
                                                         },
                                                         (error) => this.setState({ error: error.message }),
-                                                        { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                                        { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
                                                     );
                                                 }
                                             });

@@ -144,7 +144,7 @@ class EditItem extends Component {
                                 });
                             },
                             (error) => this.setState({ error: error.message }),
-                            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                            { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
                         );
                     })
                 })}
@@ -172,17 +172,23 @@ class EditItem extends Component {
                     <Right />
                 </Header>
 
-                <Content>
+                <Content style={{ backgroundColor: 'white' }}>
 
                     <View style={{ margin: 10 }}>
-                        <Text>รหัสบิล : {this.props.navigation.state.params.id}</Text>
+                        <Text style={{ fontWeight: 'bold', color: 'black' }}>รหัสบิล : {this.props.navigation.state.params.id}</Text>
                     </View>
 
                     <View style={{ justifyContent: 'space-around', flexDirection: 'row' }}>
 
-                        <Text>ชื่อ</Text>
-                        <Text>จำนวน</Text>
-                        <Text>จำนวน</Text>
+                        <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>ชื่อ</Text>
+                        </View>
+                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>จำนวนตามบิล</Text>
+                        </View>
+                        <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>จำนวนที่CN</Text>
+                        </View>
 
                     </View>
 
@@ -191,13 +197,13 @@ class EditItem extends Component {
                             this.state.showWorkEdit.map((l, i) => (
                                 <View style={{ flexDirection: 'row' }}>
 
-                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text>{l.itemCode}</Text>
+                                    <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text style={{paddingLeft: 5}}>{i+1}.) {l.itemName}</Text>
                                     </View>
-                                    <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.qty}</Text>
                                     </View>
-                                    <Item style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                    <Item style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
                                         <Input keyboardType='numeric'
                                             placeholder={l.qtyCN.toString()}
                                             placeholderTextColor="gray"
@@ -205,7 +211,7 @@ class EditItem extends Component {
                                             value={this.state.inputvalue[i]}
                                             onChangeText={
                                                 (text) => {
-                                                    if (parseInt(text) > l.qty) {
+                                                    if (parseInt(text) > l.qty || parseInt(text) < 0) {
                                                         Alert.alert(
                                                             "คุณใส่ค่าเกินจำนวน",
                                                             "กรุณาใส่ค่าใหม่อีกครั้ง",
@@ -214,7 +220,7 @@ class EditItem extends Component {
                                                                     text: 'OK', onPress: () => {
                                                                         let v = this.state.inputvalue.slice();
                                                                         v[i] = ''
-                                                                        this.setState({inputvalue: v})
+                                                                        this.setState({ inputvalue: v })
                                                                     }
                                                                 }
                                                             ]

@@ -11,7 +11,7 @@ class DetailBill extends Component {
       showDetailBill: [],
       showinvoicebill: []
     }
-    // this.props.client.resetStore();
+    this.props.client.resetStore();
     this.detailsummoney();
     this.checkinvoicebill();
   }
@@ -78,7 +78,7 @@ class DetailBill extends Component {
               this.state.showinvoicebill.map(val => (
                 <View>
                   <Separator bordered>
-                    <Text style={styles.storeLabel}>  {"  "}{val.invoiceNumber}</Text>
+                    <Text style={styles.storeLabel}>{" "}{val.invoiceNumber}</Text>
                   </Separator>
 
                   <View>
@@ -87,9 +87,9 @@ class DetailBill extends Component {
                         if (l.invoiceNumber == val.invoiceNumber) {
                           return (
                             <View style={styles.detailContent}>
-                              <ListItem style={{ backgroundColor: 'white',paddingLeft: 0, paddingTop: 5 }}>
+                              <View style={{ backgroundColor: 'white',paddingLeft: 0 }}>
                                 <View style={{  justifyContent: 'center', alignItems: 'center', flexDirection: 'row', borderBottomColor: 'gray', borderBottomWidth: 0.5  }}>
-                                  <View style={{padding:10, width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                                  <View style={{paddingLeft:5, width: Dimensions.get('window').width / 2, alignItems: 'center', flexDirection: 'row' }}>
                                     <Text style={{fontSize:12}} >{l.itemName}</Text>
                                   </View>
                                   <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -101,7 +101,7 @@ class DetailBill extends Component {
                                     <Text  style={{ color: 'orange', fontWeight: 'bold',fontSize:12 }}>฿</Text>
                                   </View>
                                 </View>
-                              </ListItem>
+                              </View>
                             </View>
 
                           )
@@ -169,7 +169,8 @@ const styles = StyleSheet.create({
     borderLeftWidth: 2,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    height: 50,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 5,
   }
 })

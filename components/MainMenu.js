@@ -88,7 +88,7 @@ class MainMenu extends Component {
                                         }, () => this.Trackingstatus5());
                                     },
                                     (error) => this.setState({ error: error.message }),
-                                    { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
                                 );
                             }
                         },
@@ -113,7 +113,7 @@ class MainMenu extends Component {
                                         }, () => this.Trackingstatus5());
                                     },
                                     (error) => this.setState({ error: error.message }),
-                                    { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
                                 );
                             }
                         },
@@ -141,7 +141,7 @@ class MainMenu extends Component {
         });
     }
 
-    checkinvoice = () => {
+    checkinvoice = (n) => {
         const { navigate } = this.props.navigation
         this.props.client.query({
             query: checkinvoice,
@@ -149,21 +149,28 @@ class MainMenu extends Component {
                 "MessengerID": global.NameOfMess
             }
         }).then((result) => {
-            console.log("checkinvoice", result.data.checkinvoice)
+            // console.log("checkinvoice", result.data.checkinvoice)
             this.setState({ showINVOICE_ID: result.data.checkinvoice })
-            console.log("NUM", this.state.showINVOICE_ID.length)
-            if (this.state.showINVOICE_ID.length > 0) {
-                this.billTOapp();
-            } else {
-                navigate('HomeTab')
+            // console.log("NUM", this.state.showINVOICE_ID.length)
+            if (n == 1) {
+                if (this.state.showINVOICE_ID.length > 0) {
+                    this.billTOapp(n);
+                } else {
+                    navigate('HomeTab');
+                }
+            } else if (n == 2) {
+                if (this.state.showINVOICE_ID.length > 0) {
+                    this.billTOapp(n);
+                } else {
+                    this.checkroundout();
+                }
             }
-
         }).catch((err) => {
             console.log("err of checkinvoice", err)
         });
     }
 
-    billTOapp = () => {
+    billTOapp = (n) => {
         const { navigate } = this.props.navigation
         console.log("billTOapp")
         this.props.client.mutate({
@@ -185,13 +192,17 @@ class MainMenu extends Component {
                         console.log("result", result.data.billTOapp)
                         this.state.showINVOICE_ID.map(l => {
                             this.detailtoapp(l.INVOICEID);
-                            this.tracking(l.INVOICEID, "4", global.NameOfMess, this.state.latitude, this.state.longitude);
                         });
-                        navigate('HomeTab')
+
+                        if (n == 1) {
+                            navigate('HomeTab');
+                        } else if (n == 2) {
+                            this.checkroundout();
+                        }
                     });
                 },
                 (error) => this.setState({ error: error.message }),
-                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
             );
         }).catch((err) => {
             console.log("error of billTOapp", err)
@@ -207,8 +218,7 @@ class MainMenu extends Component {
                 "INVOICEID": id
             }
         }).then((result) => {
-            console.log("...")
-            // navigate('HomeTab')
+            this.tracking(id, "4", global.NameOfMess, this.state.latitude, this.state.longitude);
         }).catch((err) => {
             console.log("error", err)
         });
@@ -253,8 +263,8 @@ class MainMenu extends Component {
         });
     }
 
-    _PRESS_HOME = () => {
-        this.checkinvoice();
+    _PRESS_HOME = (n) => {
+        this.checkinvoice(n);
     }
 
     render() {
@@ -317,9 +327,7 @@ class MainMenu extends Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={
-                                this.checkroundout.bind(this)
-                            }
+                            onPress={() => this._PRESS_HOME(2)}//this.checkroundout()
                             style={{ paddingHorizontal: 5 }}>
                             <View style={{
                                 width: Dimensions.get('window').width / 1.8, height: Dimensions.get('window').height / 3.8, backgroundColor: '#1e90ff',
@@ -332,7 +340,8 @@ class MainMenu extends Component {
                         </TouchableOpacity>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: "center", paddingVertical: 5 }}>
-                        <TouchableOpacity onPress={() => this._PRESS_HOME()}
+                        <TouchableOpacity
+                            onPress={() => this._PRESS_HOME(1)}
                             style={{ paddingHorizontal: 10 }}>
                             <View style={{
                                 width: Dimensions.get('window').width / 1.8, height: Dimensions.get('window').height / 3, backgroundColor: '#33adff',

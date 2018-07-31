@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, StatusBar, Alert, View, Platform, Image, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
 import { gql, withApollo, compose } from 'react-apollo'
-import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer, Input, Item, Grid, Col, ActionSheet } from 'native-base';
+import { Icon, Container, Header, Left, Body, Title, Right, Button, Content, Footer, Input, Item, Grid, Col, ActionSheet, Badge } from 'native-base';
 import Communications from 'react-native-communications';
 var BUTTONS = [
     { text: "ลูกค้ากดผิด", icon: "md-arrow-dropright", iconColor: "#2c8ef4", status: "B1" },
@@ -30,16 +30,19 @@ class DetailWork extends Component {
             error: null,
             ShowMomey: [],
             showTel: "",
+            statusEdit: 0,
         }
         this.props.client.resetStore();
         this.subDetail();
         this.summoneydetail();
+        this.submitedit();
     }
 
     _RELOAD_DETAILWORK = () => {
         this.props.client.resetStore();
         this.subDetail();
         this.summoneydetail();
+        this.submitedit();
     }
 
     _RELOAD_TO_GOBACK = () => {
@@ -95,7 +98,7 @@ class DetailWork extends Component {
                     }, () => this.tracking(s, 1));
                 },
                 (error) => this.setState({ error: error.message }),
-                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
             );
         }).catch((err) => {
             console.log("err of submiitdetail", err)
@@ -165,6 +168,28 @@ class DetailWork extends Component {
         });
     }
 
+    submitedit = () => {
+        this.props.client.query({
+            query: submitedit,
+            variables: {
+                "invoiceNumber": this.props.navigation.state.params.id,
+            }
+        }).then((result) => {
+            if (result.data.submitedit.status) {
+                this.setState({
+                    statusEdit: 1
+                })
+            } else {
+                this.setState({
+                    statusEdit: 0
+                })
+            }
+
+        }).catch((err) => {
+            console.log("err of submitedit", err)
+        });
+    }
+
     render() {
 
         const { navigate } = this.props.navigation
@@ -191,7 +216,7 @@ class DetailWork extends Component {
 
                         <Text>รหัสบิล : {this.props.navigation.state.params.id}</Text>
                         <Text >ห้าง : {this.props.navigation.state.params.Zone} </Text>
-                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}>ชื่อลูกค้า : {this.props.navigation.state.params.Cusname} </Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: 17, color: '#4682b4' }}>ชื่อลูกค้า : {this.props.navigation.state.params.Cusname} </Text>
                         <Text>ที่อยู่ : {this.props.navigation.state.params.address} </Text>
                     </View>
 
@@ -216,37 +241,50 @@ class DetailWork extends Component {
                             this.state.showDetailWork.map((l, i) => (
                                 <View style={{ flexDirection: 'row' }}>
 
-                                    <View style={{ width: Dimensions.get('window').width / 2, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ paddingLeft: 5 }}>{i+1}). {l.itemName}</Text>
+                                    <View style={{ width: Dimensions.get('window').width / 2 }}>
+                                        <Text style={{ paddingLeft: 5 }}>{i + 1}). {l.itemName}</Text>
                                     </View>
                                     <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text>{l.qty - l.qtyCN}</Text>
                                     </View>
-                                    <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ color: 'orange', fontWeight: 'bold' }}>{l.amountedit} ฿</Text>
+                                    <View style={{ width: Dimensions.get('window').width / 4, justifyContent: 'center', right: 5 }}>
+                                        <Text style={{ fontWeight: 'bold', color: 'orange', right: 5, alignSelf: 'flex-end' }}>{l.amountedit} ฿</Text>
                                     </View>
-
                                 </View>
                             ))
                         }
                     </View>
-                    <View style={{ borderTopWidth: 0.5, borderTopColor: 'gray' }}>
+                    <View style={{ borderTopWidth: 0.5, borderTopColor: 'gray', left: 10 }}>
                         {
                             this.state.ShowMomey.map((l, i) => (
-                                <View style={{marginTop: 20}} >
-                                    <View style={{  flexDirection: 'row' }}>
-                                        <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ marginTop: 20 }} >
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ width: Dimensions.get('window').width / 3 }}>
                                             <Text style={{ fontWeight: 'bold', fontSize: 17 }}>ราคาทั้งหมด : </Text>
                                         </View>
                                         <View style={{ width: Dimensions.get('window').width / 3, justifyContent: 'center', alignItems: 'center' }}>
                                             <Text style={{ color: 'orange', fontWeight: 'bold', fontSize: 17 }}> {l.SUM} ฿</Text>
                                         </View>
                                     </View>
-                                    <View style={{ margin: 26, marginTop: 5, justifyContent: 'center'}}>
+                                    <View style={{ marginTop: 5, justifyContent: 'center' }}>
                                         <Text style={{ fontWeight: 'bold' }}>หมายเหตุ :  </Text>
                                     </View>
                                 </View>
                             ))
+                        }
+                    </View>
+
+                    <View style={{ left: 10, marginTop: 10 }}>
+                        {
+                            (() => {
+                                if (this.state.statusEdit == 1) {
+                                    return (
+                                        <Badge warning style={{ alignItems: 'center', justifyContent: 'center' }} >
+                                            <Text style={{ fontSize: 14, color: 'white', fontWeight: 'bold' }}>***บิลนี้มีการแก้ไข***</Text>
+                                        </Badge>
+                                    )
+                                }
+                            })()
                         }
                     </View>
 
@@ -273,7 +311,7 @@ class DetailWork extends Component {
                                     });
                                 },
                                 (error) => this.setState({ error: error.message }),
-                                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
                             );
                         }}>
                             <View style={{
@@ -317,7 +355,7 @@ class DetailWork extends Component {
                                     });
                                 },
                                 (error) => this.setState({ error: error.message }),
-                                { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+                                { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 },
                             );
                         }} >
                             <View style={{ width: Dimensions.get('window').width / 2, height: 100, backgroundColor: '#66FFB3', justifyContent: 'center', alignItems: 'center' }} >
@@ -330,8 +368,8 @@ class DetailWork extends Component {
                         <TouchableOpacity
                             onPress={() =>
                                 Alert.alert(
-                                    "ส่งงานไม่ได้",
-                                    "คุณต้องการยืนยัน การส่งงานไม่ได้? ",
+                                    "ยืนยันการส่งงาน",
+                                    "คุณต้องการยืนยัน การส่งงาน -สำเร็จ- หรือ -ไม่สำเร็จ- ?",
                                     [
                                         {
                                             text: "ไม่", onPress: () =>
@@ -409,6 +447,13 @@ const submitwork = gql`
 const submiitdetail = gql`
     mutation submiitdetail($invoiceNumber:String!){
         submiitdetail(invoiceNumber: $invoiceNumber){
+            status
+        }
+    }
+`
+const submitedit = gql`
+    query submitedit($invoiceNumber:String!){
+        submitedit(invoiceNumber: $invoiceNumber){
             status
         }
     }
